@@ -22,6 +22,20 @@
                         </v-list-tile-action>
                     </v-list-tile>
                 </v-list-item>
+                <v-list-item>
+                    <v-list-tile avatar>
+                        <v-list-tile-avatar>
+                            <v-icon>message</v-icon>
+                        </v-list-tile-avatar>
+                        <v-list-tile-content>
+                            <v-list-tile-title>我的收藏</v-list-tile-title>
+                            <v-list-tile-sub-title></v-list-tile-sub-title>
+                        </v-list-tile-content>
+                        <v-list-tile-action>
+                            <span class="user-item-count">{{ user.messageCount }}</span>
+                        </v-list-tile-action>
+                    </v-list-tile>
+                </v-list-item>
             </v-list>
         </div>
     </div>

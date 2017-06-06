@@ -11,11 +11,31 @@
                 <v-icon class="search-icon">close</v-icon>
             </v-btn>
         </header>
+
+        <div v-if="hotNews && hotNews.length" class="search-content">
+            <v-list two-line subheader>
+                <v-subheader>热搜榜</v-subheader>
+                <v-list-item v-for="(item, index) in hotNews" v-bind:key="item.title">
+                    <v-list-tile avatar ripple>
+                        <v-list-tile-content>
+                            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                            <v-list-tile-sub-title class="grey--text text--darken-4">{{ item.abs }}</v-list-tile-sub-title>
+                        </v-list-tile-content>
+                        <v-list-tile-action>
+                            <v-icon class="grey--text text--lighten-1">star_border</v-icon>
+                        </v-list-tile-action>
+                    </v-list-tile>
+                    <v-divider light v-if="index + 1 < data.length"></v-divider>
+                </v-list-item>
+            </v-list>
+        </div>
+
         <div v-if="loading" class="search-loading">
             <v-progress-circular indeterminate v-bind:size="70" class="primary--text"></v-progress-circular>
         </div>
         <div v-if="data && data.length" class="search-content">
-            <v-list two-line>
+            <v-list two-line subheader>
+                <v-subheader>热搜榜</v-subheader>
                 <v-list-item v-for="(item, index) in data" v-bind:key="item.title">
                     <v-list-tile avatar ripple>
                         <v-list-tile-content>
@@ -36,13 +56,18 @@
 </template>
 
 <script>
-import {mapActions} from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 import types from '@/store/mutation-types';
 import pageLoadingMixin from '@/mixins/pageLoadingMixin';
 
 export default {
     name: 'search',
     mixins: [pageLoadingMixin],
+    computed: {
+        ...mapGetters([
+            'hotNews'
+        ])
+    },
     data() {
         return {
             query: '',
@@ -54,7 +79,7 @@ export default {
         ...mapActions([
             'setPageLoading',
             'setAppHeader',
-            'hideBottomNav'
+            'getHotNews'
         ]),
         async search() {
             // 把数据清空
@@ -108,8 +133,10 @@ export default {
     },
     activated() {
         this.setAppHeader({show: false});
-        this.hideBottomNav();
         this.setPageLoading(false);
+    },
+    async mounted() {
+        await this.getHotNews();
     }
 };
 </script>
@@ -119,7 +146,8 @@ export default {
 header
     display flex
     align-items center
-    height 52px
+    height $app-header-height
+    background: $theme.primary
     box-shadow 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px rgba(0,0,0,.14), 0 1px 10px rgba(0,0,0,.12)
 
 form
@@ -130,9 +158,12 @@ form
     outline none
     font-size 16px
     height 50px
+    color: $material-theme.bg-color
+    +placeholder()
+        color: $material-theme.bg-color
 
 .search-btn
-    color #959595
+    color: $material-theme.bg-color
 
 .search-loading
     margin-top 30%

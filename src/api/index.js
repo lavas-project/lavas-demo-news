@@ -1,6 +1,7 @@
 import * as user from './user';
+import * as news from './news';
 
-let api = Object.assign({}, user);
+let api = Object.assign({}, user, news);
 
 const DEAULT_ERROR_MSG = 'ERROR';
 
