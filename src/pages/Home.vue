@@ -18,25 +18,27 @@ export default {
     methods: {
         ...mapActions([
             'setPageLoading',
-            'showBottomNav',
             'setAppHeader'
         ])
     },
     activated() {
         this.setAppHeader({
             show: true,
-            title: 'VUE-PWA',
-            showMenu: true,
+            title: '',
+            showMenu: false,
             showBack: false,
             showLogo: true,
             actions: [
                 {
                     icon: 'search',
                     route: '/search'
+                },
+                {
+                    icon: 'person',
+                    route: '/user'
                 }
             ]
         });
-        this.showBottomNav();
         this.setPageLoading(false);
     }
 };

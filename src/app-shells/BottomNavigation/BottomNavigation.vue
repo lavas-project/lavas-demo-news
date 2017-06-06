@@ -9,20 +9,12 @@
             :title="appHeader.title"
             :actions="appHeader.actions"
             :loading="isPageSwitching"
-            @click-menu="handleClickHeaderMenu"
+            @click-logo="handleClickHeaderLogo"
             @click-back="handleClickHeaderBack">
-            <template slot="logo"></template>
+            <template slot="logo">
+                <span class="app-header-logo"></span>
+            </template>
         </app-header>
-        <app-sidebar
-            :show="appSidebar.show"
-            :slideFrom="appSidebar.slideFrom"
-            :title="appSidebar.title"
-            :blocks="appSidebar.blocks"
-            @close-sidebar = "handleCloseSidebar"
-            @show-sidebar = "handleShowSidebar"
-        >
-            <template slot="logo1"><span></span></template>
-        </app-sidebar>
         <div class="app-view-wrapper">
             <v-progress-circular
                 indeterminate
@@ -38,8 +30,7 @@
                         v-if="!$route.meta.notKeepAlive"
                         class="app-view"
                         :class="{
-                            'app-view-with-header': appHeader.show,
-                            'app-view-with-footer': appBottomNavigator.show
+                            'app-view-with-header': appHeader.show
                         }"></router-view>
                 </keep-alive>
             </transition>
@@ -51,31 +42,21 @@
                     v-if="$route.meta.notKeepAlive"
                     class="app-view"
                     :class="{
-                        'app-view-with-header': appHeader.show,
-                        'app-view-with-footer': appBottomNavigator.show
+                        'app-view-with-header': appHeader.show
                     }"></router-view>
             </transition>
         </div>
-        <app-bottom-navigator
-            class="app-shell-footer"
-            :show="appBottomNavigator.show"
-            :navs="appBottomNavigator.navs"
-            @click-nav="handleClickBottomNav"/>
     </div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex';
 import AppHeader from './components/appHeader';
-import AppSidebar from './components/appSidebar';
-import AppBottomNavigator from './components/appBottomNavigator';
 
 export default {
     name: 'bottomNavigation',
     components: {
-        AppHeader,
-        AppSidebar,
-        AppBottomNavigator
+        AppHeader
     },
     data () {
         return {};
@@ -83,8 +64,6 @@ export default {
     computed: {
         ...mapGetters([
             'appHeader',
-            'appSidebar',
-            'appBottomNavigator',
             'isPageLoading',
             'isPageSwitching',
             'pageTransitionName'
@@ -92,10 +71,7 @@ export default {
     },
     methods: {
         ...mapActions([
-            'setPageSwitching',
-            'showSidebar',
-            'hideSidebar',
-            'activateBottomNav'
+            'setPageSwitching'
         ]),
         handleBeforeEnter() {
             this.setPageSwitching(true);
@@ -106,17 +82,8 @@ export default {
         handleClickHeaderBack() {
             this.$router.go(-1);
         },
-        handleClickHeaderMenu() {
-            this.showSidebar();
-        },
-        handleCloseSidebar() {
-            this.hideSidebar();
-        },
-        handleShowSidebar() {
-            this.showSidebar();
-        },
-        handleClickBottomNav({name}) {
-            this.activateBottomNav(name);
+        handleClickHeaderLogo() {
+            this.$router.push('/');
         }
     }
 };
@@ -140,6 +107,14 @@ export default {
         top 0
         left 0
         right 0
+
+        .app-header-logo
+            display inline-block
+            width 88px
+            height $app-header-height
+            background url(https://gss0.bdstatic.com/5foIcy0a2gI2n2jgoY3K/n/nvn/static/news/imgs/bg-news-logo_344ce44.png) no-repeat
+            background-size 65px auto
+            background-position center 16px
 
     .app-shell-footer
         position fixed

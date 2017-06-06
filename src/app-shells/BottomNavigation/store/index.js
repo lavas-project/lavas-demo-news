@@ -68,7 +68,7 @@ const state = {
          *
          * @type {boolean}
          */
-        showMenu: true,
+        showMenu: false,
 
         /**
          * 是否展示左侧返回图标
