@@ -12,7 +12,7 @@
             @click-logo="handleClickHeaderLogo"
             @click-back="handleClickHeaderBack">
             <template slot="logo">
-                <span class="app-header-logo"></span>
+                <span class="app-header-logo">新闻</span>
             </template>
         </app-header>
         <div class="app-view-wrapper">
@@ -109,12 +109,14 @@ export default {
         right 0
 
         .app-header-logo
-            display inline-block
-            width 88px
-            height $app-header-height
-            background url(https://gss0.bdstatic.com/5foIcy0a2gI2n2jgoY3K/n/nvn/static/news/imgs/bg-news-logo_344ce44.png) no-repeat
-            background-size 65px auto
-            background-position center 16px
+            padding-left 16px
+            font-size 1.2em
+        //     display inline-block
+        //     width 88px
+        //     height $app-header-height
+        //     background url(https://gss0.bdstatic.com/5foIcy0a2gI2n2jgoY3K/n/nvn/static/news/imgs/bg-news-logo_344ce44.png) no-repeat
+        //     background-size 65px auto
+        //     background-position center 16px
 
     .app-shell-footer
         position fixed

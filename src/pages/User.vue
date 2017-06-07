@@ -7,6 +7,7 @@
                 </p>
                 <p v-cloak>{{ user.userName }}</p>
             </div>
+
             <v-list two-line>
                 <v-list-item>
                     <v-list-tile avatar>
@@ -22,10 +23,11 @@
                         </v-list-tile-action>
                     </v-list-tile>
                 </v-list-item>
+                <v-divider inset></v-divider>
                 <v-list-item>
                     <v-list-tile avatar>
                         <v-list-tile-avatar>
-                            <v-icon>message</v-icon>
+                            <v-icon>star</v-icon>
                         </v-list-tile-avatar>
                         <v-list-tile-content>
                             <v-list-tile-title>我的收藏</v-list-tile-title>
