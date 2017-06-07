@@ -11,6 +11,11 @@
             <home-news-list :newsList='topicList'></home-news-list>
 
             <home-news-list :newsList='newsList'></home-news-list>
+            <infinite-loading :on-infinite="getMoreNews" ref="infiniteLoading">
+                <span slot="no-more">
+                  没有更多了！
+                </span>
+            </infinite-loading>
 
         </div>
     </div>
@@ -21,17 +26,20 @@ import HomeNewsList from '@/components/homeNewsList.vue';
 import {mapGetters, mapActions} from 'vuex';
 import EventBus from '@/event-bus';
 import pageLoadingMixin from '@/mixins/pageLoadingMixin';
+import InfiniteLoading from 'vue-infinite-loading';
 
 export default {
     name: 'home',
     mixins: [pageLoadingMixin],
     components: {
-        HomeNewsList
+        HomeNewsList,
+        InfiniteLoading
     },
     computed: {
         ...mapGetters([
             'newsList',
-            'topicList'
+            'topicList',
+            'loaded'
         ])
     },
     props: {},
@@ -43,7 +51,11 @@ export default {
             'setPageLoading',
             'setAppHeader',
             'getNewsList'
-        ])
+        ]),
+        async getMoreNews() {
+            await this.getNewsList();
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded);
+        }
     },
     activated() {
         this.setAppHeader({

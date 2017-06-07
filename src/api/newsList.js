@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export function getNewsList() {
+export function getNewsList(pageNum, pageSize) {
     // return axios('/api/news/getNewsList', {
     //     params: {
     //         tabId,
