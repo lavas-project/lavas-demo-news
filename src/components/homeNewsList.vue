@@ -49,9 +49,7 @@ export default {
     mixins: [pageLoadingMixin],
     props: ['newsList'],
     data() {
-        return {
-            newsList: this.newsList
-        }
+        return {}
     },
     methods: {
 
@@ -90,8 +88,8 @@ a
                 width 100%
 
                 .list-item-title
-                    font-size 16px
-                    line-height 20px
+                    font-size 18px
+                    line-height 26px
                     color #333
                 .posts
                     margin-top 5px

@@ -7,7 +7,9 @@
             <!-- 轮播banner组件 -->
             <div class="top-banner"></div>
 
-            <!-- 列表部分list组件，后面提出来 -->
+            <!-- 列表部分list组件 -->
+            <home-news-list :newsList='topicList'></home-news-list>
+
             <home-news-list :newsList='newsList'></home-news-list>
 
         </div>
@@ -28,7 +30,8 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'newsList'
+            'newsList',
+            'topicList'
         ])
     },
     props: {},

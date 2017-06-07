@@ -16,7 +16,7 @@ export function getNewsList() {
                         "nid": "2678372928973431334",
                         "sourcets": "1494203283000",
                         "ts": "1494204073000",
-                        "title": "1北京楼市三次定向加息 90平首套房平均成本增45万",
+                        "title": "北京楼市三次定向加息 90平首套房平均成本增45万",
                         "url": "http://bj.house.163.com/17/0508/08/CJTBLR8K000788HN.html",
                         "imageurls": [
                             {
@@ -515,7 +515,7 @@ export function getNewsList() {
                         "token": "1d31afc3"
                     }
                 ],
-                "toppic": [
+                "topic": [
                     {
                         "nid": "14325144040983491863",
                         "sourcets": "1494192627000",
