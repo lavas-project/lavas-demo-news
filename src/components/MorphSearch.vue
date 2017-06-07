@@ -102,6 +102,10 @@ export default {
             color: $material-theme.bg-color
 
     .close-btn
+        position absolute
+        left 0
+        top 2px
+        background: $theme.primary
         transition opacity 0.3s, transform 0.3s
         opacity 0
         transform scale3d(0, 0, 1)

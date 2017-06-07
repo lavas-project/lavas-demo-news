@@ -42,7 +42,7 @@
                     <v-card-row class="blue darken-4">
                         <v-card-title>
                             <v-icon class="red--text text--lighten-1">search</v-icon>
-                            <span class="white--text">搜索结果</span>
+                            <span class="white--text">“{{lastQuery}}”的搜索结果</span>
                         </v-card-title>
                     </v-card-row>
                     <v-card-text>
@@ -87,7 +87,9 @@ export default {
         ])
     },
     data() {
-        return {};
+        return {
+            lastQuery: ''
+        };
     },
     methods: {
         ...mapActions([
@@ -100,6 +102,7 @@ export default {
         async handleSearch(query) {
             this.setPageLoading(true);
             await this.searchNews(query);
+            this.lastQuery = query;
             this.setPageLoading(false);
         },
         handleDeleteHistory(historyItem) {
