@@ -5,3 +5,4 @@
 
 export const SET_USER = 'SET_USER';
 export const SET_HOT_NEWS = 'SET_HOT_NEWS';
+export const SET_NEWS_LIST = 'SET_NEWS_LIST';
