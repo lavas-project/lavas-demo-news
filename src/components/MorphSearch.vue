@@ -11,8 +11,8 @@
             <v-icon class="search-icon">search</v-icon>
         </v-btn>
         
-        <div class="search-history">
-            <v-list two-line subheader>
+        <div class="search-history-wrapper">
+            <v-list subheader class="history-list">
                 <v-subheader inset>历史记录</v-subheader>
                 <v-list-item
                     v-for="historyItem, idx in history"
@@ -35,7 +35,6 @@
                     </v-list-tile>
                     <v-divider inset></v-divider>
                 </v-list-item>
-
             </v-list>
             <!-- <transition name="">
 
@@ -111,14 +110,16 @@ export default {
         transform scale3d(0, 0, 1)
         color: $material-theme.bg-color
         
-    .search-history
-        opacity 0
+    .search-history-wrapper
+        display none
         position absolute
         top $app-header-height
         bottom 0
         right 0
         left 0
         background: $material-theme.bg-color
+        overflow-x hidden
+        overflow-y auto
     
     &.open
         
@@ -132,8 +133,9 @@ export default {
             opacity 1
             transform scale3d(1, 1, 1)
             
-        .search-history
-            opacity 1
-        
+        .search-history-wrapper
+            display block
+            .history-list
+                opacity 1
 
 </style>

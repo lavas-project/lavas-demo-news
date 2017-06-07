@@ -20,8 +20,8 @@
                     </v-card-title>
                 </v-card-row>
                 <v-card-text>
-                    <v-list two-line v-if="hotNews && hotNews.length">
-                        <v-list-item v-for="(item, index) in hotNews" v-bind:key="item.title">
+                    <v-list two-line v-show="hotNews && hotNews.length">
+                        <v-list-item v-for="(item, index) in hotNews" v-bind:key="index">
                             <v-list-tile avatar ripple>
                                 <v-list-tile-content>
                                     <v-list-tile-title>{{ item.title }}</v-list-tile-title>
@@ -46,8 +46,8 @@
                         </v-card-title>
                     </v-card-row>
                     <v-card-text>
-                        <v-list two-line v-if="searchResult && searchResult.length">
-                            <v-list-item v-for="(item, index) in hotNews" v-bind:key="item.title">
+                        <v-list two-line>
+                            <v-list-item v-for="(item, index) in searchResult" v-bind:key="index">
                                 <v-list-tile avatar ripple>
                                     <v-list-tile-content>
                                         <v-list-tile-title>{{ item.title }}</v-list-tile-title>

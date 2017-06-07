@@ -10,7 +10,10 @@ export default {
     state: {
         hotNews: [],
         query: {
-            history: [],
+            history: [
+                '历史记录1',
+                '历史记录2'
+            ],
             result: []
         }
     },
