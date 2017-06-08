@@ -63,7 +63,8 @@ export default {
         ...mapActions([
             'setPageLoading',
             'setAppHeader',
-            'getUserInfo'
+            'getUserInfo',
+            'hideMenuTabs'
         ])
     },
     activated() {
@@ -82,6 +83,7 @@ export default {
         });
         // 关闭加载中动画
         this.setPageLoading(false);
+        this.hideMenuTabs();
     },
     async mounted() {
         await this.getUserInfo();

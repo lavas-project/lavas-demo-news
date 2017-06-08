@@ -54,7 +54,6 @@ export default {
     methods: {
         // 查看详情
         getDetail (nid) {
-            debugger
             this.$router.push('/detail?nid=' + nid);
         }
     }

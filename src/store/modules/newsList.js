@@ -10,12 +10,13 @@ export default {
     state: {
         newsList: [],
         topicList: [],
-        loaded: false,
-
+        bannerList: [],
+        loaded: false
     },
     getters: {
         newsList: state => state.newsList,
         topicList: state => state.topicList,
+        bannerList: state => state.bannerList,
         loaded: state => state.loaded
     },
     actions: {
@@ -27,7 +28,7 @@ export default {
         }
     },
     mutations: {
-        [types.SET_NEWS_LIST] (state, {news, topic}) {
+        [types.SET_NEWS_LIST] (state, {news, topic, banner}) {
             news.map(item => {
                 let time = new Date(Number(item.ts) || Date.now());
                 item.show = time.getFullYear() + '-' + time.getMonth() + '-'
@@ -50,6 +51,7 @@ export default {
             }
 
             state.topicList = topic;
+            state.bannerList = banner;
 
         }
     }

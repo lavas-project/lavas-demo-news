@@ -97,7 +97,8 @@ export default {
             'setAppHeader',
             'getHotNews',
             'searchNews',
-            'deleteQueryHistory'
+            'deleteQueryHistory',
+            'hideMenuTabs'
         ]),
         async handleSearch(query) {
             this.setPageLoading(true);
@@ -112,6 +113,7 @@ export default {
     activated() {
         this.setAppHeader({show: false});
         this.setPageLoading(false);
+        this.hideMenuTabs();
     },
     async mounted() {
         await this.getHotNews();
@@ -130,7 +132,7 @@ export default {
         height $app-header-height
         background: $theme.primary
         box-shadow 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px rgba(0,0,0,.14), 0 1px 10px rgba(0,0,0,.12)
-        
+
         .search-wrapper
             flex 1
 
@@ -141,7 +143,7 @@ export default {
             background: $material-theme.bg-color
             margin-bottom 6px
             transition transform 0.2s ease-in-out
-            
+
             &.slide-left-enter
                 transform translate(100%, 0)
 

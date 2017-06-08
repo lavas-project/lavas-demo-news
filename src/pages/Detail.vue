@@ -39,19 +39,22 @@ export default {
     methods: {
         ...mapActions([
             'setPageLoading',
-            'getNewsList'
+            'getNewsList',
+            'hideMenuTabs'
         ])
     },
     async mounted() {
-        debugger
         let nid = this.$route.query.nid;
         await this.getNewsList(0, 10, nid);
         this.detail = this.newsList[0];
         this.contents = this.newsList[0].content;
         this.setPageLoading(false);
+
     },
     beforeRouteEnter(to, from, next) {
+
         next(vm => {
+            vm.$store.commit(types.SET_MENU_TABS_VISIBILITY, false);
             vm.$store.commit(types.SET_APP_HEADER, {
                 title: 'Detail Page',
                 show: true,

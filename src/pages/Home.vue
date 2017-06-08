@@ -1,14 +1,9 @@
 <template>
     <div class="home-wrapper">
         <div class="news-wrapper">
-            <!-- 头部tab组件 -->
-            <div class="top-tab">
-                <ui-menu-tabs :entrys="entrys"></ui-menu-tabs>
-            </div>
+
             <!-- 轮播banner组件 -->
-            <div class="top-banner">
-                <ui-carousel :items="items"></ui-carousel>
-            </div>
+            <ui-carousel :items="bannerList"></ui-carousel>
             <!-- 列表部分list组件 -->
             <home-news-list :newsList='topicList'></home-news-list>
 
@@ -29,7 +24,6 @@ import {mapGetters, mapActions} from 'vuex';
 import EventBus from '@/event-bus';
 import pageLoadingMixin from '@/mixins/pageLoadingMixin';
 import uiCarousel from '@/components/ui/carousel';
-import uiMenuTabs from '@/components/ui/menuTabs';
 import InfiniteLoading from 'vue-infinite-loading';
 
 export default {
@@ -39,7 +33,6 @@ export default {
     },
     components: {
         uiCarousel,
-        uiMenuTabs,
         HomeNewsList,
         InfiniteLoading
     },
@@ -47,60 +40,20 @@ export default {
         ...mapGetters([
             'newsList',
             'topicList',
+            'bannerList',
             'loaded'
         ])
     },
 
     data() {
-        return {
-            items: [
-                {
-                    src: 'https://vuetifyjs.com/static/doc-images/carousel/squirrel.jpg',
-                    text: '松鼠的图片'
-                },
-                {
-                    src: 'https://vuetifyjs.com/static/doc-images/carousel/sky.jpg',
-                    text: '天空的图片'
-                },
-                {
-                    src: 'https://vuetifyjs.com/static/doc-images/carousel/bird.jpg',
-                    text: '鸟的图片'
-                },
-                {
-                    src: 'https://vuetifyjs.com/static/doc-images/carousel/planet.jpg',
-                    text: '星球的图片'
-                }
-            ],
-            entrys: [
-                {
-                    text: '热点'
-                },
-                {
-                    text: '军事'
-                },
-                {
-                    text: '娱乐'
-                },
-                {
-                    text: '汽车'
-                },
-                {
-                    text: '搞笑'
-                },
-                {
-                    text: '国内'
-                },
-                {
-                    text: '国际'
-                }
-            ]
-        };
+        return {};
     },
     methods: {
         ...mapActions([
             'setPageLoading',
             'setAppHeader',
-            'getNewsList'
+            'getNewsList',
+            'showMenuTabs'
         ]),
         async getMoreNews() {
             await this.getNewsList();
@@ -110,7 +63,7 @@ export default {
     activated() {
         this.setAppHeader({
             show: true,
-            title: '百度新闻',
+            title: '',
             showMenu: true,
             showBack: false,
             showLogo: true,
@@ -126,6 +79,7 @@ export default {
             ]
         });
         this.setPageLoading(false);
+        this.showMenuTabs();
     },
     async mounted() {
         await this.getNewsList();
@@ -134,4 +88,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+.home-wrapper
+    margin-top 40px
 </style>

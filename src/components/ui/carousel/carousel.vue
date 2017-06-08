@@ -10,19 +10,20 @@
             v-on:touchmove="onTouchmove"
             v-on:touchend="onTouchend"
         >
-            <div
+            <a
+                :href="item.url"
                 class="ui-carousel-item"
                 v-for="(item,i) in items"
                 :index="i"
                 v-bind:style="{
-                    backgroundImage: 'url(' + item.src + ')',
+                    backgroundImage: 'url(' + item.imageurls[0].url + ')',
                     width: windowWidth + 'px'
                 }"
             >
                 <p class="ui-carousel-item-text">
-                    <span>{{item.text}}</span>
+                    <span>{{item.title}}</span>
                 </p>
-            </div>
+            </a>
         </div>
         <div class="ui-carousel-nav">
             <span
@@ -43,11 +44,7 @@
 
     export default {
         name: 'carousel',
-        props: {
-            items: {
-                type: Array
-            }
-        },
+        props: ['items'],
         data() {
             return {
                 windowWidth: 0,
@@ -61,21 +58,24 @@
             }
         },
 
+        watch: {
+            items() {
 
-        created() {
-            let me = this;
-            let len = me.items.length;
+                let me = this;
+                let len = me.items.length;
 
-            me.items[0].active = true;
-            me.$set(this, 'windowWidth', document.body.clientWidth);
+                me.items[0].active = true;
+                me.windowWidth = document.body.clientWidth;
 
-            intervalTimer = setInterval(() => {
-                me.items.forEach((item, index) => {
-                    me.$set(me.items[index], 'active', index === num % len);
-                });
-                this.marginLeft = -this.windowWidth * (num % len);
-                num++;
-            }, 2000);
+                clearInterval(intervalTimer);
+                intervalTimer = setInterval(() => {
+                    let curidx = ++num % len;
+                    for (let i = 0, l = me.items.length; i < l; i++) {
+                        me.items[i].active = (i === curidx);
+                    }
+                    me.marginLeft = -(me.windowWidth * curidx);
+                }, 5000);
+            }
         },
 
         methods: {
@@ -113,12 +113,12 @@
                 let len = me.items.length;
 
                 intervalTimer = setInterval(() => {
-                    me.items.forEach((item, index) => {
-                        me.$set(me.items[index], 'active', index === num % len);
-                    });
-                    this.marginLeft = -this.windowWidth * (num % len);
-                    num++;
-                }, 2000);
+                    let curidx = ++num % len;
+                    for (let i = 0, l = me.items.length; i < l; i++) {
+                        me.items[i].active = (i === curidx);
+                    }
+                    me.marginLeft = -(me.windowWidth * curidx);
+                }, 5000);
             }
         }
     }
@@ -141,6 +141,7 @@
         right 0
         text-align right
         padding-right 20px
+        z-index 10
         span
             display inline-block
             vertical-align middle
@@ -155,7 +156,6 @@
             border-radius 4px
             background #fff
     .ui-carousel-item
-        position relative
         height 100%
         display inline-block
         background-size cover
@@ -166,6 +166,7 @@
             vertical-align bottom
             padding 0 17px
             text-align left
+            font-size 16px
             height 68px
             color #fff;
             background-image linear-gradient(180deg,rgba(0,0,0,0) 0,rgba(0,0,0,.8) 100%)
