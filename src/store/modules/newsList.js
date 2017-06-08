@@ -9,16 +9,19 @@ import API from '@/api';
 export default {
     state: {
         newsList: [],
-        topicList: []
+        topicList: [],
+        loaded: false,
+
     },
     getters: {
         newsList: state => state.newsList,
-        topicList: state => state.topicList
+        topicList: state => state.topicList,
+        loaded: state => state.loaded
     },
     actions: {
-        async getNewsList({commit}) {
+        async getNewsList({commit}, pageNum, pageSize, newsId) {
             try {
-                commit(types.SET_NEWS_LIST, await API.getNewsList());
+                commit(types.SET_NEWS_LIST, await API.getNewsList(pageNum, pageSize, newsId));
             }
             catch(e) {}
         }
@@ -37,8 +40,17 @@ export default {
                     + time.getDay() + ' ' + time.getHours() + ':'
                     + time.getMinutes();
             });
-            state.newsList = news;
+
+            if (news && news.length) {
+                state.newsList = state.newsList.concat(news);
+                state.loaded = 'loaded';
+            }
+            else {
+                state.loaded = 'complete';
+            }
+
             state.topicList = topic;
+
         }
     }
 };

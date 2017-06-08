@@ -5,7 +5,7 @@
             <div v-for="news in newsList" class="news-item">
 
                 <!-- 仅一张图时的样式 -->
-                <a href="/detail" v-if="news.imageurls.length === 1" class="img-first">
+                <div v-if="news.imageurls.length === 1" class="img-first news-content" @click="getDetail(news.nid)">
                     <div class="posts" v-if="news.imageurls.length">
                         <span v-for="imgUrl in news.imageurls">
                             <img :src="imgUrl.url" alt="">
@@ -18,10 +18,10 @@
                             <span class="icons">{{news.site}}</span>
                         </div>
                     </div>
-                </a>
+                </div>
 
                 <!-- 非一张图时的样式 -->
-                <a href="/detail" v-if="news.imageurls.length !== 1" class="title-first">
+                <div v-if="news.imageurls.length !== 1" class="title-first news-content" @click="getDetail(news.nid)">
                     <div class="list-item-title">{{news.title}}</div>
                     <div class="posts" v-if="news.imageurls.length">
                         <span v-for="imgUrl in news.imageurls">
@@ -32,7 +32,7 @@
                         <span class="update-time">{{news.show}}</span>
                         <span class="icons">{{news.site}}</span>
                     </div>
-                </a>
+                </div>
             </div>
         </div>
     </div>
@@ -52,16 +52,10 @@ export default {
         return {}
     },
     methods: {
-
-        // 做一些数据处理，并赋值
-        processData(data) {
-            data.map(item => {
-                let time = new Date(Number(item.ts) || Date.now());
-                item.show = time.getFullYear() + '-' + time.getMonth() + '-'
-                    + time.getDay() + ' ' + time.getHours() + ':'
-                    + time.getMinutes();
-            });
-            return data;
+        // 查看详情
+        getDetail (nid) {
+            debugger
+            this.$router.push('/detail?nid=' + nid);
         }
     }
 };
@@ -83,7 +77,7 @@ a
             line-height 16px
             border-bottom 1px solid #eee
 
-            a
+            .news-content
                 display inline-block
                 width 100%
 

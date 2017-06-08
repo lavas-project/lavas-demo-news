@@ -2,15 +2,22 @@
     <div class="home-wrapper">
         <div class="news-wrapper">
             <!-- 头部tab组件 -->
-            <div class="top-tab"></div>
-
+            <div class="top-tab">
+                <ui-menu-tabs :entrys="entrys"></ui-menu-tabs>
+            </div>
             <!-- 轮播banner组件 -->
-            <div class="top-banner"></div>
-
+            <div class="top-banner">
+                <ui-carousel :items="items"></ui-carousel>
+            </div>
             <!-- 列表部分list组件 -->
             <home-news-list :newsList='topicList'></home-news-list>
 
             <home-news-list :newsList='newsList'></home-news-list>
+            <infinite-loading :on-infinite="getMoreNews" ref="infiniteLoading">
+                <span slot="no-more">
+                  没有更多了！
+                </span>
+            </infinite-loading>
 
         </div>
     </div>
@@ -21,35 +28,90 @@ import HomeNewsList from '@/components/homeNewsList.vue';
 import {mapGetters, mapActions} from 'vuex';
 import EventBus from '@/event-bus';
 import pageLoadingMixin from '@/mixins/pageLoadingMixin';
+import uiCarousel from '@/components/ui/carousel';
+import uiMenuTabs from '@/components/ui/menuTabs';
+import InfiniteLoading from 'vue-infinite-loading';
 
 export default {
     name: 'home',
     mixins: [pageLoadingMixin],
+    props: {
+    },
     components: {
-        HomeNewsList
+        uiCarousel,
+        uiMenuTabs,
+        HomeNewsList,
+        InfiniteLoading
     },
     computed: {
         ...mapGetters([
             'newsList',
-            'topicList'
+            'topicList',
+            'loaded'
         ])
     },
-    props: {},
+
     data() {
-        return {};
+        return {
+            items: [
+                {
+                    src: 'https://vuetifyjs.com/static/doc-images/carousel/squirrel.jpg',
+                    text: '松鼠的图片'
+                },
+                {
+                    src: 'https://vuetifyjs.com/static/doc-images/carousel/sky.jpg',
+                    text: '天空的图片'
+                },
+                {
+                    src: 'https://vuetifyjs.com/static/doc-images/carousel/bird.jpg',
+                    text: '鸟的图片'
+                },
+                {
+                    src: 'https://vuetifyjs.com/static/doc-images/carousel/planet.jpg',
+                    text: '星球的图片'
+                }
+            ],
+            entrys: [
+                {
+                    text: '热点'
+                },
+                {
+                    text: '军事'
+                },
+                {
+                    text: '娱乐'
+                },
+                {
+                    text: '汽车'
+                },
+                {
+                    text: '搞笑'
+                },
+                {
+                    text: '国内'
+                },
+                {
+                    text: '国际'
+                }
+            ]
+        };
     },
     methods: {
         ...mapActions([
             'setPageLoading',
             'setAppHeader',
             'getNewsList'
-        ])
+        ]),
+        async getMoreNews() {
+            await this.getNewsList();
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded);
+        }
     },
     activated() {
         this.setAppHeader({
             show: true,
-            title: '',
-            showMenu: false,
+            title: '百度新闻',
+            showMenu: true,
             showBack: false,
             showLogo: true,
             actions: [
@@ -72,19 +134,4 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-
-.top-tab
-    width 100%
-    height 40px
-    background #2874f0
-    position fixed
-    top 50px
-    left 0
-.top-banner
-    margin-top 40px
-    height 230px
-    width 100%
-    background #fff url('https://timg01.bdimg.com/timg?tc&size=b771_434&sec=0&quality=100&cut_x=48&cut_y=0&cut_h=0&cut_w=771&di=dd6dba20725da483ce7b4fa08d615f59&src=http%3A%2F%2Fc.hiphotos.baidu.com%2Fnews%2Fcrop%253D0%252C52%252C868%252C434%2Fsign%3Dfce1822706338744888a753c6c3ff5cc%2F0b55b319ebc4b745496c6b61c5fc1e178b8215c8.jpg') no-repeat
-    background-size 100%
-
 </style>
