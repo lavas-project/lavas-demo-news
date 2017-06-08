@@ -12,6 +12,7 @@
   "dependencies": {
     "axios": "^0.16.1",
     "fastclick": "^1.0.6",
+    "iscroll": "^5.2.0",
     "normalize.css": "^7.0.0",
     "vue": "^2.2.6",
     "vue-awesome": "^2.3.1",
