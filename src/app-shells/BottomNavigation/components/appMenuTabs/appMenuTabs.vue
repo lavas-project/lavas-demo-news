@@ -116,6 +116,7 @@
         background #3e98f0
         border-top 1px solid #5dabf0
         height 40px
+        overflow hidden
         display flex
     .app-menu-tabs-item
         display inline-block
