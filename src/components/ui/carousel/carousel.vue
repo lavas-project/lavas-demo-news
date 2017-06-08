@@ -141,6 +141,7 @@
         right 0
         text-align right
         padding-right 20px
+        z-index 10
         span
             display inline-block
             vertical-align middle
@@ -155,7 +156,6 @@
             border-radius 4px
             background #fff
     .ui-carousel-item
-        position relative
         height 100%
         display inline-block
         background-size cover

@@ -15,6 +15,7 @@
                 <span class="app-header-logo">新闻</span>
             </template>
         </app-header>
+        <app-menu-tabs :entrys="menuTabs.tabs" :show="menuTabs.show"></app-menu-tabs>
         <div class="app-view-wrapper">
             <v-progress-circular
                 indeterminate
@@ -52,11 +53,13 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 import AppHeader from './components/appHeader';
+import AppMenuTabs from './components/appMenuTabs';
 
 export default {
     name: 'bottomNavigation',
     components: {
-        AppHeader
+        AppHeader,
+        AppMenuTabs
     },
     data () {
         return {};
@@ -64,6 +67,7 @@ export default {
     computed: {
         ...mapGetters([
             'appHeader',
+            'menuTabs',
             'isPageLoading',
             'isPageSwitching',
             'pageTransitionName'
