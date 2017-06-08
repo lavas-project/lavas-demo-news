@@ -611,6 +611,115 @@ export function getNewsList(pageNum, pageSize) {
                             "count": 0
                         }
                     }
+                ],
+                "banner": [
+                    {
+                        "nid": "12314169550711365783",
+                        "sourcets": "1496004503000",
+                        "ts": "1496004503000",
+                        "title": "砧板大改造 秒变iPad支架",
+                        "url": "http://www.toutiao.com/item/6424870151186809345/",
+                        "imageurls": [
+                            {
+                                "url": "https://timg01.bdimg.com/timg?tc&size=b560_315&sec=0&quality=100&cut_x=35&cut_y=0&cut_h=0&cut_w=560&di=002fceccb2693402fc680fc0e7afee4a&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fnews%2Fcrop%253D0%252C82%252C631%252C315%2Fsign%3D0a5fb6e68826cffc7d65e5f2843166a8%2Fd0c8a786c9177f3eda133c727acf3bc79f3d56ae.jpg",
+                                "height": 270,
+                                "width": 480
+                            }
+                        ],
+                        "site": "全网资讯",
+                        "abs": "一天她发现了一块破旧的砧板，于是她萌发了一个念头，要把这个砧板改造成支架。",
+                        "display_type": 1,
+                        "display_url": "http://www.toutiao.com/item/6424870151186809345/",
+                        "topic": [],
+                        "long_abs": "国外的一个家庭主妇平日在家中无事的时候总是喜欢把废弃的东西改造成有用的东西。一天她发现了一块破旧的砧板，于是她萌发了一个念头，要把这个砧板改造成支架。为了让这个支架显得更加美观，她买了一些白色的油漆，在砧板上刷了一层。现在主妇天天拿着这个支架用来支撑ipad等电子设备，特别是在烹饪的时候可以方便看食谱。",
+                        "has_related": [],
+                        "tag": [
+                            "iPad",
+                            "烹饪技巧",
+                            "家居"
+                        ],
+                        "content": [],
+                        "content_type": {
+                            "image": 1
+                        },
+                        "type": "image",
+                        "total_images": "5",
+                        "count": {
+                            "up": 8,
+                            "down": 0,
+                            "comment": 1
+                        }
+                    },
+                    {
+                        "nid": "11252684405169648321",
+                        "sourcets": "1495901589000",
+                        "ts": "1495901589000",
+                        "title": "10个让人心动不已的车载好物",
+                        "url": "http://www.toutiao.com/a6424309001625829634/",
+                        "imageurls": [
+                            {
+                                "url": "https://timg01.bdimg.com/timg?tc&size=b487_274&sec=0&quality=100&cut_x=30&cut_y=0&cut_h=0&cut_w=487&di=e7453ce709496013a6dfb17debccd69e&src=http%3A%2F%2Fb.hiphotos.baidu.com%2Fnews%2Fcrop%253D0%252C63%252C548%252C274%2Fsign%3D8ec29892db00baa1ae631dfb7a209524%2Fa2cc7cd98d1001e928fe4171b20e7bec55e79789.jpg",
+                                "height": 270,
+                                "width": 480
+                            }
+                        ],
+                        "site": "全网资讯",
+                        "abs": "觉得很伤脑筋的话建议大家备一个干湿两用的吸尘器，吸力强劲，配合不用的接口不放过任何一个角落。",
+                        "display_type": 1,
+                        "display_url": "http://www.toutiao.com/a6424309001625829634/",
+                        "topic": [],
+                        "long_abs": "随着社会的发展和进步，越来越多的人选择买车来方便自己的生活，随之而来的是汽车用品也越来越好用，多样化的汽车用品到底有哪些才是我们真正想拥有的呢？长途驾驶，开夜车大家准备一个充气床是很有用的，不仅是坐在后排的人可以很好休息，到了服务区没地方住的时候也很方便我们在车里就能躺着睡觉。",
+                        "has_related": [],
+                        "tag": [],
+                        "content": [],
+                        "content_type": {
+                            "image": 1
+                        },
+                        "type": "image",
+                        "total_images": "11",
+                        "count": {
+                            "up": 18,
+                            "down": 0,
+                            "comment": 1
+                        }
+                    },
+                    {
+                        "nid": "9038270543655205558",
+                        "sourcets": "1495786440000",
+                        "ts": "1495786440000",
+                        "title": "16件最热门高科技产品",
+                        "url": "http://tech.huanqiu.com/photo/2017-05/2872610.html?t=1495802893435",
+                        "imageurls": [
+                            {
+                                "url": "https://timg01.bdimg.com/timg?tc&size=b636_358&sec=0&quality=100&cut_x=39&cut_y=0&cut_h=0&cut_w=636&di=1dde78e42f3f71056c9b8b6e4e4aaa02&src=http%3A%2F%2Ff.hiphotos.baidu.com%2Fnews%2Fcrop%253D0%252C0%252C716%252C358%2Fsign%3Dbd72fe0ef1f2b211f061df0ef7b04908%2F11385343fbf2b2113e591d33c08065380cd78e5c.jpg",
+                                "height": 270,
+                                "width": 480
+                            }
+                        ],
+                        "site": "环球网",
+                        "abs": "Snapchat的最新技术可让您拍摄十秒钟的视频，您可以通过Snapchat应用程序访问和发送。",
+                        "display_type": 1,
+                        "display_url": "http://tech.huanqiu.com/photo/2017-05/2872610.html?t=1495802893435",
+                        "topic": [],
+                        "long_abs": "如果你能买的到的话，Snapchat的眼镜是您可以获得的最热门的小工具之一。Snapchat的最新技术可让您拍摄十秒钟的视频，您可以通过Snapchat应用程序访问和发送。Sphero的BB-8玩具是去年收藏家特别想要的一个小玩具，但是现在你可以获得一个带有战斗喷漆的更酷的版本，而且还能让你只用手势就可以操控机器人。",
+                        "has_related": [],
+                        "tag": [
+                            "数码",
+                            "电脑",
+                            "机器人"
+                        ],
+                        "content": [],
+                        "content_type": {
+                            "image": 1
+                        },
+                        "type": "image",
+                        "total_images": "16",
+                        "count": {
+                            "up": 7,
+                            "down": 0,
+                            "comment": 2
+                        }
+                    }
                 ]
             }
         });

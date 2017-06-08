@@ -99,6 +99,7 @@
             left 0
             right 0
             top 100px
+            z-index 500
             bottom 0
             background rgba(0, 0, 0, .3)
     .ui-menu-tabs-single
@@ -111,7 +112,7 @@
         height 40px
         line-height 40px
         color #fff
-        font-size 15px
+        font-size 16px
         width 40px
         text-align center
         margin 0 16px
@@ -131,6 +132,7 @@
             height 40px
             line-height 40px
             padding 0 18px
+            font-size 16px
     .ui-menu-tabs-toggle
         display inline-block
         height 40px
@@ -146,6 +148,6 @@
         right 0
         top 38px
         background #3e98f0
-        z-index 200
+        z-index 600
         padding 10px 0 20px 0
 </style>

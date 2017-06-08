@@ -7,7 +7,7 @@
             </div>
             <!-- 轮播banner组件 -->
             <div class="top-banner">
-                <ui-carousel :items="items"></ui-carousel>
+                <ui-carousel :items="bannerList"></ui-carousel>
             </div>
             <!-- 列表部分list组件 -->
             <home-news-list :newsList='topicList'></home-news-list>
@@ -47,30 +47,13 @@ export default {
         ...mapGetters([
             'newsList',
             'topicList',
+            'bannerList',
             'loaded'
         ])
     },
 
     data() {
         return {
-            items: [
-                {
-                    src: 'https://vuetifyjs.com/static/doc-images/carousel/squirrel.jpg',
-                    text: '松鼠的图片'
-                },
-                {
-                    src: 'https://vuetifyjs.com/static/doc-images/carousel/sky.jpg',
-                    text: '天空的图片'
-                },
-                {
-                    src: 'https://vuetifyjs.com/static/doc-images/carousel/bird.jpg',
-                    text: '鸟的图片'
-                },
-                {
-                    src: 'https://vuetifyjs.com/static/doc-images/carousel/planet.jpg',
-                    text: '星球的图片'
-                }
-            ],
             entrys: [
                 {
                     text: '热点'
@@ -110,7 +93,7 @@ export default {
     activated() {
         this.setAppHeader({
             show: true,
-            title: '百度新闻',
+            title: '',
             showMenu: true,
             showBack: false,
             showLogo: true,
