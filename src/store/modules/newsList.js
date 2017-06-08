@@ -42,7 +42,7 @@ export default {
 
             if (news && news.length) {
                 state.newsList = state.newsList.concat(news);
-                state.loaded = 'complete';
+                state.loaded = 'loaded';
             }
             else {
                 state.loaded = 'complete';
