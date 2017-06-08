@@ -9,7 +9,6 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var ManifestWebpackPlugin = require('./plugins/manifest-webpack-plugin');
-var CdnWebpackPlugin = require('./plugins/cdn-webpack-plugin');
 var SwRegisterWebpackPlugin = require('./plugins/swRegister-webpack-plugin');
 var SWPrecacheWebpackDevServerPlugin = require('sw-precache-webpack-dev-server-plugin');
 
@@ -37,13 +36,6 @@ module.exports = merge(baseWebpackConfig, {
         // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
-
-        // add cdn in index.html
-        new CdnWebpackPlugin({
-            js: {
-                vue: 'https://cdn.bootcss.com/vue/2.3.3/vue.min.js'
-            }
-        }),
 
         // https://github.com/ampedandwired/html-webpack-plugin
         new HtmlWebpackPlugin({

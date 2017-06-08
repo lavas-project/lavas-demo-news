@@ -73,7 +73,7 @@
             selectItem(index) {
                 let me = this;
                 me.entrys.forEach((item, i) => {
-                    Vue.set(me.entrys[i], 'active', i === index);
+                    me.$set(me.entrys[i], 'active', i === index);
                 });
 
                 // todo: 请求列表页数据了

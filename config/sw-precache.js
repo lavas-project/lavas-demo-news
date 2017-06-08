@@ -15,18 +15,15 @@ module.exports = {
 
         /* 需缓存的文件配置
            需动态缓存的放到runtimeCaching中处理 */
-        staticFileGlobs: [
-            // 'dist/**/*.{html,js,css}',
-            'dist/index.html',
-            'dist/manifest.json',
-            'dist/static/css/**/*.*',
-            'dist/static/fonts/**/*.*',
-            'dist/static/img/**/*.*',
-            'dist/static/js/**/*.*'
-        ],
+        staticFileGlobs: [],
+
+        /* webpack生成的静态资源全部缓存 */
+        mergeStaticsConfig: true,
 
         /* 忽略的文件 */
-        staticFileGlobsIgnorePatterns: [],
+        staticFileGlobsIgnorePatterns: [
+            /\.map$/ // map文件不需要缓存
+        ],
 
         /* 需要省略掉的前缀名 */
         stripPrefix: 'dist/',
@@ -74,13 +71,15 @@ module.exports = {
 
         /* 需缓存的文件配置
            需动态缓存的放到runtimeCaching中处理 */
-        staticFileGlobs: [
-            '/**/*.{html,js,css}',
-            '/static/fonts/**/*.*'
-        ],
+        staticFileGlobs: [],
+
+        /* webpack生成的静态资源全部缓存 */
+        mergeStaticsConfig: true,
 
         /* 忽略的文件 */
-        staticFileGlobsIgnorePatterns: [],
+        staticFileGlobsIgnorePatterns: [
+            /\.map$/ // map文件不需要缓存
+        ],
 
         /* 需要省略掉的前缀名 */
         stripPrefix: '',

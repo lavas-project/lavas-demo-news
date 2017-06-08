@@ -67,11 +67,11 @@
             let len = me.items.length;
 
             me.items[0].active = true;
-            Vue.set(this, 'windowWidth', document.body.clientWidth);
+            me.$set(this, 'windowWidth', document.body.clientWidth);
 
             intervalTimer = setInterval(() => {
                 me.items.forEach((item, index) => {
-                    Vue.set(me.items[index], 'active', index === num % len);
+                    me.$set(me.items[index], 'active', index === num % len);
                 });
                 this.marginLeft = -this.windowWidth * (num % len);
                 num++;
@@ -114,7 +114,7 @@
 
                 intervalTimer = setInterval(() => {
                     me.items.forEach((item, index) => {
-                        Vue.set(me.items[index], 'active', index === num % len);
+                        me.$set(me.items[index], 'active', index === num % len);
                     });
                     this.marginLeft = -this.windowWidth * (num % len);
                     num++;
