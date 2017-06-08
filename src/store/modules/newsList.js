@@ -20,9 +20,9 @@ export default {
         loaded: state => state.loaded
     },
     actions: {
-        async getNewsList({commit}) {
+        async getNewsList({commit}, pageNum, pageSize, newsId) {
             try {
-                commit(types.SET_NEWS_LIST, await API.getNewsList());
+                commit(types.SET_NEWS_LIST, await API.getNewsList(pageNum, pageSize, newsId));
             }
             catch(e) {}
         }
