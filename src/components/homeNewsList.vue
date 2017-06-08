@@ -2,10 +2,10 @@
     <div class="news-wrapper">
         <!-- 列表部分list组件，后面提出来 -->
         <div class="news-list">
-            <div v-for="news in newsList" class="news-item">
+            <div v-for="news in newsList" class="news-item" @click="getDetail(news.nid, news.url)">
 
                 <!-- 仅一张图时的样式 -->
-                <div v-if="news.imageurls.length === 1" class="img-first news-content" @click="getDetail(news.nid)">
+                <div v-if="news.imageurls.length === 1" class="img-first news-content" >
                     <div class="posts" v-if="news.imageurls.length">
                         <span v-for="imgUrl in news.imageurls">
                             <img :src="imgUrl.url" alt="">
@@ -21,7 +21,7 @@
                 </div>
 
                 <!-- 非一张图时的样式 -->
-                <div v-if="news.imageurls.length !== 1" class="title-first news-content" @click="getDetail(news.nid)">
+                <div v-if="news.imageurls.length !== 1" class="title-first news-content">
                     <div class="list-item-title">{{news.title}}</div>
                     <div class="posts" v-if="news.imageurls.length">
                         <span v-for="imgUrl in news.imageurls">
@@ -53,8 +53,22 @@ export default {
     },
     methods: {
         // 查看详情
-        getDetail (nid) {
-            this.$router.push('/detail?nid=' + nid);
+        getDetail (nid, url) {
+            let nidLocal = [
+                '14325144040983491863',
+                '1897953632979056483',
+                '9763594890609305267',
+                '2538171553527880634',
+                '9763594890609305267'
+            ];
+            debugger
+
+            if (nidLocal.indexOf(nid + '') === -1) {
+                location.href = url;
+            }
+            else {
+                this.$router.push('/detail?nid=' + nid);
+            }
         }
     }
 };

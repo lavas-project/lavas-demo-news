@@ -44,8 +44,11 @@ export default {
         ])
     },
     async mounted() {
+    // async created() {
         let nid = this.$route.query.nid;
-        await this.getNewsList(0, 10, nid);
+        await this.getNewsList({
+            nid: nid
+        });
         this.detail = this.newsList[0];
         this.contents = this.newsList[0].content;
         this.setPageLoading(false);

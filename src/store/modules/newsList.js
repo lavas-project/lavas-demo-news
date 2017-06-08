@@ -20,9 +20,9 @@ export default {
         loaded: state => state.loaded
     },
     actions: {
-        async getNewsList({commit}, pageNum, pageSize, newsId) {
+        async getNewsList({commit}, params) {
             try {
-                commit(types.SET_NEWS_LIST, await API.getNewsList(pageNum, pageSize, newsId));
+                commit(types.SET_NEWS_LIST, await API.getNewsList(params));
             }
             catch(e) {}
         }
@@ -41,6 +41,7 @@ export default {
                     + time.getDay() + ' ' + time.getHours() + ':'
                     + time.getMinutes();
             });
+            console.log(news)
 
             if (news && news.length) {
                 state.newsList = state.newsList.concat(news);

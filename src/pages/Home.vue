@@ -56,7 +56,10 @@ export default {
             'showMenuTabs'
         ]),
         async getMoreNews() {
-            await this.getNewsList();
+            await this.getNewsList({
+                pageNum: Math.floor(this.newsList.length / 20 + 1),
+                pageSize: 20
+            });
             this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded);
         }
     },
@@ -82,7 +85,10 @@ export default {
         this.showMenuTabs();
     },
     async mounted() {
-        await this.getNewsList();
+        await this.getNewsList({
+            pageNum: 0,
+            pageSize: 20
+        });
     }
 };
 </script>
