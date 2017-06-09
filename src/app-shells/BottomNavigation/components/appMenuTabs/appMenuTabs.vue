@@ -67,7 +67,7 @@ import {mapGetters, mapActions} from 'vuex';
 
         data() {
             return {
-                open: true,
+                open: true
             }
         },
 
@@ -87,10 +87,16 @@ import {mapGetters, mapActions} from 'vuex';
                 this.open = !this.open;
             },
             async selectItem(index) {
+
+
                 let me = this;
                 me.entrys.forEach((item, i) => {
                     me.$set(me.entrys[i], 'active', i === index);
                 });
+
+                if (me.entrys[index].value === this.category) {
+                    return;
+                }
 
                 if (!this.open) {this.toggleOpen();}
                 this.setPageLoading(true);
@@ -99,7 +105,7 @@ import {mapGetters, mapActions} from 'vuex';
                 document.getElementsByClassName('home-wrapper')[0].scrollTop = 0
 
                 this.$router.push('?category=' + me.entrys[index].value);
-
+                this.tabIndex = index;
             }
         }
     };
