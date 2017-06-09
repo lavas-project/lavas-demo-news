@@ -24,7 +24,7 @@ export function createRouter() {
         routes: [
             // <!-- INJECT_SKELETON_ROUTE -->
             {
-                path: '/:id?',
+                path: '/',
                 name: 'home',
                 component: Home
                 // meta: {
