@@ -41,7 +41,7 @@ export default {
             'newsList',
             'topicList',
             'bannerList',
-            'tabIndex',
+            'category',
             'loaded'
         ])
     },
@@ -60,7 +60,7 @@ export default {
         ]),
         async getMoreNews() {
             await this.getNewsList({
-                tabIndex: this.tabIndex,
+                category: this.category,
                 pageNum: Math.floor(this.newsList.length / 20),
                 pageSize: 20
             });
@@ -71,12 +71,12 @@ export default {
         path() {
             this.getMoreNews();
         },
-        async tabIndex() {
-            await this.getNewsList({
-                tabIndex: this.tabIndex,
-                pageNum: 0,
-                pageSize: 20
-            });
+        async category() {
+            // await this.getNewsList({
+            //     category: this.category,
+            //     pageNum: 0,
+            //     pageSize: 20
+            // });
             this.setPageLoading(false);
         }
     },
@@ -102,12 +102,13 @@ export default {
         this.showMenuTabs();
 
         this.path = this.$route.path;
-        this.tabIndex = this.$route.query.tabIndex || 0;
+        this.category = this.$route.query.category || 'remem';
+
     }
     // ,
     // async mounted() {
     //     await this.getNewsList({
-    //         tabIndex: 0,
+    //         category: 'remem',
     //         pageNum: 0,
     //         pageSize: 20
     //     });

@@ -231,7 +231,7 @@ const state = {
         tabs: [
             {
                 text: '热点',
-                value: 'redian',
+                value: 'remem',
                 active: true
             },
             {

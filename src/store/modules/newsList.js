@@ -12,7 +12,7 @@ export default {
         topicList: [],
         bannerList: [],
         newsDetail: {},
-        tabIndex: 0,
+        category: 'remem',
         loaded: false
     },
     getters: {
@@ -20,7 +20,7 @@ export default {
         newsDetail: state => state.newsDetail,
         topicList: state => state.topicList,
         bannerList: state => state.bannerList,
-        tabIndex: state => state.tabIndex,
+        category: state => state.category,
         loaded: state => state.loaded
     },
     actions: {
@@ -36,9 +36,9 @@ export default {
             }
             catch(e) {}
         },
-        async checkTabIndex({commit}, index) {
+        async checkTabCategory({commit}, category) {
             try {
-                commit(types.SET_NEWS_TABINDEX, index);
+                commit(types.SET_NEWS_CATEGORY, category);
             }
             catch(e) {}
         }
@@ -87,8 +87,8 @@ export default {
             }
 
         },
-        [types.SET_NEWS_TABINDEX] (state, index) {
-            state.tabIndex = index;
+        [types.SET_NEWS_CATEGORY] (state, category) {
+            state.category = category;
             state.newsList = [];
         }
     }

@@ -55,7 +55,7 @@ import {mapGetters, mapActions} from 'vuex';
     export default {
         computed: {
             ...mapGetters([
-                'tabIndex'
+                'category'
             ])
         },
         props: {
@@ -73,16 +73,15 @@ import {mapGetters, mapActions} from 'vuex';
 
         created() {
             let me = this;
-            let tabIndex = parseInt(this.$route.query.tabIndex) || 0;
+            let category = this.$route.query.category || 'remem';
             me.entrys.forEach((item, i) => {
-                me.$set(me.entrys[i], 'active', i === tabIndex);
+                me.$set(me.entrys[i], 'active', me.entrys[i].value === category);
             });
         },
         methods: {
             ...mapActions([
                 'setPageLoading',
-                'getNewsList',
-                'checkTabIndex'
+                'checkTabCategory'
             ]),
             toggleOpen() {
                 this.open = !this.open;
@@ -96,10 +95,10 @@ import {mapGetters, mapActions} from 'vuex';
                 if (!this.open) {this.toggleOpen();}
                 this.setPageLoading(true);
 
-                await this.checkTabIndex(index);
+                await this.checkTabCategory(me.entrys[index].value);
                 document.getElementsByClassName('home-wrapper')[0].scrollTop = 0
 
-                this.$router.push('?tabIndex=' + index);
+                this.$router.push('?category=' + me.entrys[index].value);
 
             }
         }
