@@ -27,7 +27,8 @@ export default {
     computed: {
         ...mapGetters([
             'newsDetail',
-            'category'
+            'newsList',
+            'bannerList'
         ]),
         detail: function() {
             return this.newsDetail || {};
@@ -39,23 +40,16 @@ export default {
     props: {},
     data() {
         return {
-            nid: ''
+            nid: '',
+            type: ''
         }
     },
     methods: {
         ...mapActions([
             'setPageLoading',
-            'getNewsDetail',
-            'hideMenuTabs'
+            'getNewsList',
+            'getNewsDetail'
         ])
-    },
-    watch: {
-        async nid() {
-            await this.getNewsDetail({
-                nid: this.nid,
-                category: this.category
-            });
-        }
     },
     beforeRouteEnter(to, from, next) {
 
@@ -83,8 +77,26 @@ export default {
             });
         });
     },
-    activated() {
-        this.nid = this.$route.query.nid;
+    async activated() {
+        let nid = this.nid = this.$route.query.nid;
+        let type = this.type = this.$route.query.type;
+        let category = this.category = this.$route.query.category;
+
+        this.setPageLoading(true);
+
+        if (type === 'news' && this.newsList.length === 0) {
+            await this.getNewsList({
+                category
+            });
+            this.getNewsDetail({nid, type});
+        }
+        else if (type === 'banner' && this.bannerList.length === 0) {
+            await this.getNewsList({
+                category
+            });
+            this.getNewsDetail({nid, type});
+        }
+
         this.setPageLoading(false);
     }
 };

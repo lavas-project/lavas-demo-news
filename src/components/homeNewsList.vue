@@ -53,17 +53,26 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'category'
+            'category',
+            'newsDetail'
         ])
     },
     methods: {
+        ...mapActions([
+            'setPageLoading',
+            'getNewsDetail',
+            'setPageLoading'
+        ]),
+
         // 查看详情
         async getDetail (nid, url, contentLength) {
             if (!contentLength) {
                 location.href = url;
             }
             else {
-                this.$router.push('/detail/?nid=' + nid + '&category=' + this.category || 'remen');
+                this.setPageLoading(true);
+                this.getNewsDetail({nid, type: 'news'});
+                this.$router.push('/detail/?type=news&nid=' + nid + '&category=' + this.category);
             }
         }
     }

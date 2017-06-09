@@ -101,11 +101,10 @@ import {mapGetters, mapActions} from 'vuex';
                 if (!this.open) {this.toggleOpen();}
                 this.setPageLoading(true);
 
-                await this.checkTabCategory(me.entrys[index].value, true);
+                await this.checkTabCategory(me.entrys[index].value);
                 document.getElementsByClassName('home-wrapper')[0].scrollTop = 0
 
                 this.$router.push('?category=' + me.entrys[index].value);
-                this.tabIndex = index;
             }
         }
     };

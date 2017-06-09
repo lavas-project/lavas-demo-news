@@ -32,7 +32,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
+    import {mapGetters, mapActions} from 'vuex';
 
     let intervalTimer = null;
     let num = 0;
@@ -55,7 +55,8 @@
                 return this.windowWidth * this.items.length;
             },
             ...mapGetters([
-                'category'
+                'category',
+                'newsDetail'
             ])
         },
 
@@ -80,13 +81,22 @@
         },
 
         methods: {
+
+            ...mapActions([
+                'setPageLoading',
+                'getNewsDetail',
+                'setPageLoading'
+            ]),
+
             // 查看详情
             async getDetail (nid, url, contentLength) {
                 if (!contentLength) {
                     location.href = url;
                 }
                 else {
-                    this.$router.push('/detail/?nid=' + nid + '&category=' + this.category || 'remen');
+                    this.setPageLoading(true);
+                    this.getNewsDetail({nid, type: 'banner'});
+                    this.$router.push('/detail/?type=banner&nid=' + nid + '&category=' + this.category);
                 }
             }
         }

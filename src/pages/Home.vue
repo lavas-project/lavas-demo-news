@@ -26,7 +26,6 @@ import pageLoadingMixin from '@/mixins/pageLoadingMixin';
 import uiCarousel from '@/components/ui/carousel';
 import InfiniteLoading from 'vue-infinite-loading';
 
-let firstFlag = true;
 
 export default {
     name: 'home',
@@ -76,15 +75,12 @@ export default {
             this.getMoreNews();
         },
         async category() {
-            if (!firstFlag) {
-                await this.getNewsList({
-                    category: this.category,
-                    pageNum: 0,
-                    pageSize: 20
-                });
-                this.setPageLoading(false);
-            }
-            firstFlag = false;
+            await this.getNewsList({
+                category: this.category,
+                pageNum: 0,
+                pageSize: 20
+            });
+            this.setPageLoading(false);
         }
     },
     activated() {

@@ -30,21 +30,18 @@ export default {
             }
             catch (e) {}
         },
-        async getNewsDetail({commit}, params) {
-            try {
-                commit(types.SET_NEWS_DETAIL, await API.getNewsList(params));
-            }
-            catch (e) {}
+        getNewsDetail({commit}, {nid, type}) {
+            commit(types.SET_NEWS_DETAIL, {nid, type});
         },
-        async checkTabCategory({commit}, category, isNewTab) {
+        async checkTabCategory({commit}, category) {
             try {
-                commit(types.SET_NEWS_CATEGORY, category, isNewTab);
+                commit(types.SET_NEWS_CATEGORY, category);
             }
             catch (e) {}
         }
     },
     mutations: {
-        [types.SET_NEWS_LIST] (state, {news, topic, banner}) {
+        [types.SET_NEWS_LIST](state, {news, topic, banner}) {
             let content = [];
 
             news.map(item => {
@@ -91,20 +88,45 @@ export default {
             state.bannerList = banner;
 
         },
-        [types.SET_NEWS_DETAIL](state, {news}) {
-            news.map(item => {
+        [types.SET_NEWS_DETAIL](state, {nid, type}) {
+            state.newsList.map(item => {
                 let time = new Date(Number(item.ts) || Date.now());
                 item.show = time.getFullYear() + '-' + time.getMonth() + '-'
                     + time.getDay() + ' ' + time.getHours() + ':'
                     + time.getMinutes();
             });
 
-            if (news && news.length) {
-                state.newsDetail = news[0];
-                state.loaded = 'loaded';
+            if (type === 'banner') {
+                if (state.bannerList && state.bannerList.length) {
+                    state.bannerList.forEach(news => {
+                        if (news.nid === nid) {
+                            state.newsDetail = news;
+                        }
+                    });
+                    if (!state.newsDetail.nid) {
+                        state.newsDetail = state.bannerList[0];
+                    }
+                    state.loaded = 'loaded';
+                }
+                else {
+                    state.loaded = 'complete';
+                }
             }
             else {
-                state.loaded = 'complete';
+                if (state.newsList && state.newsList.length) {
+                    state.newsList.forEach(news => {
+                        if (news.nid === nid) {
+                            state.newsDetail = news;
+                        }
+                    });
+                    if (!state.newsDetail.nid) {
+                        state.newsDetail = state.newsList[0];
+                    }
+                    state.loaded = 'loaded';
+                }
+                else {
+                    state.loaded = 'complete';
+                }
             }
 
         },
