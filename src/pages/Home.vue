@@ -41,12 +41,15 @@ export default {
             'newsList',
             'topicList',
             'bannerList',
+            'tabIndex',
             'loaded'
         ])
     },
 
     data() {
-        return {};
+        return {
+            path: '/'
+        };
     },
     methods: {
         ...mapActions([
@@ -57,10 +60,16 @@ export default {
         ]),
         async getMoreNews() {
             await this.getNewsList({
-                pageNum: Math.floor(this.newsList.length / 20 + 1),
+                tabIndex: this.tabIndex,
+                pageNum: Math.floor(this.newsList.length / 20),
                 pageSize: 20
             });
             this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded);
+        }
+    },
+    watch: {
+        path() {
+            this.getMoreNews();
         }
     },
     activated() {
@@ -83,13 +92,17 @@ export default {
         });
         this.setPageLoading(false);
         this.showMenuTabs();
-    },
-    async mounted() {
-        await this.getNewsList({
-            pageNum: 0,
-            pageSize: 20
-        });
+
+        this.path = this.$route.path;
     }
+    // ,
+    // async mounted() {
+    //     await this.getNewsList({
+    //         tabIndex: 0,
+    //         pageNum: 0,
+    //         pageSize: 20
+    //     });
+    // }
 };
 </script>
 

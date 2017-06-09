@@ -50,8 +50,14 @@
 </template>
 
 <script>
+import {mapGetters, mapActions} from 'vuex';
 
     export default {
+        computed: {
+            ...mapGetters([
+                'tabIndex'
+            ])
+        },
         props: {
             entrys: {
                 type: Array
@@ -61,27 +67,44 @@
 
         data() {
             return {
-                open: true
+                open: true,
             }
         },
 
         created() {
-            this.entrys[0].active = true;
+            let tabIndex = this.$route.query.tabIndex || 0;
+            this.entrys.map(item => item.active = false);
+            this.entrys[tabIndex].active = true;
         },
-
         methods: {
+            ...mapActions([
+                'setPageLoading',
+                'getNewsList',
+                'checkTabIndex'
+            ]),
             toggleOpen() {
                 this.open = !this.open;
             },
-
-            selectItem(index) {
+            async selectItem(index) {
                 let me = this;
                 me.entrys.forEach((item, i) => {
                     me.$set(me.entrys[i], 'active', i === index);
                 });
 
-                // todo: 请求列表页数据了
-                // me.commit();
+                if (!this.open) {this.toggleOpen();}
+
+                await this.checkTabIndex(index);
+                document.getElementsByClassName('home-wrapper')[0].scrollTop = 0
+
+                // tabMenu切换
+                await this.getNewsList({
+                    tabIndex: index,
+                    pageNum: 0,
+                    pageSize: 20
+                });
+
+                this.$router.push('?tabIndex=' + index);
+
             }
         }
     };

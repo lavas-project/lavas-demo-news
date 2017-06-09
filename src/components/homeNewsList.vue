@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+
 import {mapGetters, mapActions} from 'vuex';
 import EventBus from '@/event-bus';
 import pageLoadingMixin from '@/mixins/pageLoadingMixin';
@@ -52,8 +52,12 @@ export default {
         return {}
     },
     methods: {
+        ...mapActions([
+            'setPageLoading',
+            'getNewsDetail'
+        ]),
         // 查看详情
-        getDetail (nid, url) {
+        async getDetail (nid, url) {
             let nidLocal = [
                 '14325144040983491863',
                 '1897953632979056483',
@@ -61,13 +65,12 @@ export default {
                 '2538171553527880634',
                 '9763594890609305267'
             ];
-            debugger
 
             if (nidLocal.indexOf(nid + '') === -1) {
                 location.href = url;
             }
             else {
-                this.$router.push('/detail?nid=' + nid);
+                this.$router.push('/detail/' + nid + '?nid=' + nid);
             }
         }
     }

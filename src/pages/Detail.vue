@@ -26,33 +26,34 @@ export default {
     mixins: [pageLoadingMixin],
     computed: {
         ...mapGetters([
-            'newsList'
-        ])
+            'newsDetail'
+        ]),
+        detail: function() {
+            return this.newsDetail || {};
+        },
+        contents: function() {
+            return this.newsDetail && this.newsDetail.content || [];
+        }
     },
     props: {},
     data() {
         return {
-            detail: {},
-            contents: []
+            nid: ''
         }
     },
     methods: {
         ...mapActions([
             'setPageLoading',
-            'getNewsList',
+            'getNewsDetail',
             'hideMenuTabs'
         ])
     },
-    async mounted() {
-    // async created() {
-        let nid = this.$route.query.nid;
-        await this.getNewsList({
-            nid: nid
-        });
-        this.detail = this.newsList[0];
-        this.contents = this.newsList[0].content;
-        this.setPageLoading(false);
-
+    watch: {
+        async nid() {
+            await this.getNewsDetail({
+                nid: this.nid
+            });
+        }
     },
     beforeRouteEnter(to, from, next) {
 
@@ -79,7 +80,11 @@ export default {
                 show: false
             });
         });
-    }
+    },
+    activated() {
+        this.nid = this.$route.query.nid;
+        this.setPageLoading(false);
+    },
 };
 </script>
 
