@@ -59,8 +59,9 @@ export default {
             'showMenuTabs'
         ]),
         async getMoreNews() {
+            const category = this.$route.query.category || 'remen';
             await this.getNewsList({
-                category: this.category,
+                category: category,
                 pageNum: Math.floor(this.newsList.length / 20),
                 pageSize: 20
             });
@@ -84,7 +85,7 @@ export default {
         this.setAppHeader({
             show: true,
             title: '',
-            showMenu: true,
+            showMenu: false,
             showBack: false,
             showLogo: true,
             actions: [
@@ -102,13 +103,13 @@ export default {
         this.showMenuTabs();
 
         this.path = this.$route.path;
-        this.category = this.$route.query.category || 'remem';
+        this.category = this.$route.query.category || 'remen';
 
     }
     // ,
     // async mounted() {
     //     await this.getNewsList({
-    //         category: 'remem',
+    //         category: 'remen',
     //         pageNum: 0,
     //         pageSize: 20
     //     });

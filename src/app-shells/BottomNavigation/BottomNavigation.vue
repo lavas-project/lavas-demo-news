@@ -12,7 +12,7 @@
             @click-logo="handleClickHeaderLogo"
             @click-back="handleClickHeaderBack">
             <template slot="logo">
-                <span class="app-header-logo">新闻</span>
+                <span class="app-header-logo">新闻 - news</span>
             </template>
         </app-header>
         <app-menu-tabs :entrys="menuTabs.tabs" :show="menuTabs.show"></app-menu-tabs>
