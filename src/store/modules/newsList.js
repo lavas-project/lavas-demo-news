@@ -12,7 +12,7 @@ export default {
         topicList: [],
         bannerList: [],
         newsDetail: {},
-        category: 'remem',
+        category: 'remen',
         loaded: false
     },
     getters: {

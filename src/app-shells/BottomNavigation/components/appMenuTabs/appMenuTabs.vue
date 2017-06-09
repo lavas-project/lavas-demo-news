@@ -73,7 +73,7 @@ import {mapGetters, mapActions} from 'vuex';
 
         created() {
             let me = this;
-            let category = this.$route.query.category || 'remem';
+            let category = this.$route.query.category || 'remen';
             me.entrys.forEach((item, i) => {
                 me.$set(me.entrys[i], 'active', me.entrys[i].value === category);
             });

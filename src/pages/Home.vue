@@ -102,13 +102,13 @@ export default {
         this.showMenuTabs();
 
         this.path = this.$route.path;
-        this.category = this.$route.query.category || 'remem';
+        this.category = this.$route.query.category || 'remen';
 
     }
     // ,
     // async mounted() {
     //     await this.getNewsList({
-    //         category: 'remem',
+    //         category: 'remen',
     //         pageNum: 0,
     //         pageSize: 20
     //     });
