@@ -6,12 +6,8 @@
                 width: wrapWidth + 'px',
                 marginLeft: marginLeft + 'px'
             }"
-            v-on:touchstart="onTouchstart"
-            v-on:touchmove="onTouchmove"
-            v-on:touchend="onTouchend"
         >
-            <a
-                :href="item.url"
+            <div
                 class="ui-carousel-item"
                 v-for="(item,i) in items"
                 :index="i"
@@ -19,11 +15,12 @@
                     backgroundImage: 'url(' + item.imageurls[0].url + ')',
                     width: windowWidth + 'px'
                 }"
+                @click="getDetail(item.nid, item.url, item.content.length)"
             >
                 <p class="ui-carousel-item-text">
                     <span>{{item.title}}</span>
                 </p>
-            </a>
+            </div>
         </div>
         <div class="ui-carousel-nav">
             <span
@@ -35,6 +32,7 @@
 </template>
 
 <script>
+    import {mapGetters} from 'vuex';
 
     let intervalTimer = null;
     let num = 0;
@@ -55,7 +53,10 @@
         computed: {
             wrapWidth() {
                 return this.windowWidth * this.items.length;
-            }
+            },
+            ...mapGetters([
+                'category'
+            ])
         },
 
         watch: {
@@ -79,46 +80,14 @@
         },
 
         methods: {
-            onTouchstart(e) {
-                let touch = e.targetTouches[0];
-                startPos = {
-                    x: touch.pageX,
-                    y: touch.pageY,
-                    time: Date.now()
-                };
-
-                clearInterval(intervalTimer);
-            },
-
-            onTouchmove(e) {
-                let touch = e.targetTouches[0];
-                let len = this.items.length;
-
-                curPos = {
-                    x: touch.pageX - startPos.x,
-                    y: touch.pageY - startPos.y,
-                    time: Date.now()
-                };
-
-                isScroll = Math.abs(curPos.x) < Math.abs(curPos.y) ? 1 : 0;
-
-                // 表示横向滑动
-                if (isScroll === 0) {
+            // 查看详情
+            async getDetail (nid, url, contentLength) {
+                if (!contentLength) {
+                    location.href = url;
                 }
-
-            },
-
-            onTouchend() {
-                let me = this;
-                let len = me.items.length;
-
-                intervalTimer = setInterval(() => {
-                    let curidx = ++num % len;
-                    for (let i = 0, l = me.items.length; i < l; i++) {
-                        me.items[i].active = (i === curidx);
-                    }
-                    me.marginLeft = -(me.windowWidth * curidx);
-                }, 5000);
+                else {
+                    this.$router.push('/detail/?nid=' + nid + '&category=' + this.category || 'remen');
+                }
             }
         }
     }

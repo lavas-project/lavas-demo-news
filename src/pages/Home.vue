@@ -26,6 +26,8 @@ import pageLoadingMixin from '@/mixins/pageLoadingMixin';
 import uiCarousel from '@/components/ui/carousel';
 import InfiniteLoading from 'vue-infinite-loading';
 
+let firstFlag = true;
+
 export default {
     name: 'home',
     mixins: [pageLoadingMixin],
@@ -56,7 +58,8 @@ export default {
             'setPageLoading',
             'setAppHeader',
             'getNewsList',
-            'showMenuTabs'
+            'showMenuTabs',
+            'checkTabCategory'
         ]),
         async getMoreNews() {
             const category = this.$route.query.category || 'remen';
@@ -73,12 +76,15 @@ export default {
             this.getMoreNews();
         },
         async category() {
-            await this.getNewsList({
-                category: this.category,
-                pageNum: 0,
-                pageSize: 20
-            });
-            this.setPageLoading(false);
+            if (!firstFlag) {
+                await this.getNewsList({
+                    category: this.category,
+                    pageNum: 0,
+                    pageSize: 20
+                });
+                this.setPageLoading(false);
+            }
+            firstFlag = false;
         }
     },
     activated() {
@@ -101,9 +107,8 @@ export default {
         });
         this.setPageLoading(false);
         this.showMenuTabs();
-
+        this.checkTabCategory(this.$route.query.category || 'remen');
         this.path = this.$route.path;
-        this.category = this.$route.query.category || 'remen';
 
     }
     // ,

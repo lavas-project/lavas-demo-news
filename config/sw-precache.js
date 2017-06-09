@@ -48,6 +48,10 @@ module.exports = {
             {
                 urlPattern: /\/material-design-icon/,
                 handler: 'networkFirst'
+            },
+            {
+                urlPattern: /\/pwa\.baidu\.com/,
+                handler: 'networkFirst'
             }
             // ,
             // 如果在staticFileGlobs中设置相同的缓存路径，可能导致此处不起作用
@@ -103,10 +107,6 @@ module.exports = {
         runtimeCaching: [
             {
                 urlPattern: /\/material-design-icon/,
-                handler: 'networkFirst'
-            },
-            {
-                urlPattern: /\/pwa\.baidu\.com/,
                 handler: 'networkFirst'
             }
             // ,

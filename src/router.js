@@ -32,7 +32,7 @@ export function createRouter() {
                 // }
             },
             {
-                path: '/detail/:id',
+                path: '/detail',
                 name: 'detail',
                 component: Detail
             },

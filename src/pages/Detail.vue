@@ -62,7 +62,7 @@ export default {
         next(vm => {
             vm.$store.commit(types.SET_MENU_TABS_VISIBILITY, false);
             vm.$store.commit(types.SET_APP_HEADER, {
-                title: 'Detail Page',
+                title: '',
                 show: true,
                 showMenu: false,
                 showBack: true,

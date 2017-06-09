@@ -36,9 +36,9 @@ export default {
             }
             catch (e) {}
         },
-        async checkTabCategory({commit}, category) {
+        async checkTabCategory({commit}, category, isNewTab) {
             try {
-                commit(types.SET_NEWS_CATEGORY, category);
+                commit(types.SET_NEWS_CATEGORY, category, isNewTab);
             }
             catch (e) {}
         }
@@ -89,9 +89,11 @@ export default {
             }
 
         },
-        [types.SET_NEWS_CATEGORY](state, category) {
+        [types.SET_NEWS_CATEGORY](state, category, isNewTab = false) {
             state.category = category;
-            state.newsList = [];
+            if (isNewTab) {
+                state.newsList = [];
+            }
         }
     }
 };
