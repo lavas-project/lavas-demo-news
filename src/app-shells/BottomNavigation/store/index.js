@@ -231,25 +231,36 @@ const state = {
         tabs: [
             {
                 text: '热点',
+                value: 'redian',
                 active: true
             },
             {
-                text: '军事'
+                text: '娱乐',
+                value: 'yule'
             },
             {
-                text: '娱乐'
+                text: '体育',
+                value: 'tiyu'
             },
             {
-                text: '汽车'
+                text: '军事',
+                value: 'junshi'
             },
             {
-                text: '搞笑'
+                text: '社会',
+                value: 'shehui'
             },
             {
-                text: '国内'
+                text: '汽车',
+                value: 'qiche'
             },
             {
-                text: '国际'
+                text: '国内',
+                value: 'guonei'
+            },
+            {
+                text: '国际',
+                value: 'guoji'
             }
         ]
     }
