@@ -84,7 +84,7 @@ export default {
         this.setAppHeader({
             show: true,
             title: '',
-            showMenu: true,
+            showMenu: false,
             showBack: false,
             showLogo: true,
             actions: [

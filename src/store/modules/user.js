@@ -19,11 +19,11 @@ export default {
                 let userInfo = await API.getUserInfo(userId);
                 commit(types.SET_USER, userInfo);
             }
-            catch(e) {}
+            catch (e) {}
         }
     },
     mutations: {
-        [types.SET_USER] (state, user) {
+        [types.SET_USER](state, user) {
             state.user = user;
         }
     }

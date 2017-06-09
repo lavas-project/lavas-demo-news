@@ -28,23 +28,23 @@ export default {
             try {
                 commit(types.SET_NEWS_LIST, await API.getNewsList(params));
             }
-            catch(e) {}
+            catch (e) {}
         },
         async getNewsDetail({commit}, params) {
             try {
                 commit(types.SET_NEWS_DETAIL, await API.getNewsList(params));
             }
-            catch(e) {}
+            catch (e) {}
         },
         async checkTabCategory({commit}, category) {
             try {
                 commit(types.SET_NEWS_CATEGORY, category);
             }
-            catch(e) {}
+            catch (e) {}
         }
     },
     mutations: {
-        [types.SET_NEWS_LIST] (state, {news, topic, banner}) {
+        [types.SET_NEWS_LIST](state, {news, topic, banner}) {
 
             news.map(item => {
                 let time = new Date(Number(item.ts) || Date.now());
@@ -72,7 +72,7 @@ export default {
             state.bannerList = banner;
 
         },
-        [types.SET_NEWS_DETAIL] (state, {news}) {
+        [types.SET_NEWS_DETAIL](state, {news}) {
             news.map(item => {
                 let time = new Date(Number(item.ts) || Date.now());
                 item.show = time.getFullYear() + '-' + time.getMonth() + '-'
@@ -89,7 +89,7 @@ export default {
             }
 
         },
-        [types.SET_NEWS_CATEGORY] (state, category) {
+        [types.SET_NEWS_CATEGORY](state, category) {
             state.category = category;
             state.newsList = [];
         }

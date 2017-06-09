@@ -74,7 +74,7 @@ a
     text-decoration none
 
 .news-wrapper
-    min-height 200px
+    // min-height 200px
 
     .news-list
         padding 10px
