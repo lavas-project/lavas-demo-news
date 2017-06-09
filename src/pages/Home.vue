@@ -64,6 +64,7 @@ export default {
             const category = this.$route.query.category || 'remen';
             await this.getNewsList({
                 category: category,
+                change: false,
                 pageNum: Math.floor(this.newsList.length / 20),
                 pageSize: 20
             });
@@ -77,6 +78,7 @@ export default {
         async category() {
             await this.getNewsList({
                 category: this.category,
+                change: true,
                 pageNum: 0,
                 pageSize: 20
             });

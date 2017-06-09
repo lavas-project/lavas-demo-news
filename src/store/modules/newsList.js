@@ -26,7 +26,8 @@ export default {
     actions: {
         async getNewsList({commit}, params) {
             try {
-                commit(types.SET_NEWS_LIST, await API.getNewsList(params));
+                let {news, banner, topic} = await API.getNewsList(params);
+                commit(types.SET_NEWS_LIST, {news, banner, topic, change: params.change});
             }
             catch (e) {}
         },
@@ -41,7 +42,7 @@ export default {
         }
     },
     mutations: {
-        [types.SET_NEWS_LIST](state, {news, topic, banner}) {
+        [types.SET_NEWS_LIST](state, {news, topic, banner, change}) {
             let content = [];
 
             news.map(item => {
@@ -77,7 +78,12 @@ export default {
             });
 
             if (news && news.length) {
-                state.newsList = state.newsList.concat(news);
+                if (change) {
+                    state.newsList = news;
+                }
+                else {
+                    state.newsList = state.newsList.concat(news);
+                }
                 state.loaded = 'loaded';
             }
             else {
@@ -130,11 +136,8 @@ export default {
             }
 
         },
-        [types.SET_NEWS_CATEGORY](state, category, isNewTab = false) {
+        [types.SET_NEWS_CATEGORY](state, category) {
             state.category = category;
-            if (isNewTab) {
-                state.newsList = [];
-            }
         }
     }
 };
