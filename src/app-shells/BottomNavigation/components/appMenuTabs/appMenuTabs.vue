@@ -148,9 +148,9 @@ import {mapGetters, mapActions} from 'vuex';
         line-height 40px
         color #fff
         font-size 16px
-        width 40px
+        width 60px
         text-align center
-        margin 0 16px
+        margin 0 6px
         span
             display inline-block
             height 38px
