@@ -26,9 +26,9 @@ var webpackConfig = merge(baseWebpackConfig, {
             extract: true
         })
     },
-    // externals: {
-    //     vue: 'Vue'
-    // },
+    externals: {
+        vue: 'Vue'
+    },
     devtool: config.build.productionSourceMap ? '#source-map' : false,
     output: {
         path: config.build.assetsRoot,
