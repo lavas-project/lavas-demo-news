@@ -70,6 +70,13 @@ export default {
     watch: {
         path() {
             this.getMoreNews();
+        },
+        tabIndex() {
+            this.getNewsList({
+                tabIndex: this.tabIndex,
+                pageNum: 0,
+                pageSize: 20
+            });
         }
     },
     activated() {
@@ -94,6 +101,7 @@ export default {
         this.showMenuTabs();
 
         this.path = this.$route.path;
+        this.tabIndex = this.$route.query.tabIndex || 0;
     }
     // ,
     // async mounted() {

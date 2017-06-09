@@ -72,9 +72,11 @@ import {mapGetters, mapActions} from 'vuex';
         },
 
         created() {
-            let tabIndex = this.$route.query.tabIndex || 0;
-            this.entrys.map(item => item.active = false);
-            this.entrys[tabIndex].active = true;
+            let me = this;
+            let tabIndex = parseInt(this.$route.query.tabIndex) || 0;
+            me.entrys.forEach((item, i) => {
+                me.$set(me.entrys[i], 'active', i === tabIndex);
+            });
         },
         methods: {
             ...mapActions([
@@ -95,13 +97,6 @@ import {mapGetters, mapActions} from 'vuex';
 
                 await this.checkTabIndex(index);
                 document.getElementsByClassName('home-wrapper')[0].scrollTop = 0
-
-                // tabMenu切换
-                await this.getNewsList({
-                    tabIndex: index,
-                    pageNum: 0,
-                    pageSize: 20
-                });
 
                 this.$router.push('?tabIndex=' + index);
 
