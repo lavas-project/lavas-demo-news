@@ -12,6 +12,11 @@ export default {
             withCredentials: true
         });
 
+        if (params.nid) {
+            let news = data.data.data.news || [];
+            data.data.data.news = news.filter(item => item.nid === params.nid) || news[0] || [];
+        }
+
         return data.data.data;
     },
 

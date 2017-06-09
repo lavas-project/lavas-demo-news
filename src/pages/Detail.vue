@@ -26,7 +26,8 @@ export default {
     mixins: [pageLoadingMixin],
     computed: {
         ...mapGetters([
-            'newsDetail'
+            'newsDetail',
+            'category'
         ]),
         detail: function() {
             return this.newsDetail || {};
@@ -51,7 +52,8 @@ export default {
     watch: {
         async nid() {
             await this.getNewsDetail({
-                nid: this.nid
+                nid: this.nid,
+                category: this.category
             });
         }
     },
@@ -84,7 +86,7 @@ export default {
     activated() {
         this.nid = this.$route.query.nid;
         this.setPageLoading(false);
-    },
+    }
 };
 </script>
 
