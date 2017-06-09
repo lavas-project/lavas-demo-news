@@ -2,7 +2,7 @@
     <div class="news-wrapper">
         <!-- 列表部分list组件，后面提出来 -->
         <div class="news-list">
-            <div v-for="news in newsList" class="news-item" @click="getDetail(news.nid, news.url)">
+            <div v-for="news in newsList" class="news-item" @click="getDetail(news.nid, news.url, news.content)">
 
                 <!-- 仅一张图时的样式 -->
                 <div v-if="news.imageurls.length === 1" class="img-first news-content" >
@@ -57,16 +57,8 @@ export default {
             'getNewsDetail'
         ]),
         // 查看详情
-        async getDetail (nid, url) {
-            let nidLocal = [
-                '14325144040983491863',
-                '1897953632979056483',
-                '9763594890609305267',
-                '2538171553527880634',
-                '9763594890609305267'
-            ];
-
-            if (nidLocal.indexOf(nid + '') === -1) {
+        async getDetail (nid, url, content) {
+            if (!content || !content.length) {
                 location.href = url;
             }
             else {
