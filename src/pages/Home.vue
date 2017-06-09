@@ -59,8 +59,9 @@ export default {
             'showMenuTabs'
         ]),
         async getMoreNews() {
+            const category = this.$route.query.category || 'remen';
             await this.getNewsList({
-                category: this.category,
+                category: category,
                 pageNum: Math.floor(this.newsList.length / 20),
                 pageSize: 20
             });
