@@ -72,11 +72,11 @@ export default {
             this.getMoreNews();
         },
         async category() {
-            // await this.getNewsList({
-            //     category: this.category,
-            //     pageNum: 0,
-            //     pageSize: 20
-            // });
+            await this.getNewsList({
+                category: this.category,
+                pageNum: 0,
+                pageSize: 20
+            });
             this.setPageLoading(false);
         }
     },

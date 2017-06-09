@@ -45,19 +45,21 @@ export default {
     },
     mutations: {
         [types.SET_NEWS_LIST] (state, {news, topic, banner}) {
+
             news.map(item => {
                 let time = new Date(Number(item.ts) || Date.now());
                 item.show = time.getFullYear() + '-' + time.getMonth() + '-'
                     + time.getDay() + ' ' + time.getHours() + ':'
                     + time.getMinutes();
             });
-            topic.map(item => {
-                let time = new Date(Number(item.ts) || Date.now());
-                item.show = time.getFullYear() + '-' + time.getMonth() + '-'
-                    + time.getDay() + ' ' + time.getHours() + ':'
-                    + time.getMinutes();
-            });
-
+            if (topic) {
+                topic.map(item => {
+                    let time = new Date(Number(item.ts) || Date.now());
+                    item.show = time.getFullYear() + '-' + time.getMonth() + '-'
+                        + time.getDay() + ' ' + time.getHours() + ':'
+                        + time.getMinutes();
+                });
+            }
             if (news && news.length) {
                 state.newsList = state.newsList.concat(news);
                 state.loaded = 'loaded';

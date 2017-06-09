@@ -87,6 +87,7 @@ export default {
     },
     async mounted() {
         await this.getUserInfo();
+        console.log('xxx', this.user);
     }
 };
 </script>

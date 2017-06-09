@@ -27,11 +27,11 @@ export default {
             catch(e) {}
         },
         async searchNews({commit}, query) {
-            try {
+            // try {
                 commit(types.ADD_QUERY_HISTORY, query);
                 commit(types.SET_QUERY_RESULT, await API.searchNews(query));
-            }
-            catch(e) {}
+            // }
+            // catch(e) {}
         },
         deleteQueryHistory({commit}, query) {
             commit(types.DELETE_QUERY_HISTORY, query);

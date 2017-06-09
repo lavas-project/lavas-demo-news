@@ -16,7 +16,8 @@ export default {
     actions: {
         async getUserInfo({commit}, userId) {
             try {
-                commit(types.SET_USER, await API.getUserInfo(userId));
+                let userInfo = await API.getUserInfo(userId);
+                commit(types.SET_USER, userInfo);
             }
             catch(e) {}
         }
