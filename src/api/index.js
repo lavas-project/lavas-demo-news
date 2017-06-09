@@ -8,7 +8,6 @@ import axios from 'axios';
 export default {
     async getNewsList(params) {
         let data = await axios('https://pwa.baidu.com/api/mockup/news/' + params.category, {
-            params,
             withCredentials: true
         });
 
