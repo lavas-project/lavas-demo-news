@@ -94,6 +94,7 @@ import {mapGetters, mapActions} from 'vuex';
                 });
 
                 if (!this.open) {this.toggleOpen();}
+                this.setPageLoading(true);
 
                 await this.checkTabIndex(index);
                 document.getElementsByClassName('home-wrapper')[0].scrollTop = 0
