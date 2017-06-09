@@ -71,12 +71,13 @@ export default {
         path() {
             this.getMoreNews();
         },
-        tabIndex() {
-            this.getNewsList({
+        async tabIndex() {
+            await this.getNewsList({
                 tabIndex: this.tabIndex,
                 pageNum: 0,
                 pageSize: 20
             });
+            this.setPageLoading(false);
         }
     },
     activated() {
