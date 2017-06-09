@@ -44,22 +44,41 @@ export default {
         }
     },
     mutations: {
-        [types.SET_NEWS_LIST](state, {news, topic, banner}) {
+        [types.SET_NEWS_LIST] (state, {news, topic, banner}) {
+            let content = [];
 
             news.map(item => {
                 let time = new Date(Number(item.ts) || Date.now());
                 item.show = time.getFullYear() + '-' + time.getMonth() + '-'
                     + time.getDay() + ' ' + time.getHours() + ':'
                     + time.getMinutes();
+
+                if (!content.length && item.content.length) {
+                    content = item.content;
+                }
+                item.content = item.content.length ? item.content : content;
             });
+
             if (topic) {
                 topic.map(item => {
                     let time = new Date(Number(item.ts) || Date.now());
                     item.show = time.getFullYear() + '-' + time.getMonth() + '-'
                         + time.getDay() + ' ' + time.getHours() + ':'
                         + time.getMinutes();
+                    if (!content.length && item.content.length) {
+                        content = item.content;
+                    }
+                    item.content = item.content.length ? item.content : content;
                 });
             }
+
+            banner.map(item => {
+                if (!content.length && item.content.length) {
+                    content = item.content;
+                }
+                item.content = item.content.length ? item.content : content;
+            });
+
             if (news && news.length) {
                 state.newsList = state.newsList.concat(news);
                 state.loaded = 'loaded';
