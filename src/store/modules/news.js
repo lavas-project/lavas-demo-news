@@ -27,36 +27,36 @@ export default {
             try {
                 commit(types.SET_HOT_NEWS, await API.getHotNews());
             }
-            catch(e) {}
+            catch (e) {}
         },
         async searchNews({commit}, query) {
             try {
                 commit(types.ADD_QUERY_HISTORY, query);
                 commit(types.SET_QUERY_RESULT, await API.searchNews(query));
             }
-            catch(e) {}
+            catch (e) {}
         },
         deleteQueryHistory({commit}, query) {
             commit(types.DELETE_QUERY_HISTORY, query);
         }
     },
     mutations: {
-        [types.SET_HOT_NEWS] (state, {news}) {
+        [types.SET_HOT_NEWS](state, {news}) {
             state.hotNews = news;
         },
-        [types.ADD_QUERY_HISTORY] (state, query) {
+        [types.ADD_QUERY_HISTORY](state, query) {
             if (state.query.history.indexOf(query) === -1) {
                 state.query.history.push(query);
             }
         },
-        [types.DELETE_QUERY_HISTORY] (state, query) {
+        [types.DELETE_QUERY_HISTORY](state, query) {
             let queryIdx = state.query.history.indexOf(query);
             if (queryIdx > -1) {
                 state.query.history.splice(queryIdx, 1);
             }
         },
-        [types.SET_QUERY_RESULT] (state, {news}) {
+        [types.SET_QUERY_RESULT](state, {news}) {
             state.query.result = news;
-        },
+        }
     }
 };

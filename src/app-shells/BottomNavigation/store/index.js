@@ -214,8 +214,56 @@ const state = {
                 route: '/user'
             }
         ]
-    }
+    },
 
+    /**
+     * 导航tabs
+     *
+     * @type {Object}
+     */
+    menuTabs: {
+        /**
+         * 是否展现 menuTabs
+         * @type {Boolean}
+         */
+        show: true,
+
+        tabs: [
+            {
+                text: '热点',
+                value: 'remen',
+                active: true
+            },
+            {
+                text: '娱乐',
+                value: 'yule'
+            },
+            {
+                text: '体育',
+                value: 'tiyu'
+            },
+            {
+                text: '军事',
+                value: 'junshi'
+            },
+            {
+                text: '社会',
+                value: 'shehui'
+            },
+            {
+                text: '汽车',
+                value: 'qiche'
+            },
+            {
+                text: '国内',
+                value: 'guonei'
+            },
+            {
+                text: '国际',
+                value: 'guoji'
+            }
+        ]
+    }
 };
 
 const getters = {
@@ -225,7 +273,8 @@ const getters = {
     pageTransitionName: state => state.pageTransitionName,
     appHeader: state => state.appHeader,
     appSidebar: state => state.appSidebar,
-    appBottomNavigator: state => state.appBottomNavigator
+    appBottomNavigator: state => state.appBottomNavigator,
+    menuTabs: state => state.menuTabs
 };
 
 const actions = {
@@ -302,6 +351,18 @@ const actions = {
      */
     hideSidebar({commit}) {
         commit(types.SET_SIDEBAR_VISIBILITY, false);
+    },
+
+    /**
+     * 隐藏menu tabs
+     */
+    hideMenuTabs({commit}) {
+        commit(types.SET_MENU_TABS_VISIBILITY, false);
+    },
+
+
+    showMenuTabs({commit}) {
+        commit(types.SET_MENU_TABS_VISIBILITY, true);
     }
 };
 
@@ -334,6 +395,9 @@ const mutations = {
     },
     [types.SET_SIDEBAR_VISIBILITY] (state, sidebarVisibility) {
         state.appSidebar.show = sidebarVisibility;
+    },
+    [types.SET_MENU_TABS_VISIBILITY] (state, menuTabsVisibility) {
+        state.menuTabs.show = menuTabsVisibility;
     }
 };
 

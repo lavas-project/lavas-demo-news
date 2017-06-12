@@ -26,53 +26,75 @@ export default {
     mixins: [pageLoadingMixin],
     computed: {
         ...mapGetters([
-            'newsList'
-        ])
+            'newsDetail',
+            'newsList',
+            'bannerList'
+        ]),
+        detail: function() {
+            return this.newsDetail || {};
+        },
+        contents: function() {
+            return this.newsDetail && this.newsDetail.content || [];
+        }
     },
     props: {},
     data() {
         return {
-            detail: {},
-            contents: []
+            nid: '',
+            type: ''
         }
     },
     methods: {
         ...mapActions([
+            'setAppHeader',
+            'hideMenuTabs',
             'setPageLoading',
-            'getNewsList'
+            'getNewsList',
+            'getNewsDetail'
         ])
     },
-    async mounted() {
-        debugger
-        let nid = this.$route.query.nid;
-        await this.getNewsList(0, 10, nid);
-        this.detail = this.newsList[0];
-        this.contents = this.newsList[0].content;
-        this.setPageLoading(false);
-    },
-    beforeRouteEnter(to, from, next) {
-        next(vm => {
-            vm.$store.commit(types.SET_APP_HEADER, {
-                title: 'Detail Page',
-                show: true,
-                showMenu: false,
-                showBack: true,
-                showLogo: false,
-                actions: [
-                    {
-                        icon: 'home',
-                        route: {
-                            name: 'home'
-                        }
-                    }
-                ]
-            });
+    async activated() {
+        let nid = this.nid = this.$route.query.nid;
+        let type = this.type = this.$route.query.type;
+        let category = this.category = this.$route.query.category;
 
-            // 隐藏底部导航栏
-            vm.$store.commit(types.SET_APP_BOTTOM_NAV, {
-                show: false
-            });
+        this.setAppHeader({
+            title: '',
+            show: true,
+            showMenu: false,
+            showBack: true,
+            showLogo: false,
+            actions: [
+                {
+                    icon: 'home',
+                    route: {
+                        name: 'home'
+                    }
+                }
+            ]
         });
+        this.hideMenuTabs();
+        this.setPageLoading(true);
+
+        if (type === 'news' && this.newsList.length === 0) {
+            await this.getNewsList({
+                category
+            });
+            this.getNewsDetail({nid, type});
+        }
+        else if (type === 'banner' && this.bannerList.length === 0) {
+            await this.getNewsList({
+                category
+            });
+            this.getNewsDetail({nid, type});
+        }
+
+        // 设置页面标题
+        this.setAppHeader({
+            title: this.detail.title
+        });
+
+        this.setPageLoading(false);
     }
 };
 </script>

@@ -6,21 +6,19 @@
                 width: wrapWidth + 'px',
                 marginLeft: marginLeft + 'px'
             }"
-            v-on:touchstart="onTouchstart"
-            v-on:touchmove="onTouchmove"
-            v-on:touchend="onTouchend"
         >
             <div
                 class="ui-carousel-item"
                 v-for="(item,i) in items"
                 :index="i"
                 v-bind:style="{
-                    backgroundImage: 'url(' + item.src + ')',
+                    backgroundImage: 'url(' + item.imageurls[0].url + ')',
                     width: windowWidth + 'px'
                 }"
+                @click="getDetail(item.nid, item.url, item.content.length)"
             >
                 <p class="ui-carousel-item-text">
-                    <span>{{item.text}}</span>
+                    <span>{{item.title}}</span>
                 </p>
             </div>
         </div>
@@ -34,6 +32,7 @@
 </template>
 
 <script>
+    import {mapGetters, mapActions} from 'vuex';
 
     let intervalTimer = null;
     let num = 0;
@@ -43,11 +42,7 @@
 
     export default {
         name: 'carousel',
-        props: {
-            items: {
-                type: Array
-            }
-        },
+        props: ['items'],
         data() {
             return {
                 windowWidth: 0,
@@ -58,67 +53,51 @@
         computed: {
             wrapWidth() {
                 return this.windowWidth * this.items.length;
-            }
+            },
+            ...mapGetters([
+                'category',
+                'newsDetail'
+            ])
         },
 
+        watch: {
+            items() {
 
-        created() {
-            let me = this;
-            let len = me.items.length;
-
-            me.items[0].active = true;
-            me.$set(this, 'windowWidth', document.body.clientWidth);
-
-            intervalTimer = setInterval(() => {
-                me.items.forEach((item, index) => {
-                    me.$set(me.items[index], 'active', index === num % len);
-                });
-                this.marginLeft = -this.windowWidth * (num % len);
-                num++;
-            }, 2000);
-        },
-
-        methods: {
-            onTouchstart(e) {
-                let touch = e.targetTouches[0];
-                startPos = {
-                    x: touch.pageX,
-                    y: touch.pageY,
-                    time: Date.now()
-                };
-
-                clearInterval(intervalTimer);
-            },
-
-            onTouchmove(e) {
-                let touch = e.targetTouches[0];
-                let len = this.items.length;
-
-                curPos = {
-                    x: touch.pageX - startPos.x,
-                    y: touch.pageY - startPos.y,
-                    time: Date.now()
-                };
-
-                isScroll = Math.abs(curPos.x) < Math.abs(curPos.y) ? 1 : 0;
-
-                // 表示横向滑动
-                if (isScroll === 0) {
-                }
-
-            },
-
-            onTouchend() {
                 let me = this;
                 let len = me.items.length;
 
+                me.items[0].active = true;
+                me.windowWidth = document.body.clientWidth;
+
+                clearInterval(intervalTimer);
                 intervalTimer = setInterval(() => {
-                    me.items.forEach((item, index) => {
-                        me.$set(me.items[index], 'active', index === num % len);
-                    });
-                    this.marginLeft = -this.windowWidth * (num % len);
-                    num++;
-                }, 2000);
+                    let curidx = ++num % len;
+                    for (let i = 0, l = me.items.length; i < l; i++) {
+                        me.items[i].active = (i === curidx);
+                    }
+                    me.marginLeft = -(me.windowWidth * curidx);
+                }, 5000);
+            }
+        },
+
+        methods: {
+
+            ...mapActions([
+                'setPageLoading',
+                'getNewsDetail',
+                'setPageLoading'
+            ]),
+
+            // 查看详情
+            async getDetail (nid, url, contentLength) {
+                if (!contentLength) {
+                    location.href = url;
+                }
+                else {
+                    this.setPageLoading(true);
+                    this.getNewsDetail({nid, type: 'banner'});
+                    this.$router.push('/detail/?type=banner&nid=' + nid + '&category=' + this.category);
+                }
             }
         }
     }
@@ -141,6 +120,7 @@
         right 0
         text-align right
         padding-right 20px
+        z-index 10
         span
             display inline-block
             vertical-align middle
@@ -155,7 +135,6 @@
             border-radius 4px
             background #fff
     .ui-carousel-item
-        position relative
         height 100%
         display inline-block
         background-size cover
@@ -166,6 +145,7 @@
             vertical-align bottom
             padding 0 17px
             text-align left
+            font-size 16px
             height 68px
             color #fff;
             background-image linear-gradient(180deg,rgba(0,0,0,0) 0,rgba(0,0,0,.8) 100%)

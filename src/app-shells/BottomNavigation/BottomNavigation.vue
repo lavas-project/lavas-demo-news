@@ -12,9 +12,10 @@
             @click-logo="handleClickHeaderLogo"
             @click-back="handleClickHeaderBack">
             <template slot="logo">
-                <span class="app-header-logo">新闻</span>
+                <span class="app-header-logo">新闻 - news</span>
             </template>
         </app-header>
+        <app-menu-tabs :entrys="menuTabs.tabs" :show="menuTabs.show"></app-menu-tabs>
         <div class="app-view-wrapper">
             <v-progress-circular
                 indeterminate
@@ -52,18 +53,21 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 import AppHeader from './components/appHeader';
+import AppMenuTabs from './components/appMenuTabs';
 
 export default {
     name: 'bottomNavigation',
     components: {
-        AppHeader
+        AppHeader,
+        AppMenuTabs
     },
-    data () {
+    data() {
         return {};
     },
     computed: {
         ...mapGetters([
             'appHeader',
+            'menuTabs',
             'isPageLoading',
             'isPageSwitching',
             'pageTransitionName'
@@ -92,13 +96,6 @@ export default {
 <style lang="stylus" scoped>
 
 .app-shell
-    position absolute
-    top 0
-    right 0
-    bottom 0
-    left 0
-    width 100%
-    height 100%
     display flex
     flex-direction column
 
@@ -127,7 +124,7 @@ export default {
     .app-view-wrapper
         flex 1
         position relative
-        overflow hidden
+
         .app-view-loading
             position fixed
             top 50%
@@ -136,11 +133,8 @@ export default {
             z-index 100
             color: $theme.primary
         .app-view
-            position absolute
-            top 0
-            right 0
-            bottom 0
-            left 0
+            margin-top 0
+            height 100%
             overflow-x hidden
             overflow-y auto
             transition transform 0.4s cubic-bezier(.55, 0, .1, 1)
@@ -148,10 +142,10 @@ export default {
             color: $material-theme.text-color
 
             &.app-view-with-header
-                top $app-header-height
+                margin-top $app-header-height
 
-            &.app-view-with-footer
-                bottom $app-footer-height
+            // &.app-view-with-footer
+            //     bottom $app-footer-height
 
             &.slide-left-enter
                 transform translate(100%, 0)

@@ -2,10 +2,10 @@
     <div class="news-wrapper">
         <!-- 列表部分list组件，后面提出来 -->
         <div class="news-list">
-            <div v-for="news in newsList" class="news-item">
+            <div v-for="news in newsList" class="news-item" @click="getDetail(news.nid, news.url, news.content.length)">
 
                 <!-- 仅一张图时的样式 -->
-                <div v-if="news.imageurls.length === 1" class="img-first news-content" @click="getDetail(news.nid)">
+                <div v-if="news.imageurls.length === 1" class="img-first news-content" >
                     <div class="posts" v-if="news.imageurls.length">
                         <span v-for="imgUrl in news.imageurls">
                             <img :src="imgUrl.url" alt="">
@@ -21,7 +21,7 @@
                 </div>
 
                 <!-- 非一张图时的样式 -->
-                <div v-if="news.imageurls.length !== 1" class="title-first news-content" @click="getDetail(news.nid)">
+                <div v-if="news.imageurls.length !== 1" class="title-first news-content">
                     <div class="list-item-title">{{news.title}}</div>
                     <div class="posts" v-if="news.imageurls.length">
                         <span v-for="imgUrl in news.imageurls">
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+
 import {mapGetters, mapActions} from 'vuex';
 import EventBus from '@/event-bus';
 import pageLoadingMixin from '@/mixins/pageLoadingMixin';
@@ -51,11 +51,29 @@ export default {
     data() {
         return {}
     },
+    computed: {
+        ...mapGetters([
+            'category',
+            'newsDetail'
+        ])
+    },
     methods: {
+        ...mapActions([
+            'setPageLoading',
+            'getNewsDetail',
+            'setPageLoading'
+        ]),
+
         // 查看详情
-        getDetail (nid) {
-            debugger
-            this.$router.push('/detail?nid=' + nid);
+        async getDetail (nid, url, contentLength) {
+            if (!contentLength) {
+                location.href = url;
+            }
+            else {
+                this.setPageLoading(true);
+                this.getNewsDetail({nid, type: 'news'});
+                this.$router.push('/detail/?type=news&nid=' + nid + '&category=' + this.category);
+            }
         }
     }
 };
@@ -66,7 +84,7 @@ a
     text-decoration none
 
 .news-wrapper
-    min-height 200px
+    // min-height 200px
 
     .news-list
         padding 10px

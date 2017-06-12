@@ -12,31 +12,6 @@
         </header>
 
         <div class="result-wrapper">
-            <v-card class="result-card">
-                <v-card-row class="blue darken-4">
-                    <v-card-title>
-                        <v-icon class="red--text text--lighten-1">whatshot</v-icon>
-                        <span class="white--text">热搜榜</span>
-                    </v-card-title>
-                </v-card-row>
-                <v-card-text>
-                    <v-list two-line v-show="hotNews && hotNews.length">
-                        <v-list-item v-for="(item, index) in hotNews" v-bind:key="index">
-                            <v-list-tile avatar ripple>
-                                <v-list-tile-content>
-                                    <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                                    <v-list-tile-sub-title class="grey--text text--darken-4">{{ item.abs }}</v-list-tile-sub-title>
-                                </v-list-tile-content>
-                                <v-list-tile-action>
-                                    <v-list-tile-action-text class="news-date">{{ item.ts | formatDateToNow }}</v-list-tile-action-text>
-                                    <v-icon class="grey--text text--lighten-1">star_border</v-icon>
-                                </v-list-tile-action>
-                            </v-list-tile>
-                        </v-list-item>
-                    </v-list>
-                </v-card-text>
-            </v-card>
-
             <transition name="slide-left">
                 <v-card class="result-card" v-show="searchResult && searchResult.length">
                     <v-card-row class="blue darken-4">
@@ -63,6 +38,31 @@
                     </v-card-text>
                 </v-card>
             </transition>
+
+            <v-card class="result-card">
+                <v-card-row class="blue darken-4">
+                    <v-card-title>
+                        <v-icon class="red--text text--lighten-1">whatshot</v-icon>
+                        <span class="white--text">热搜榜</span>
+                    </v-card-title>
+                </v-card-row>
+                <v-card-text>
+                    <v-list two-line v-show="hotNews && hotNews.length">
+                        <v-list-item v-for="(item, index) in hotNews" v-bind:key="index">
+                            <v-list-tile avatar ripple>
+                                <v-list-tile-content>
+                                    <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                                    <v-list-tile-sub-title class="grey--text text--darken-4">{{ item.abs }}</v-list-tile-sub-title>
+                                </v-list-tile-content>
+                                <v-list-tile-action>
+                                    <v-list-tile-action-text class="news-date">{{ item.ts | formatDateToNow }}</v-list-tile-action-text>
+                                    <v-icon class="grey--text text--lighten-1">star_border</v-icon>
+                                </v-list-tile-action>
+                            </v-list-tile>
+                        </v-list-item>
+                    </v-list>
+                </v-card-text>
+            </v-card>
         </div>
     </div>
 </template>
@@ -97,7 +97,8 @@ export default {
             'setAppHeader',
             'getHotNews',
             'searchNews',
-            'deleteQueryHistory'
+            'deleteQueryHistory',
+            'hideMenuTabs'
         ]),
         async handleSearch(query) {
             this.setPageLoading(true);
@@ -112,6 +113,7 @@ export default {
     activated() {
         this.setAppHeader({show: false});
         this.setPageLoading(false);
+        this.hideMenuTabs();
     },
     async mounted() {
         await this.getHotNews();
@@ -130,7 +132,7 @@ export default {
         height $app-header-height
         background: $theme.primary
         box-shadow 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px rgba(0,0,0,.14), 0 1px 10px rgba(0,0,0,.12)
-        
+
         .search-wrapper
             flex 1
 
@@ -141,7 +143,8 @@ export default {
             background: $material-theme.bg-color
             margin-bottom 6px
             transition transform 0.2s ease-in-out
-            
+            transform translate3d(0,0,0)
+
             &.slide-left-enter
                 transform translate(100%, 0)
 

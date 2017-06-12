@@ -1,14 +1,9 @@
 <template>
     <div class="home-wrapper">
         <div class="news-wrapper">
-            <!-- 头部tab组件 -->
-            <div class="top-tab">
-                <ui-menu-tabs :entrys="entrys"></ui-menu-tabs>
-            </div>
+
             <!-- 轮播banner组件 -->
-            <div class="top-banner">
-                <ui-carousel :items="items"></ui-carousel>
-            </div>
+            <ui-carousel :items="bannerList"></ui-carousel>
             <!-- 列表部分list组件 -->
             <home-news-list :newsList='topicList'></home-news-list>
 
@@ -29,8 +24,8 @@ import {mapGetters, mapActions} from 'vuex';
 import EventBus from '@/event-bus';
 import pageLoadingMixin from '@/mixins/pageLoadingMixin';
 import uiCarousel from '@/components/ui/carousel';
-import uiMenuTabs from '@/components/ui/menuTabs';
 import InfiniteLoading from 'vue-infinite-loading';
+
 
 export default {
     name: 'home',
@@ -39,7 +34,6 @@ export default {
     },
     components: {
         uiCarousel,
-        uiMenuTabs,
         HomeNewsList,
         InfiniteLoading
     },
@@ -47,71 +41,55 @@ export default {
         ...mapGetters([
             'newsList',
             'topicList',
+            'bannerList',
+            'category',
             'loaded'
         ])
     },
 
     data() {
         return {
-            items: [
-                {
-                    src: 'https://vuetifyjs.com/static/doc-images/carousel/squirrel.jpg',
-                    text: '松鼠的图片'
-                },
-                {
-                    src: 'https://vuetifyjs.com/static/doc-images/carousel/sky.jpg',
-                    text: '天空的图片'
-                },
-                {
-                    src: 'https://vuetifyjs.com/static/doc-images/carousel/bird.jpg',
-                    text: '鸟的图片'
-                },
-                {
-                    src: 'https://vuetifyjs.com/static/doc-images/carousel/planet.jpg',
-                    text: '星球的图片'
-                }
-            ],
-            entrys: [
-                {
-                    text: '热点'
-                },
-                {
-                    text: '军事'
-                },
-                {
-                    text: '娱乐'
-                },
-                {
-                    text: '汽车'
-                },
-                {
-                    text: '搞笑'
-                },
-                {
-                    text: '国内'
-                },
-                {
-                    text: '国际'
-                }
-            ]
+            path: '/'
         };
     },
     methods: {
         ...mapActions([
             'setPageLoading',
             'setAppHeader',
-            'getNewsList'
+            'getNewsList',
+            'showMenuTabs',
+            'checkTabCategory'
         ]),
         async getMoreNews() {
-            await this.getNewsList();
+            const category = this.$route.query.category || 'remen';
+            await this.getNewsList({
+                category: category,
+                change: false,
+                pageNum: Math.floor(this.newsList.length / 20),
+                pageSize: 20
+            });
             this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded);
+        }
+    },
+    watch: {
+        path() {
+            this.getMoreNews();
+        },
+        async category() {
+            await this.getNewsList({
+                category: this.category,
+                change: true,
+                pageNum: 0,
+                pageSize: 20
+            });
+            this.setPageLoading(false);
         }
     },
     activated() {
         this.setAppHeader({
             show: true,
-            title: '百度新闻',
-            showMenu: true,
+            title: '',
+            showMenu: false,
             showBack: false,
             showLogo: true,
             actions: [
@@ -126,12 +104,14 @@ export default {
             ]
         });
         this.setPageLoading(false);
-    },
-    async mounted() {
-        await this.getNewsList();
+        this.showMenuTabs();
+        this.checkTabCategory(this.$route.query.category || 'remen');
+        this.path = this.$route.path;
     }
 };
 </script>
 
 <style lang="stylus" scoped>
+.home-wrapper
+    margin-top 40px
 </style>

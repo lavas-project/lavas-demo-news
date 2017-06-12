@@ -1,14 +1,26 @@
 <template>
     <div class="search-wrapper" :class="{open: open}">
-        <div class="search-form">
-            <input class="search-input" v-model="query" type="search" autocomplete="off" placeholder="请输入搜索词" autocapitalize="off" @focus="open = true"/>
-        </div>
+        <form class="search-form"
+            @submit.prevent="search(query)">
+            <input class="search-input"
+                v-model="query"
+                v-focus="focused"
+                type="search"
+                autocomplete="off"
+                placeholder="请输入搜索词"
+                autocapitalize="off"
+                @focus="handleFocus"
+                @blur="focused = false"/>
+        </form>
         <v-btn class="close-btn"
+            v-show="open"
             icon ripple @click.native="open = false">
-            <v-icon class="close-icon">close</v-icon>
+            <v-icon class="close-icon">arrow_back</v-icon>
         </v-btn>
-        <v-btn light icon class="search-btn" @click.native="search(query)">
-            <v-icon class="search-icon">search</v-icon>
+        <v-btn class="clear-btn"
+            v-show="open"
+            icon ripple @click.native="query = ''">
+            <v-icon class="clear-icon">close</v-icon>
         </v-btn>
         
         <div class="search-history-wrapper">
@@ -36,14 +48,13 @@
                     <v-divider inset></v-divider>
                 </v-list-item>
             </v-list>
-            <!-- <transition name="">
-
-            </transition> -->
         </div>
     </div>
 </template>
 
 <script>
+import {focus} from 'vue-focus';
+
 export default {
     name: 'morphSearch',
     props: {
@@ -51,26 +62,32 @@ export default {
             type: Array
         }
     },
+    directives: {
+        focus
+    },
     data() {
         return {
             open: false,
-            query: ''
+            query: '',
+            focused: false
         };
     },
     methods: {
         search(query) {
             if (query) {
                 this.open = false;
+                this.focused = false;
                 this.query = query;
-                this.$emit('search', this.query);
+                this.$emit('search', this.query);   
             }
         },
         deleteHistory(historyItem) {
             this.$emit('delete-history', historyItem);
+        },
+        handleFocus() {
+            this.focused = true;
+            this.open = true;
         }
-    },
-    async mounted() {
-
     }
 };
 </script>
@@ -94,20 +111,14 @@ export default {
             +placeholder()
                 color: $material-theme.bg-color
     
-        .search-btn
-            transition opacity 0.3s, transform 0.3s
-            opacity 0
-            transform scale3d(0, 0, 1)
-            color: $material-theme.bg-color
+    .clear-btn
+        color: $material-theme.bg-color
 
     .close-btn
         position absolute
         left 0
         top 2px
         background: $theme.primary
-        transition opacity 0.3s, transform 0.3s
-        opacity 0
-        transform scale3d(0, 0, 1)
         color: $material-theme.bg-color
         
     .search-history-wrapper
@@ -122,17 +133,7 @@ export default {
         overflow-y auto
     
     &.open
-        
-        .search-form
-            
-            .search-btn
-                opacity 1
-                transform scale3d(1, 1, 1)
-            
-        .close-btn
-            opacity 1
-            transform scale3d(1, 1, 1)
-            
+  
         .search-history-wrapper
             display block
             .history-list
