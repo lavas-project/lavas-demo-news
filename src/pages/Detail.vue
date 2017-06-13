@@ -90,9 +90,9 @@ export default {
         }
 
         // 设置页面标题
-        this.setAppHeader({
-            title: this.detail.title
-        });
+        // this.setAppHeader({
+        //     title: this.detail.title
+        // });
 
         this.setPageLoading(false);
     }

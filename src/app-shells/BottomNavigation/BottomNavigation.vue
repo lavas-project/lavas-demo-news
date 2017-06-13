@@ -104,22 +104,18 @@ export default {
         top 0
         left 0
         right 0
+        z-index 1000
 
         .app-header-logo
             padding-left 16px
             font-size 1.2em
-        //     display inline-block
-        //     width 88px
-        //     height $app-header-height
-        //     background url(https://gss0.bdstatic.com/5foIcy0a2gI2n2jgoY3K/n/nvn/static/news/imgs/bg-news-logo_344ce44.png) no-repeat
-        //     background-size 65px auto
-        //     background-position center 16px
 
     .app-shell-footer
         position fixed
         bottom 0
         left 0
         right 0
+        z-index 1000
 
     .app-view-wrapper
         flex 1
@@ -133,8 +129,9 @@ export default {
             z-index 100
             color: $theme.primary
         .app-view
+            position absolute
+            width 100%
             margin-top 0
-            height 100%
             overflow-x hidden
             overflow-y auto
             transition transform 0.4s cubic-bezier(.55, 0, .1, 1)
