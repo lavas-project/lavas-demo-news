@@ -9,11 +9,11 @@ import Router from 'vue-router';
 import types from './store/mutation-types';
 
 // 定义切割点，异步加载路由组件
-const Home = () => import('@/pages/Home.vue');
-const Detail = () => import('@/pages/Detail.vue');
-const NotFound = () => import('@/pages/NotFound.vue');
-const User = () => import('@/pages/User.vue');
-const Search = () => import('@/pages/Search.vue');
+// const Home = () => import('@/pages/Home.vue');
+// const Detail = () => import('@/pages/Detail.vue');
+// const NotFound = () => import('@/pages/NotFound.vue');
+// const User = () => import('@/pages/User.vue');
+// const Search = () => import('@/pages/Search.vue');
 
 Vue.use(Router);
 
@@ -34,7 +34,7 @@ export function createRouter() {
             {
                 path: '/',
                 name: 'home',
-                component: Home
+                component: () => import('./pages/Home.vue')
                 // meta: {
                 //     notKeepAlive: true
                 // }
@@ -42,22 +42,22 @@ export function createRouter() {
             {
                 path: '/detail',
                 name: 'detail',
-                component: Detail
+                component: () => import('./pages/Detail.vue')
             },
             {
                 path: '/user',
                 name: 'user',
-                component: User
+                component: () => import('./pages/User.vue')
             },
             {
                 path: '/search',
                 name: 'search',
-                component: Search
+                component: () => import('./pages/Search.vue')
             },
             {
                 path: '*',
                 name: 'notFound',
-                component: NotFound
+                component: () => import('./pages/NotFound.vue')
             }
         ]
     });

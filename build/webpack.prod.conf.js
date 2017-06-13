@@ -14,6 +14,7 @@ var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 var ManifestWebpackPlugin = require('./plugins/manifest-webpack-plugin');
 var CdnWebpackPlugin = require('./plugins/cdn-webpack-plugin');
 var SwRegisterWebpackPlugin = require('./plugins/swRegister-webpack-plugin');
+var VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 
 var env = process.env.NODE_ENV === 'testing'
     ? require('../config/test.env')
@@ -132,7 +133,9 @@ var webpackConfig = merge(baseWebpackConfig, {
 
         new SwRegisterWebpackPlugin({
             filePath: config.swRegister.filePath
-        })
+        }),
+        // server side render
+        new VueSSRClientPlugin()
     ]
 });
 

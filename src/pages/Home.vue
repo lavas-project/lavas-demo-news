@@ -8,11 +8,6 @@
             <home-news-list :newsList='topicList'></home-news-list>
 
             <home-news-list :newsList='newsList'></home-news-list>
-            <infinite-loading :on-infinite="getMoreNews" ref="infiniteLoading">
-                <span slot="no-more">
-                  没有更多了！
-                </span>
-            </infinite-loading>
 
         </div>
     </div>
@@ -24,7 +19,6 @@ import {mapGetters, mapActions} from 'vuex';
 import EventBus from '@/event-bus';
 import pageLoadingMixin from '@/mixins/pageLoadingMixin';
 import uiCarousel from '@/components/ui/carousel';
-import InfiniteLoading from 'vue-infinite-loading';
 
 
 export default {
@@ -34,8 +28,7 @@ export default {
     },
     components: {
         uiCarousel,
-        HomeNewsList,
-        InfiniteLoading
+        HomeNewsList
     },
     computed: {
         ...mapGetters([
@@ -68,7 +61,7 @@ export default {
                 pageNum: Math.floor(this.newsList.length / 20),
                 pageSize: 20
             });
-            this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded);
+            // this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded);
         }
     },
     watch: {
@@ -84,6 +77,9 @@ export default {
             });
             this.setPageLoading(false);
         }
+    },
+    mounted() {
+        this.getMoreNews();
     },
     activated() {
         this.setAppHeader({
