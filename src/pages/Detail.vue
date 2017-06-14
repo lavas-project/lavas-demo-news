@@ -38,6 +38,10 @@ export default {
         }
     },
     props: {},
+    async asyncData(store, route) {
+        await this.getNewsList();
+        await this.getNewsDetail();
+    },
     data() {
         return {
             nid: '',
