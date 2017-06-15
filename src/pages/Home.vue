@@ -13,7 +13,6 @@
                   没有更多了！
                 </span>
             </infinite-loading>
-
         </div>
     </div>
 </template>
@@ -106,6 +105,9 @@ export default {
         this.setPageLoading(false);
         this.showMenuTabs();
         this.checkTabCategory(this.$route.query.category || 'remen');
+        if (this.category === 'remen') {
+            this.getMoreNews();
+        }
         this.path = this.$route.path;
     }
 };
@@ -113,5 +115,5 @@ export default {
 
 <style lang="stylus" scoped>
 .home-wrapper
-    margin-top 40px
+    margin-top 92px !important;
 </style>

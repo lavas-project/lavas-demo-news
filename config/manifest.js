@@ -17,5 +17,5 @@ module.exports = {
     startUrl: '/',
     display: 'standalone',
     backgroundColor: '#000000',
-    themeColor: '#3e98f0'
+    themeColor: '#ff5722'
 };

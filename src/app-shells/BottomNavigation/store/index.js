@@ -49,6 +49,8 @@ const state = {
          */
         show: true,
 
+        isRefresh: false,
+
         /**
          * 标题内容
          *

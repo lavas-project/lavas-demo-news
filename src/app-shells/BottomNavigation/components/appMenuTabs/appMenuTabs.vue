@@ -1,7 +1,5 @@
 <template>
-    <transition
-        name="slide-down">
-    <div class="app-menu-tabs" v-show="show">
+    <div class="app-menu-tabs" id="app-menu-tabs" v-show="show">
         <div class="app-menu-tabs-single" v-show="open">
             <div class="app-menu-tabs-con">
                 <div
@@ -46,7 +44,6 @@
             <div class="app-menu-tabs-mask" v-on:click="toggleOpen"></div>
         </div>
     </div>
-    </transition>
 </template>
 
 <script>
@@ -55,7 +52,8 @@ import {mapGetters, mapActions} from 'vuex';
     export default {
         computed: {
             ...mapGetters([
-                'category'
+                'category',
+                'tab'
             ])
         },
         props: {
@@ -88,7 +86,6 @@ import {mapGetters, mapActions} from 'vuex';
             },
             async selectItem(index) {
 
-
                 let me = this;
                 me.entrys.forEach((item, i) => {
                     me.$set(me.entrys[i], 'active', i === index);
@@ -102,9 +99,11 @@ import {mapGetters, mapActions} from 'vuex';
                 this.setPageLoading(true);
 
                 await this.checkTabCategory(me.entrys[index].value);
-                document.getElementsByClassName('home-wrapper')[0].scrollTop = 0
+
+                document.body.scrollTop = 0
 
                 this.$router.push('?category=' + me.entrys[index].value);
+
             }
         }
     };
@@ -113,76 +112,84 @@ import {mapGetters, mapActions} from 'vuex';
 
 
 <style lang="stylus" scoped>
-    .app-menu-tabs
-        position fixed
-        top 52px
-        left 0
-        right 0
-        z-index 1000
-    .app-menu-tabs-all
-        background #3e98f0
-        border-top 1px solid #5dabf0
-        height 40px
-        display flex
-        position relative
-        .app-menu-tabs-item
-            width: 12.6667%;
-            margin 0 2%
-        .app-menu-tabs-mask
-            position fixed
-            left 0
-            right 0
-            top 92px
-            z-index 500
-            bottom 0
-            background rgba(0, 0, 0, .3)
-    .app-menu-tabs-single
-        background #3e98f0
-        border-top 1px solid #5dabf0
-        height 40px
-        overflow hidden
-        display flex
+
+$btn-color = #fff
+
+.app-menu-tabs-all
+    background: $theme.primary
+    border-top 1px solid #5dabf0
+    height 40px
+    display flex
+    position relative
+
     .app-menu-tabs-item
-        display inline-block
-        height 40px
-        line-height 40px
-        color #fff
-        font-size 16px
-        width 60px
-        text-align center
-        margin 0 6px
-        span
-            display inline-block
-            height 38px
-            padding 0 4px
-        span.active
-            border-bottom 2px solid #fff
-    .app-menu-tabs-con
-        flex 1
-        overflow hidden
-        overflow-x auto
-        color #fff
-        height 100px
-        label
-            height 40px
-            line-height 40px
-            padding 0 18px
-            font-size 16px
-    .app-menu-tabs-toggle
-        display inline-block
-        height 40px
-        width 40px
-        line-height 40px
-        text-align center
-        .app-menu-tabs-icon
-            color #fff
-    .app-menu-tabs-list
-        position absolute
-        border-top 1px solid #5dabf0
+        width: 12.6667%;
+        margin 0 2%
+
+    .app-menu-tabs-mask
+        position fixed
         left 0
         right 0
-        top 38px
-        background #3e98f0
-        z-index 600
-        padding 10px 0 20px 0
+        top 92px
+        z-index 500
+        bottom 0
+        // background rgba(0, 0, 0, .3)
+
+.app-menu-tabs-single
+    background: $theme.primary
+    border-top 1px solid #5dabf0
+    height 40px
+    overflow hidden
+    display flex
+
+.app-menu-tabs-item
+    display inline-block
+    height 40px
+    line-height 40px
+    color $btn-color
+    font-size 16px
+    width 60px
+    text-align center
+    margin 0 6px
+
+    span
+        display inline-block
+        height 38px
+        padding 0 4px
+
+    span.active
+        border-bottom 2px solid $btn-color
+
+.app-menu-tabs-con
+    flex 1
+    overflow hidden
+    overflow-x auto
+    color $btn-color
+    height 100px
+    label
+        height 40px
+        line-height 40px
+        padding 0 18px
+        font-size 16px
+
+.app-menu-tabs-toggle
+    display inline-block
+    height 40px
+    width 40px
+    line-height 40px
+    text-align center
+
+    .app-menu-tabs-icon
+        color $btn-color
+
+.app-menu-tabs-list
+    position absolute
+    border-top 1px solid #5dabf0
+    left 0
+    right 0
+    top 38px
+    background: $theme.primary
+    z-index 600
+    padding 10px 0 20px 0
+
 </style>

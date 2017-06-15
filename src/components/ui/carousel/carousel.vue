@@ -107,7 +107,7 @@
     .ui-carousel-wrap
         height 232px
         width 100%
-        background-color #000
+        background-color rgba(0, 0, 0, 0)
         position relative
         overflow hidden
         .ui-carousel-inner-wrap

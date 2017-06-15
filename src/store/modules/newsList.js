@@ -21,6 +21,7 @@ export default {
         topicList: state => state.topicList,
         bannerList: state => state.bannerList,
         category: state => state.category,
+        tab: state => state.tab,
         loaded: state => state.loaded
     },
     actions: {
@@ -34,11 +35,8 @@ export default {
         getNewsDetail({commit}, {nid, type}) {
             commit(types.SET_NEWS_DETAIL, {nid, type});
         },
-        async checkTabCategory({commit}, category) {
-            try {
-                commit(types.SET_NEWS_CATEGORY, category);
-            }
-            catch (e) {}
+        checkTabCategory({commit}, category) {
+            commit(types.SET_NEWS_CATEGORY, category);
         }
     },
     mutations: {

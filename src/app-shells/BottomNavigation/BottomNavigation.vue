@@ -1,21 +1,23 @@
 <template>
     <div class="app-shell app-shell-bottom-navigation">
-        <app-header
-            class="app-shell-header"
-            :show="appHeader.show"
-            :showMenu="appHeader.showMenu"
-            :showBack="appHeader.showBack"
-            :showLogo="appHeader.showLogo"
-            :title="appHeader.title"
-            :actions="appHeader.actions"
-            :loading="isPageSwitching"
-            @click-logo="handleClickHeaderLogo"
-            @click-back="handleClickHeaderBack">
-            <template slot="logo">
-                <span class="app-header-logo">新闻 - news</span>
-            </template>
-        </app-header>
-        <app-menu-tabs :entrys="menuTabs.tabs" :show="menuTabs.show"></app-menu-tabs>
+        <div class="app-shell-header">
+            <app-header
+                :show="appHeader.show"
+                :isRefresh="appHeader.isRefresh"
+                :showMenu="appHeader.showMenu"
+                :showBack="appHeader.showBack"
+                :showLogo="appHeader.showLogo"
+                :title="appHeader.title"
+                :actions="appHeader.actions"
+                :loading="isPageSwitching"
+                @click-logo="handleClickHeaderLogo"
+                @click-back="handleClickHeaderBack">
+                <template slot="logo">
+                    <span class="app-header-logo">新闻 - news</span>
+                </template>
+            </app-header>
+            <app-menu-tabs :entrys="menuTabs.tabs" :show="menuTabs.show"></app-menu-tabs>
+        </div>
         <div class="app-view-wrapper">
             <v-progress-circular
                 indeterminate
@@ -99,6 +101,23 @@ export default {
     display flex
     flex-direction column
 
+    .app-refresh-tips
+        background #000
+        color #fff
+        height 40px
+        line-height 40px
+        padding 0 20px
+        .app-refresh-wrap
+            display flex
+        span
+            display inline-block
+            flex 1
+            font-size 15px
+        button
+            color #fff
+            outline none
+            font-size 15px
+
     .app-shell-header
         position fixed
         top 0
@@ -132,8 +151,6 @@ export default {
             position absolute
             width 100%
             margin-top 0
-            overflow-x hidden
-            overflow-y auto
             transition transform 0.4s cubic-bezier(.55, 0, .1, 1)
             background: $material-theme.bg-color
             color: $material-theme.text-color
