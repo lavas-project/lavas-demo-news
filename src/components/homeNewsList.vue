@@ -107,12 +107,14 @@ a
                     margin-top 5px
                     span
                         display inline-block
-                        margin-right 1px
+                        margin-right 2%
                         max-height 111px
-                        width 33%
+                        width 32%
                         img
                             width 100%
                             display inline-block
+                        &:last-child
+                            margin-right 0
                 .some-icons
                     color #ccc
                     margin-right 3%
@@ -127,9 +129,9 @@ a
                     width 66%
                     float right
                     padding-left 10px
-                    padding-top 10px
+
                 .posts
-                    width 33%
+                    width 34%
                     display inline-block
                     span
                         width 100%
