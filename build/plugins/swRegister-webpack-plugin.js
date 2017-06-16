@@ -56,8 +56,12 @@ SwRegisterPlugin.prototype.apply = function (compiler) {
                     let content = compilation.assets[asset].source();
                     content = content.replace(/\.js/g, '.js?v=' + version);
                     compilation.assets[(config.swRegister.name || 'sw-register') + '.js'] = {
-                        source:() => content,
-                        size:() => content.length
+                        source() {
+                            return content;
+                        },
+                        size() {
+                            return content.length;
+                        }
                     };
 
                     delete compilation.assets[asset];
