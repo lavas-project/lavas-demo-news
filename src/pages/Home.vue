@@ -25,6 +25,7 @@ import pageLoadingMixin from '@/mixins/pageLoadingMixin';
 import uiCarousel from '@/components/ui/carousel';
 import InfiniteLoading from 'vue-infinite-loading';
 
+let isFirst = false;
 
 export default {
     name: 'home',
@@ -71,10 +72,10 @@ export default {
         }
     },
     watch: {
-        path() {
-            this.getMoreNews();
-        },
-        async category() {
+        async category(new1, old) {
+            if (!old) {
+                return;
+            }
             await this.getNewsList({
                 category: this.category,
                 change: true,
@@ -82,6 +83,7 @@ export default {
                 pageSize: 20
             });
             this.setPageLoading(false);
+
         }
     },
     activated() {
@@ -108,7 +110,6 @@ export default {
         if (this.category === 'remen') {
             this.getMoreNews();
         }
-        this.path = this.$route.path;
     }
 };
 </script>
