@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import HomeNewsList from '@/components/homeNewsList.vue';
+import HomeNewsList from '@/components/HomeNewsList.vue';
 import {mapGetters, mapActions} from 'vuex';
 import EventBus from '@/event-bus';
 import pageLoadingMixin from '@/mixins/pageLoadingMixin';
