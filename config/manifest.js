@@ -16,6 +16,6 @@ module.exports = {
     ],
     startUrl: '/',
     display: 'standalone',
-    backgroundColor: '#000000',
-    themeColor: '#ff5722'
+    backgroundColor: '#fff',
+    themeColor: '#3e98f0'
 };
