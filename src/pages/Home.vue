@@ -72,8 +72,8 @@ export default {
         }
     },
     watch: {
-        async category(new1, old) {
-            if (!old) {
+        async category(newC, oldC) {
+            if (!oldC) {
                 return;
             }
             await this.getNewsList({
