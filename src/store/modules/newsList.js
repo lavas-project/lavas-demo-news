@@ -25,20 +25,14 @@ export default {
     },
     actions: {
         async getNewsList({commit}, params) {
-            try {
-                let {news, banner, topic} = await API.getNewsList(params);
-                commit(types.SET_NEWS_LIST, {news, banner, topic, change: params.change});
-            }
-            catch (e) {}
+            let {news, banner, topic} = await API.getNewsList(params);
+            commit(types.SET_NEWS_LIST, {news, banner, topic, change: params.change});
         },
         getNewsDetail({commit}, {nid, type}) {
             commit(types.SET_NEWS_DETAIL, {nid, type});
         },
         async checkTabCategory({commit}, category) {
-            try {
-                commit(types.SET_NEWS_CATEGORY, category);
-            }
-            catch (e) {}
+            commit(types.SET_NEWS_CATEGORY, category);
         }
     },
     mutations: {
@@ -92,7 +86,6 @@ export default {
 
             state.topicList = topic;
             state.bannerList = banner;
-
         },
         [types.SET_NEWS_DETAIL](state, {nid, type}) {
             state.newsList.map(item => {

@@ -10,14 +10,14 @@
         <div class="content">
             <div v-for="content in contents" class="news-item">
                 <p v-if="content.type === 'text'">{{ content.data }}</p>
-                <img v-if="content.type === 'image'" :src="content.data.original.url"/>
+                <img v-if="content.type === 'image'" :src="content.data.original.url" />
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import types from '@/store/mutation-types';
 import pageLoadingMixin from '@/mixins/pageLoadingMixin';
 
@@ -30,23 +30,40 @@ export default {
             'newsList',
             'bannerList'
         ]),
-        detail: function() {
+        detail: function () {
             return this.newsDetail || {};
         },
-        contents: function() {
+        contents: function () {
             return this.newsDetail && this.newsDetail.content || [];
         }
     },
     props: {},
-    async asyncData(store, route) {
-        await this.getNewsList();
-        await this.getNewsDetail();
+    async asyncData({store, route}) {
+        store.dispatch('setAppHeader', {
+            title: '',
+            show: true,
+            showMenu: false,
+            showBack: true,
+            showLogo: false,
+            actions: [
+                {
+                    icon: 'home',
+                    route: {
+                        name: 'home'
+                    }
+                }
+            ]
+        });
+        store.dispatch('hideMenuTabs');
+        store.dispatch('setPageLoading', false);
+        await store.dispatch('getNewsList', {category: route.query.category});
+        await store.dispatch('getNewsDetail', {nid: route.query.nid, type: route.query.type});
     },
     data() {
         return {
             nid: '',
             type: ''
-        }
+        };
     },
     methods: {
         ...mapActions([
@@ -84,13 +101,13 @@ export default {
             await this.getNewsList({
                 category
             });
-            this.getNewsDetail({nid, type});
+            this.getNewsDetail({ nid, type });
         }
         else if (type === 'banner' && this.bannerList.length === 0) {
             await this.getNewsList({
                 category
             });
-            this.getNewsDetail({nid, type});
+            this.getNewsDetail({ nid, type });
         }
 
         // 设置页面标题
