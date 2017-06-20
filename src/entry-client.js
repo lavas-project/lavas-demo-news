@@ -4,6 +4,7 @@
  */
 
 import FastClick from 'fastclick';
+import 'es6-promise/auto';
 import {createApp} from './app';
 
 import 'normalize.css';

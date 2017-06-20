@@ -10,7 +10,6 @@ var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var ManifestWebpackPlugin = require('./plugins/manifest-webpack-plugin');
 var SwRegisterWebpackPlugin = require('./plugins/swRegister-webpack-plugin');
-var SWPrecacheWebpackDevServerPlugin = require('sw-precache-webpack-dev-server-plugin');
 
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -46,8 +45,6 @@ module.exports = merge(baseWebpackConfig, {
             // exclude skeleton and sw-register chunk
             excludeChunks: ['skeleton', config.swRegister.name || 'sw-register']
         }),
-        // service worker caching
-        new SWPrecacheWebpackDevServerPlugin(config.swPrecache.dev),
 
         // generate manifest.json, include theme
         new ManifestWebpackPlugin(Object.assign(config.manifest, {
