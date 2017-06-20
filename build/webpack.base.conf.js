@@ -12,8 +12,7 @@ function resolve(dir) {
 module.exports = {
     entry: {
         app: './src/entry-client.js',
-        skeleton: './src/entry-skeleton.js',
-        [config.swRegister.name || 'sw-register']: './src/sw-register.js'
+        skeleton: './src/entry-skeleton.js'
     },
     output: {
         path: config.build.assetsRoot,

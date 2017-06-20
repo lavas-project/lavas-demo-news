@@ -6,14 +6,12 @@ var iconConfig = require('./icon');
 var themeConfig = require('./theme');
 var manifestConfig = require('./manifest');
 var swPrecacheConfig = require('./sw-precache');
-var swRegisterConfig = require('./sw-register');
 
 module.exports = {
     icon: iconConfig,
     theme: themeConfig,
     manifest: manifestConfig,
     swPrecache: swPrecacheConfig,
-    swRegister: swRegisterConfig,
     build: {
         env: require('./prod.env'),
         index: path.resolve(__dirname, '../dist/index.html'),

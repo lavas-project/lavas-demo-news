@@ -1,8 +1,7 @@
 /**
- * @file 注册 service-worker.js， 并监听 service-worker.js 升级更新
- * @author zoumiaojiang(zoumiaojiang@gmail.com)
+ * @file serviceworker register
+ * @author *__ author __*{% if: *__ email __* %}(*__ email __*){% /if %}
  */
-
 
 if ('serviceWorker' in navigator) {
 
@@ -24,7 +23,20 @@ if ('serviceWorker' in navigator) {
             }
         }
 
-        const refreshHtml = `
+        const dom = document.createElement('div');
+
+        /* eslint-disable max-len */
+        dom.innerHTML = `
+            <style>
+                .app-refresh {background:#000;color:#fff;height:52px;line-height:52px;opacity:1;position:fixed;left:0;right:0;z-index:10001;padding:0 18px;animation: app-refresh-animation 1s;}
+                .app-refresh-wrap{display:flex;}
+                .app-refresh-wrap span{display:inline-block;flex:1;font-size:15px;}
+                .app-refresh-wrap button{color:#fff;outline:none;font-size:15px;}
+                @keyframes app-refresh-animation{from {height: 0;opacity: 0}to {height: 52px;opacity: 1;}}
+                @-webkit-keyframes app-refresh-animation{from {height: 0;opacity: 0}to {height: 52px;opacity: 1;}}
+                @-o-keyframes app-refresh-animation{from {height: 0;opacity: 0}to {height: 52px;opacity: 1;}}
+                @-moz-keyframes app-refresh-animation{from {height: 0;opacity: 0}to {height: 52px;opacity: 1;}}
+            </style>
             <div class="app-refresh" id="app-refresh">
                 <div class="app-refresh-wrap">
                     <span>已更新最新版本</span>
@@ -32,11 +44,9 @@ if ('serviceWorker' in navigator) {
                 </div>
             </div>
         `;
+        /* eslint-enable */
 
-        const dom = document.createElement('div');
-        dom.innerHTML = refreshHtml;
         document.body.appendChild(dom);
-        setTimeout(() => document.getElementById('app-refresh').className += ' app-refresh-show', 16);
     };
 
 
@@ -48,8 +58,4 @@ if ('serviceWorker' in navigator) {
             handlerUpdateMessage(e);
         }
     });
-
-    // handlerUpdateMessage();
-
 }
-

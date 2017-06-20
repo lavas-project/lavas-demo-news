@@ -43,7 +43,7 @@ module.exports = merge(baseWebpackConfig, {
             inject: true,
             favicon: utils.assetsPath('img/icons/favicon.ico'),
             // exclude skeleton and sw-register chunk
-            excludeChunks: ['skeleton', config.swRegister.name || 'sw-register']
+            excludeChunks: ['skeleton']
         }),
 
         // generate manifest.json, include theme
@@ -51,9 +51,7 @@ module.exports = merge(baseWebpackConfig, {
             fileName: utils.assetsPath(config.manifest.fileName)
         }, config.theme.manifest)),
 
-        new SwRegisterWebpackPlugin({
-            filePath: config.swRegister.filePath
-        }),
+        new SwRegisterWebpackPlugin({}),
 
         new FriendlyErrorsPlugin()
     ]
