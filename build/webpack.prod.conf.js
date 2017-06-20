@@ -87,7 +87,7 @@ var webpackConfig = merge(baseWebpackConfig, {
             },
             favicon: utils.assetsPath('img/icons/favicon.ico'),
             // exclude skeleton chunk
-            excludeChunks: ['skeleton', config.swRegister.name || 'sw-register'],
+            excludeChunks: ['skeleton'],
             // necessary to consistently work with multiple chunks via CommonsChunkPlugin
             chunksSortMode: 'dependency'
         }),
@@ -131,7 +131,7 @@ var webpackConfig = merge(baseWebpackConfig, {
             fileName: utils.assetsPath(config.manifest.fileName)
         }, config.theme.manifest)),
 
-        new SwRegisterWebpackPlugin(),
+        new SwRegisterWebpackPlugin({}),
 
         new MultiPathWebpackPlugin({
             prefix: config.build.assetsPublicPath,
