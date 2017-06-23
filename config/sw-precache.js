@@ -41,7 +41,7 @@ module.exports = {
 
         /* 生成service-worker.js的文件配置模板，不配置时采用默认的配置
             本demo做了sw的更新策略，所以在原有模板基础做了相应的修改 */
-        templateFilePath: 'build/sw.tmpl',
+        templateFilePath: 'config/sw.tmpl.js',
         verbose: true,
         // 需要根据路由动态处理的文件
         runtimeCaching: [
