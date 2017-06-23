@@ -9,7 +9,6 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var ManifestWebpackPlugin = require('./plugins/manifest-webpack-plugin');
-var SwRegisterWebpackPlugin = require('./plugins/swRegister-webpack-plugin');
 
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -50,8 +49,6 @@ module.exports = merge(baseWebpackConfig, {
         new ManifestWebpackPlugin(Object.assign(config.manifest, {
             fileName: utils.assetsPath(config.manifest.fileName)
         }, config.theme.manifest)),
-
-        new SwRegisterWebpackPlugin({}),
 
         new FriendlyErrorsPlugin()
     ]

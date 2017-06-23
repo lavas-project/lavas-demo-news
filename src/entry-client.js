@@ -4,7 +4,7 @@
  */
 
 import FastClick from 'fastclick';
-import 'es6-promise/auto';
+import 'babel-polyfill';
 import {createApp} from './app';
 
 import 'normalize.css';
