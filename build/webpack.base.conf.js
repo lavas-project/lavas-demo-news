@@ -4,6 +4,8 @@ var path = require('path');
 var utils = require('./utils');
 var config = require('../config');
 var vueLoaderConfig = require('./vue-loader.conf');
+require('babel-polyfill');
+
 
 function resolve(dir) {
     return path.join(__dirname, '..', dir);
@@ -11,7 +13,7 @@ function resolve(dir) {
 
 module.exports = {
     entry: {
-        app: './src/entry-client.js',
+        app: ['babel-polyfill', './src/entry-client.js'],
         skeleton: './src/entry-skeleton.js'
     },
     output: {
