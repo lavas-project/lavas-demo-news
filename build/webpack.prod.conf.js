@@ -131,10 +131,11 @@ var webpackConfig = merge(baseWebpackConfig, {
             fileName: utils.assetsPath(config.manifest.fileName)
         }, config.theme.manifest)),
 
-        new SwRegisterWebpackPlugin({}),
+        new SwRegisterWebpackPlugin({
+            filePath: path.resolve(__dirname, '../src/service-worker.js')
+        }),
 
         new MultiPathWebpackPlugin({
-            prefix: config.build.assetsPublicPath,
             ignore: []
         })
     ]

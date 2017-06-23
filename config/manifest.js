@@ -14,7 +14,7 @@ module.exports = {
             type: 'image/png'
         }
     ],
-    startUrl: '/',
+    startUrl: '/lavas-showcase/news/',
     display: 'standalone',
     backgroundColor: '#fff',
     themeColor: '#3e98f0'
