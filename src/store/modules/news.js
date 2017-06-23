@@ -18,9 +18,15 @@ export default {
         }
     },
     getters: {
-        hotNews: state => state.hotNews,
-        searchHistory: state => state.query.history,
-        searchResult: state => state.query.result
+        hotNews(state) {
+            return state.hotNews;
+        },
+        searchHistory(state) {
+            return state.query.history;
+        },
+        searchResult(state) {
+            return state.query.result;
+        }
     },
     actions: {
         async getHotNews({commit}) {

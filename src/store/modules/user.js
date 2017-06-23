@@ -11,7 +11,9 @@ export default {
         user: {}
     },
     getters: {
-        user: state => state.user
+        user(state) {
+            return state.user;
+        }
     },
     actions: {
         async getUserInfo({commit}, userId) {

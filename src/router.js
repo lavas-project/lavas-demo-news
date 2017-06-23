@@ -9,6 +9,7 @@ import Router from 'vue-router';
 import types from './store/mutation-types';
 
 // 定义切割点，异步加载路由组件
+
 const Home = () => import('@/pages/Home.vue');
 const Detail = () => import('@/pages/Detail.vue');
 const NotFound = () => import('@/pages/NotFound.vue');
@@ -25,9 +26,7 @@ export function createRouter() {
             if (savedPosition) {
                 return savedPosition;
             }
-            else {
-                return { x: 0, y: 0 };
-            }
+            return {x: 0, y: 0};
         },
         routes: [
             // <!-- INJECT_SKELETON_ROUTE -->
@@ -114,6 +113,7 @@ const ALWAYS_FORWARD_PAGE = ['search'];
  * 历史记录，记录访问过的页面的 fullPath
  *
  * @type {Array.<string>}
+ * @const
  */
 const HISTORY_STACK = [];
 

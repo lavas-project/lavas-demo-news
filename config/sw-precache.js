@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 /**
  * sw-precache一些设置项，staticFileGlobs主要是设置具体需要缓存的文件
  * 在webpack.prod.conf.js 中被使用

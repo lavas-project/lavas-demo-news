@@ -1,3 +1,5 @@
+/*eslint-disable*/
+
 /**
  * 自动引入模板，在原有sw-precache 插件默认模板基础上做的二次开发
  *

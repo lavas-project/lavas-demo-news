@@ -113,7 +113,7 @@ const state = {
             imageRight: '',
             altRight: '',
             svgRight: '',
-            iconRight: '',
+            iconRight: ''
         },
         // 分块组
         blocks: [
@@ -269,6 +269,7 @@ const state = {
 };
 
 const getters = {
+    /* eslint-disable */
     needPageTransition: state => state.needPageTransition,
     isPageSwitching: state => state.isPageSwitching,
     isPageLoading: state => state.isPageLoading,
@@ -277,6 +278,7 @@ const getters = {
     appSidebar: state => state.appSidebar,
     appBottomNavigator: state => state.appBottomNavigator,
     menuTabs: state => state.menuTabs
+    /* eslint-enable */
 };
 
 const actions = {
@@ -287,7 +289,7 @@ const actions = {
      * @param {Function} commit commit
      */
     enablePageTransition({commit}) {
-        commit(tpes.ENABLE_PAGE_TRANSITION, true);
+        commit(types.ENABLE_PAGE_TRANSITION, true);
     },
 
     /**
@@ -301,6 +303,9 @@ const actions = {
 
     /**
      * 设置页面是否处于切换中
+     *
+     * @param {Function} commit commit
+     * @param {boolean}  isPageSwitching isPageSwitching
      */
     setPageSwitching({commit}, isPageSwitching) {
         commit(types.SET_PAGE_SWITCHING, isPageSwitching);
@@ -308,6 +313,9 @@ const actions = {
 
     /**
      * 设置页面是否处于载入中
+     *
+     * @param {Function} commit commit
+     * @param {boolean} isPageLoading isPageLoading
      */
     setPageLoading({commit}, isPageLoading) {
         commit(types.SET_PAGE_LOADING, isPageLoading);
@@ -315,6 +323,9 @@ const actions = {
 
     /**
      * 设置顶部导航条
+     *
+     * @param {Function} commit commit
+     * @param {boolean}  appHeader appHeader
      */
     setAppHeader({commit}, appHeader) {
         commit(types.SET_APP_HEADER, appHeader);
@@ -322,6 +333,8 @@ const actions = {
 
     /**
      * 隐藏底部导航
+     *
+     * @param {Function} commit commit
      */
     hideBottomNav({commit}) {
         commit(types.SET_APP_BOTTOM_NAV, {show: false});
@@ -329,6 +342,8 @@ const actions = {
 
     /**
      * 显示底部导航
+     *
+     * @param {Function} commit commit
      */
     showBottomNav({commit}) {
         commit(types.SET_APP_BOTTOM_NAV, {show: true});
@@ -336,6 +351,9 @@ const actions = {
 
     /**
      * 激活底部导航
+     *
+     * @param {Function} commit commit
+     * @param {string} name  name
      */
     activateBottomNav({commit}, name) {
         commit(types.ACTIVATE_APP_BOTTOM_NAV, name);
@@ -343,6 +361,8 @@ const actions = {
 
     /**
      * 展示侧边栏
+     *
+     * @param {Function} commit commit
      */
     showSidebar({commit}) {
         commit(types.SET_SIDEBAR_VISIBILITY, true);
@@ -350,6 +370,8 @@ const actions = {
 
     /**
      * 隐藏侧边栏
+     *
+     * @param {Function} commit commit
      */
     hideSidebar({commit}) {
         commit(types.SET_SIDEBAR_VISIBILITY, false);
@@ -357,6 +379,8 @@ const actions = {
 
     /**
      * 隐藏menu tabs
+     *
+     * @param {Function} commit commit
      */
     hideMenuTabs({commit}) {
         commit(types.SET_MENU_TABS_VISIBILITY, false);
@@ -369,19 +393,19 @@ const actions = {
 };
 
 const mutations = {
-    [types.SET_PAGE_SWITCHING] (state, isPageSwitching) {
+    [types.SET_PAGE_SWITCHING](state, isPageSwitching) {
         state.isPageSwitching = isPageSwitching;
     },
-    [types.SET_PAGE_LOADING] (state, isPageLoading) {
+    [types.SET_PAGE_LOADING](state, isPageLoading) {
         state.isPageLoading = isPageLoading;
     },
-    [types.SET_PAGE_TRANSITION_NAME] (state, {pageTransitionName}) {
+    [types.SET_PAGE_TRANSITION_NAME](state, {pageTransitionName}) {
         state.pageTransitionName = pageTransitionName;
     },
-    [types.SET_APP_HEADER] (state, appHeader) {
+    [types.SET_APP_HEADER](state, appHeader) {
         state.appHeader = Object.assign(state.appHeader, appHeader);
     },
-    [types.ACTIVATE_APP_BOTTOM_NAV] (state, name) {
+    [types.ACTIVATE_APP_BOTTOM_NAV](state, name) {
         state.appBottomNavigator.navs = state.appBottomNavigator.navs.map(nav => {
             if (nav.name === name) {
                 nav.active = true;
@@ -392,20 +416,22 @@ const mutations = {
             return nav;
         });
     },
-    [types.SET_APP_BOTTOM_NAV] (state, appBottomNavigator) {
+    [types.SET_APP_BOTTOM_NAV](state, appBottomNavigator) {
         state.appBottomNavigator = Object.assign(state.appBottomNavigator, appBottomNavigator);
     },
-    [types.SET_SIDEBAR_VISIBILITY] (state, sidebarVisibility) {
+    [types.SET_SIDEBAR_VISIBILITY](state, sidebarVisibility) {
         state.appSidebar.show = sidebarVisibility;
     },
-    [types.SET_MENU_TABS_VISIBILITY] (state, menuTabsVisibility) {
+    [types.SET_MENU_TABS_VISIBILITY](state, menuTabsVisibility) {
         state.menuTabs.show = menuTabsVisibility;
     }
 };
 
+/* eslint-disable */
 export default {
     state,
     getters,
     actions,
     mutations
 };
+/* eslint-enable */

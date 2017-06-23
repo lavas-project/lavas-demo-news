@@ -1,3 +1,4 @@
+/* eslint-disable */
 /**
  * @file 生成skeleton
  */

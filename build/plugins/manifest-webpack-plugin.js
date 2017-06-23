@@ -1,6 +1,9 @@
 /**
  * @file 生成manifest.json
+ * @author searchfe
  */
+
+/*eslint-disable*/
 
 const META_THEME_COLOR_HOLDER = `<!-- META_THEME_COLOR -->`;
 

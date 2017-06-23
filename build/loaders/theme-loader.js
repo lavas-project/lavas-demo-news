@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 const loaderUtils = require('loader-utils');
 const defaultVuetifyVariables = {
     themeColor: {

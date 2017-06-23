@@ -1,3 +1,8 @@
+/**
+ * @file menifest config
+ * @author mj(zoumiaojiang@gmail.com)
+ */
+
 module.exports = {
     fileName: 'manifest.json',
     name: 'pwa-news',

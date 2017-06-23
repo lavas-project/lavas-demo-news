@@ -16,13 +16,27 @@ export default {
         loaded: false
     },
     getters: {
-        newsList: state => state.newsList,
-        newsDetail: state => state.newsDetail,
-        topicList: state => state.topicList,
-        bannerList: state => state.bannerList,
-        category: state => state.category,
-        tab: state => state.tab,
-        loaded: state => state.loaded
+        newsList(state) {
+            return state.newsList;
+        },
+        newsDetail(state) {
+            return state.newsDetail;
+        },
+        topicList(state) {
+            return state.topicList;
+        },
+        bannerList(state) {
+            return state.bannerList;
+        },
+        category(state) {
+            return state.category;
+        },
+        tab(state) {
+            return state.tab;
+        },
+        loaded(state) {
+            return state.loaded;
+        }
     },
     actions: {
         async getNewsList({commit}, params) {

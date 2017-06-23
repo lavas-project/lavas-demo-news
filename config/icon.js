@@ -1,3 +1,8 @@
+/**
+ * @file icon config
+ * @author mj(zoumiaojiang@gmail.com)
+ */
+
 var path = require('path');
 
 module.exports = {

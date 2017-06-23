@@ -1,9 +1,15 @@
-export function formatDateToNow (date, now, isNews) {
+/**
+ * @file lavas news filter
+ * @author mj(zoumiaojiang@gmail.com)
+ */
+
+export default function (date, now, isNews) {
     if (!now) {
         now = (new Date()).getTime();
     }
     date = Number(date);
-    var diff = now - date;
+
+    const diff = now - date;
     // error
     if (diff < 0) {
         return null;
@@ -54,4 +60,4 @@ export function formatDateToNow (date, now, isNews) {
     }
 
     return date.getFullYear() + '年' + (date.getMonth() + 1) + '月' + date.getDate() + '日';
-};
+}
