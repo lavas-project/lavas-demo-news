@@ -218,8 +218,9 @@ self.addEventListener('activate', function(event) {
                 return self.clients.matchAll()
                     .then(function (clients) {
                         if (clients && clients.length) {
-                            var currentClient = clients[0];
-                            currentClient.postMessage('updateMessage');
+                            clients.forEach(function(client) {
+                                client.postMessage('sw.update');
+                            })
                         }
                     })
             }
