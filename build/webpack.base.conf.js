@@ -1,11 +1,14 @@
-/* eslint-disable */
+/**
+ * @file 基础 webpack 配置文件，开发环境和生产环境公用的
+ * @author zoumiaojiang(zoumiaojiang@gmail.com)
+ */
 
-var path = require('path');
-var utils = require('./utils');
-var config = require('../config');
-var vueLoaderConfig = require('./vue-loader.conf');
-require('babel-polyfill');
+'use strict';
 
+const path = require('path');
+const utils = require('./utils');
+const config = require('../config');
+const vueLoaderConfig = require('./vue-loader.conf');
 
 function resolve(dir) {
     return path.join(__dirname, '..', dir);
@@ -13,8 +16,7 @@ function resolve(dir) {
 
 module.exports = {
     entry: {
-        app: ['babel-polyfill', './src/entry-client.js'],
-        skeleton: './src/entry-skeleton.js'
+        app: ['babel-polyfill', './src/entry-client.js']
     },
     output: {
         path: config.build.assetsRoot,
@@ -26,25 +28,20 @@ module.exports = {
     resolve: {
         extensions: ['.js', '.vue', '.json'],
         alias: {
-            // resolve alias
             'vue$': 'vue/dist/vue.esm.js',
             '@': resolve('src')
         }
     },
     module: {
         rules: [
+
             // register custom svgs
             {
-                resource: resolve('src/svg'),
+                resource: resolve('src/app.js'),
                 loader: 'svg-loader',
                 enforce: 'pre'
             },
-            // inject skeleton route in dev mode
-            {
-                resource: resolve('src/router'),
-                loader: 'router-loader',
-                enforce: 'pre'
-            },
+
             // inject vuetify theme variables
             {
                 resource: resolve('src/assets/styles/global'),
@@ -58,6 +55,7 @@ module.exports = {
                         loader: 'vue-loader',
                         options: vueLoaderConfig
                     },
+
                     // inject global variables in every .vue file
                     {
                         loader: 'theme-loader',
@@ -104,7 +102,6 @@ module.exports = {
     resolveLoader: {
         alias: {
             'svg-loader': path.join(__dirname, './loaders/svg-loader'),
-            'router-loader': path.join(__dirname, './loaders/router-loader'),
             'theme-loader': path.join(__dirname, './loaders/theme-loader')
         }
     }

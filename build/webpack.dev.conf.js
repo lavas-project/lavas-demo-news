@@ -1,14 +1,24 @@
-/* eslint-disable */
+/**
+ * @file 开发环境 webpack 配置文件
+ * @author zoumiaojiang(zoumiaojiang@gmail.com)
+ */
 
-var utils = require('./utils');
-var webpack = require('webpack');
-var config = require('../config');
-var merge = require('webpack-merge');
-var baseWebpackConfig = require('./webpack.base.conf');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var ManifestWebpackPlugin = require('./plugins/manifest-webpack-plugin');
+'use strict';
+
+const path = require('path');
+const utils = require('./utils');
+const webpack = require('webpack');
+const config = require('../config');
+const merge = require('webpack-merge');
+const baseWebpackConfig = require('./webpack.base.conf');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin');
+
+function resolve(dir) {
+    return path.join(__dirname, '..', dir);
+}
 
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -18,6 +28,10 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 module.exports = merge(baseWebpackConfig, {
     module: {
         rules: utils.styleLoaders({sourceMap: config.dev.cssSourceMap})
+            .concat(SkeletonWebpackPlugin.loader({ // visit by route '/skeleton' in dev mode
+                entry: 'skeleton',
+                routerEntry: resolve('src/router.js')
+            }))
     },
 
     // cheap-module-eval-source-map is faster for development
@@ -35,20 +49,17 @@ module.exports = merge(baseWebpackConfig, {
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoEmitOnErrorsPlugin(),
 
+        new SkeletonWebpackPlugin({
+            webpackConfig: require('./webpack.skeleton.conf')
+        }),
+
         // https://github.com/ampedandwired/html-webpack-plugin
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: 'index.html',
             inject: true,
-            favicon: utils.assetsPath('img/icons/favicon.ico'),
-            // exclude skeleton and sw-register chunk
-            excludeChunks: ['skeleton']
+            favicon: utils.assetsPath('img/icons/favicon.ico')
         }),
-
-        // generate manifest.json, include theme
-        new ManifestWebpackPlugin(Object.assign(config.manifest, {
-            fileName: utils.assetsPath(config.manifest.fileName)
-        }, config.theme.manifest)),
 
         new FriendlyErrorsPlugin()
     ]

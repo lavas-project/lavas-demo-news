@@ -1,40 +1,28 @@
-pwa-news
-==
+# pwa-project
 
-## icon的使用方法
+> lavas news demo
 
-使用 Icon 组件，传入图标名称，最终在页面中输出对应的`<svg>`：
+## npm 相关命令
 
-`<icon name="bars"></icon>`
+``` bash
+# 安装工程依赖
+npm install
 
-目前在项目中引入`svg`有两种方式：
-1. 自带[fontawesome](http://fontawesome.io/icons/)图标，使用时需要在`config/icon.js`中声明。
-2. 自定义svg图标，放入`src/assets/svg`文件夹中即可，为了避免命名冲突，使用时图标名称为`前缀+svg文件名`。以上文件夹路径和前缀均可在`config/icon.js`中配置。
+# 更新工程依赖
+npm update
 
-## 主题配置
+# 在 localhost:8082 上启动带有热更新机制的开发服务器
+npm run dev
 
-在`config/theme.js`中配置`vuetify`，配置项分为两部分：
-1. themeColor 主题颜色
-2. materialDesign 包含material的一些基础变量，例如背景色，文字颜色等。另外，vuetify内置了两种material主题(light/dark)，使用`useBuiltInMaterialDesign`可指定，此时会忽略`materialDesign`。
+# 检查您的代码是否规范
+npm run lint
 
-``` js
-vuetify: {
-    themeColor: {
-        primary: '#4DBA87',
-        accent: '$blue.accent-2',
-        ...
-    },
-    materialDesign: {
-        'bg-color': '#fff',
-        'fg-color': '#000',
-        ...
-    },
-    useBuiltInMaterialDesign: 'dark'
-}
+# 构建线上生产环境产物
+npm run build
+
+# 构建线上生产环境产物并且查看构建分析报告
+npm run build --report
 ```
 
-配置完成后，在组件样式中引用这些变量：
-* 使用`themeColor`：`background: $theme.primary`
-* 使用`materialDesign`：`color: $material-theme.bg-color`
-
-需要注意的是，使用主题相关的变量时，`:`不能够省略，原因是[省略冒号的情况下，stylus编译器无法区分hash和选择器](https://github.com/stylus/stylus/issues/1405)
+Lavas 工程模版基于 [vue-template](https://github.com/vuejs-templates/webpack) 模版创建。
+如果想要了解具体如何玩转整个 Lavas 创建的 PWA 工程, 请查看 [vue-template 指南](http://vuejs-templates.github.io/webpack/) 和 [vue-loader 指南](http://vuejs.github.io/vue-loader)。

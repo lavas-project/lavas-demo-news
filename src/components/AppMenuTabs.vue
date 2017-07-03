@@ -72,6 +72,7 @@ import {mapGetters, mapActions} from 'vuex';
         created() {
             let me = this;
             let category = this.$route.query.category || 'remen';
+
             me.entrys.forEach((item, i) => {
                 me.$set(me.entrys[i], 'active', me.entrys[i].value === category);
             });
@@ -85,8 +86,8 @@ import {mapGetters, mapActions} from 'vuex';
                 this.open = !this.open;
             },
             async selectItem(index) {
-
                 let me = this;
+
                 me.entrys.forEach((item, i) => {
                     me.$set(me.entrys[i], 'active', i === index);
                 });

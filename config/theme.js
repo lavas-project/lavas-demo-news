@@ -1,15 +1,17 @@
 /**
- * @file theme config
- * @author mj(zoumiaojiang@gmail.com)
+ * @file 主题构建相关配置
+ * @author zoumiaojiang(zoumiaojiang@gmail.com)
  */
 
+'use strict';
+
 // 定义主题列表
-const themeList = {
+let themeList = {
+
     // 定义主题名称
     myTheme: {
         themeColor: {
-            primary: '#3e98f0',
-            // primary: '#4DBA87',
+            primary: 'rgb(40, 116, 240)',
             accent: '$blue.accent-2',
             secondary: '$grey.darken-3',
             info: '$blue.base',
@@ -32,9 +34,5 @@ const themeList = {
 };
 
 module.exports = {
-    manifest: {
-        // backgroundColor: '#000000',
-        // themeColor: '#4DBA87'
-    },
     theme: themeList.myTheme // 和主题列表中的主题名称对应
 };
