@@ -7,6 +7,7 @@
                 @click-back="handleClickHeaderBack">
                 <template slot="logo"></template>
             </app-header>
+            <app-menu-tabs :entrys="appMenuTabs.tabs" :show="appMenuTabs.show"></app-menu-tabs>
             <app-sidebar
                 @hide-sidebar = "handleHideSidebar"
                 @show-sidebar = "handleShowSidebar"
@@ -56,13 +57,15 @@ import {mapState, mapActions} from 'vuex';
 import AppHeader from '@/components/AppHeader';
 import AppSidebar from '@/components/AppSidebar';
 import AppBottomNavigator from '@/components/AppBottomNavigator';
+import AppMenuTabs from'@/components/AppMenuTabs';
 
 export default {
     name: 'app',
     components: {
         AppHeader,
         AppSidebar,
-        AppBottomNavigator
+        AppBottomNavigator,
+        AppMenuTabs
     },
     data() {
         return {};
@@ -71,7 +74,8 @@ export default {
         ...mapState('appShell', [
             'appHeader',
             'appBottomNavigator',
-            'pageTransitionName'
+            'pageTransitionName',
+            'appMenuTabs'
         ])
     },
     methods: {
@@ -115,7 +119,6 @@ export default {
     font-family 'Avenir', Helvetica, Arial, sans-serif
     -webkit-font-smoothing antialiased
     -moz-osx-font-smoothing grayscale
-    text-align center
     color #2c3e50
 </style>
 
@@ -165,8 +168,8 @@ export default {
                 width 0px
                 background transparent
 
-            &.app-view-with-header
-                top $app-header-height
+            // &.app-view-with-header
+            //     top $app-header-height
 
             &.app-view-with-footer
                 bottom $app-footer-height

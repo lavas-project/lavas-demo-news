@@ -75,7 +75,9 @@ let actions = {
      */
     saveScrollTop({commit}, {path, scrollTop}) {
         commit(types.SAVE_SCROLLTOP, {path, scrollTop});
-    }
+    },
+
+
 };
 
 let mutations = {
@@ -354,6 +356,72 @@ export default {
                 },
                 [types.SET_APP_BOTTOM_NAV](state, appBottomNavigator) {
                     state = Object.assign(state, appBottomNavigator);
+                }
+            }
+        },
+
+        appMenuTabs: {
+            namespaced: true,
+            state: {
+                tabs: [
+                    {
+                        text: '热点',
+                        value: 'remen',
+                        active: true
+                    },
+                    {
+                        text: '娱乐',
+                        value: 'yule'
+                    },
+                    {
+                        text: '体育',
+                        value: 'tiyu'
+                    },
+                    {
+                        text: '军事',
+                        value: 'junshi'
+                    },
+                    {
+                        text: '社会',
+                        value: 'shehui'
+                    },
+                    {
+                        text: '汽车',
+                        value: 'qiche'
+                    },
+                    {
+                        text: '国内',
+                        value: 'guonei'
+                    },
+                    {
+                        text: '国际',
+                        value: 'guoji'
+                    }
+                ],
+
+                show: true
+            },
+
+            actions: {
+
+                /**
+                 * 隐藏menu tabs
+                 *
+                 * @param {Function} commit commit
+                 */
+                hideMenuTabs({commit}) {
+                    commit(types.SET_MENU_TABS_VISIBILITY, false);
+                },
+
+
+                showMenuTabs({commit}) {
+                    commit(types.SET_MENU_TABS_VISIBILITY, true);
+                }
+            },
+
+            mutations: {
+                [types.SET_MENU_TABS_VISIBILITY](state, menuTabsVisibility) {
+                    state.show = menuTabsVisibility;
                 }
             }
         }

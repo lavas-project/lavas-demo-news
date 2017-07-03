@@ -79,7 +79,6 @@ import {mapGetters, mapActions} from 'vuex';
         },
         methods: {
             ...mapActions([
-                'setPageLoading',
                 'checkTabCategory'
             ]),
             toggleOpen() {
@@ -97,9 +96,6 @@ import {mapGetters, mapActions} from 'vuex';
                 }
 
                 if (!this.open) {this.toggleOpen();}
-                this.setPageLoading(true);
-
-                await this.checkTabCategory(me.entrys[index].value);
 
                 document.body.scrollTop = 0
 
@@ -115,6 +111,14 @@ import {mapGetters, mapActions} from 'vuex';
 <style lang="stylus" scoped>
 
 $btn-color = #fff
+
+.app-menu-tabs
+    position fixed
+    top 52px
+    left 0
+    right 0
+    z-index 1000
+    text-align left
 
 .app-menu-tabs-all
     background: $theme.primary
@@ -170,7 +174,7 @@ $btn-color = #fff
     label
         height 40px
         line-height 40px
-        padding 0 18px
+        padding 0 14px
         font-size 16px
 
 .app-menu-tabs-toggle

@@ -124,6 +124,7 @@ $btn-color = #fff
 
     .app-header-middle
         flex 1
+        padding-left 10px
         font-size 1.2em
 
     // 改变 icon 大小
