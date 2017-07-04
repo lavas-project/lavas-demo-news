@@ -41,7 +41,6 @@
 <script>
 
 import {mapGetters, mapActions} from 'vuex';
-import EventBus from '@/event-bus';
 import pageLoadingMixin from '@/mixins/pageLoadingMixin';
 
 export default {
@@ -49,7 +48,7 @@ export default {
     mixins: [pageLoadingMixin],
     props: ['newsList'],
     data() {
-        return {}
+        return {};
     },
     computed: {
         ...mapGetters([
@@ -65,7 +64,7 @@ export default {
         ]),
 
         // 查看详情
-        async getDetail (nid, url, contentLength) {
+        async getDetail(nid, url, contentLength) {
             if (!contentLength) {
                 location.href = url;
             }

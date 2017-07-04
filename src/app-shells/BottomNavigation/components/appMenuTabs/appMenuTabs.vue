@@ -49,64 +49,66 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 
-    export default {
-        computed: {
-            ...mapGetters([
-                'category',
-                'tab'
-            ])
+export default {
+    computed: {
+        ...mapGetters([
+            'category',
+            'tab'
+        ])
+    },
+    props: {
+        entrys: {
+            type: Array
         },
-        props: {
-            entrys: {
-                type: Array
-            },
-            show: true
-        },
+        show: true
+    },
 
-        data() {
-            return {
-                open: true
-            }
-        },
+    data() {
+        return {
+            open: true
+        };
+    },
 
-        created() {
+    created() {
+        let me = this;
+        let category = this.$route.query.category || 'remen';
+        me.entrys.forEach((item, i) => {
+            me.$set(me.entrys[i], 'active', me.entrys[i].value === category);
+        });
+    },
+    methods: {
+        ...mapActions([
+            'setPageLoading',
+            'checkTabCategory'
+        ]),
+        toggleOpen() {
+            this.open = !this.open;
+        },
+        async selectItem(index) {
+
             let me = this;
-            let category = this.$route.query.category || 'remen';
             me.entrys.forEach((item, i) => {
-                me.$set(me.entrys[i], 'active', me.entrys[i].value === category);
+                me.$set(me.entrys[i], 'active', i === index);
             });
-        },
-        methods: {
-            ...mapActions([
-                'setPageLoading',
-                'checkTabCategory'
-            ]),
-            toggleOpen() {
-                this.open = !this.open;
-            },
-            async selectItem(index) {
 
-                let me = this;
-                me.entrys.forEach((item, i) => {
-                    me.$set(me.entrys[i], 'active', i === index);
-                });
-
-                if (me.entrys[index].value === this.category) {
-                    return;
-                }
-
-                if (!this.open) {this.toggleOpen();}
-                this.setPageLoading(true);
-
-                await this.checkTabCategory(me.entrys[index].value);
-
-                document.body.scrollTop = 0
-
-                this.$router.push('?category=' + me.entrys[index].value);
-
+            if (me.entrys[index].value === this.category) {
+                return;
             }
+
+            if (!this.open) {
+                this.toggleOpen();
+            }
+            this.setPageLoading(true);
+
+            await this.checkTabCategory(me.entrys[index].value);
+
+            document.body.scrollTop = 0;
+
+            this.$router.push('?category=' + me.entrys[index].value);
+
         }
-    };
+    }
+};
 
 </script>
 

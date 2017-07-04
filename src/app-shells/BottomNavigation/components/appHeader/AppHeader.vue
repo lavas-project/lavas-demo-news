@@ -52,20 +52,20 @@ export default {
     name: 'appHeader',
     props: {
         show: {
-            type: Boolean,
-            default: true
+            'type': Boolean,
+            'default': true
         },
         showMenu: {
-            type: Boolean,
-            default: false
+            'type': Boolean,
+            'default': false
         },
         showBack: {
-            type: Boolean,
-            default: false
+            'type': Boolean,
+            'default': false
         },
         showLogo: {
-            type: Boolean,
-            default: false
+            'type': Boolean,
+            'default': false
         },
         logoIcon: {
             type: String
@@ -81,6 +81,7 @@ export default {
         }
     },
     methods: {
+
         /**
          * 处理按钮点击事件
          *

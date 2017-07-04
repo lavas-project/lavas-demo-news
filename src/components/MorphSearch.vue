@@ -78,7 +78,7 @@ export default {
                 this.open = false;
                 this.focused = false;
                 this.query = query;
-                this.$emit('search', this.query);   
+                this.$emit('search', this.query);
             }
         },
         deleteHistory(historyItem) {
@@ -97,11 +97,11 @@ export default {
     display flex
     align-items center
     z-index 999
-        
+
     .search-form
         flex 1
         display flex
-        
+
         .search-input
             flex 1
             outline none
@@ -110,7 +110,7 @@ export default {
             color: $material-theme.bg-color
             +placeholder()
                 color: $material-theme.bg-color
-    
+
     .clear-btn
         color: $material-theme.bg-color
 
@@ -120,7 +120,7 @@ export default {
         top 2px
         background: $theme.primary
         color: $material-theme.bg-color
-        
+
     .search-history-wrapper
         display none
         position absolute
@@ -131,9 +131,9 @@ export default {
         background: $material-theme.bg-color
         overflow-x hidden
         overflow-y auto
-    
+
     &.open
-  
+
         .search-history-wrapper
             display block
             .history-list

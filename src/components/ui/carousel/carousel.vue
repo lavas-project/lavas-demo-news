@@ -36,9 +36,6 @@
 
     let intervalTimer = null;
     let num = 0;
-    let startPos = {};
-    let curPos = {};
-    let isScroll = 0;
 
     export default {
         name: 'carousel',
@@ -89,7 +86,7 @@
             ]),
 
             // 查看详情
-            async getDetail (nid, url, contentLength) {
+            async getDetail(nid, url, contentLength) {
                 if (!contentLength) {
                     location.href = url;
                 }
@@ -100,7 +97,7 @@
                 }
             }
         }
-    }
+    };
 </script>
 
 <style lang="stylus" scoped>

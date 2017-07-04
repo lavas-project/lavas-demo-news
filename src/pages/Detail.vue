@@ -18,7 +18,6 @@
 
 <script>
 import {mapGetters, mapActions} from 'vuex';
-import types from '@/store/mutation-types';
 import pageLoadingMixin from '@/mixins/pageLoadingMixin';
 
 export default {
@@ -30,10 +29,10 @@ export default {
             'newsList',
             'bannerList'
         ]),
-        detail: function() {
+        detail() {
             return this.newsDetail || {};
         },
-        contents: function() {
+        contents() {
             return this.newsDetail && this.newsDetail.content || [];
         }
     },
@@ -42,7 +41,7 @@ export default {
         return {
             nid: '',
             type: ''
-        }
+        };
     },
     methods: {
         ...mapActions([

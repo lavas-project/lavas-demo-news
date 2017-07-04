@@ -3,7 +3,7 @@
  * @author mj(zoumiaojiang@gmail.com)
  */
 
-export default function (date, now, isNews) {
+export function formatDateToNow(date, now, isNews) {
     if (!now) {
         now = (new Date()).getTime();
     }

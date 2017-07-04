@@ -20,12 +20,9 @@
 <script>
 import HomeNewsList from '@/components/HomeNewsList.vue';
 import {mapGetters, mapActions} from 'vuex';
-import EventBus from '@/event-bus';
 import pageLoadingMixin from '@/mixins/pageLoadingMixin';
 import uiCarousel from '@/components/ui/carousel';
 import InfiniteLoading from 'vue-infinite-loading';
-
-let isFirst = false;
 
 export default {
     name: 'home',

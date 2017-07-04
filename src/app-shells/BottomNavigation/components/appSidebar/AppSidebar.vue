@@ -61,8 +61,8 @@ export default {
     },
     props: {
         show: {
-            type: Boolean,
-            default: true
+            'type': Boolean,
+            'default': true
         },
         slideFrom: {
             type: String

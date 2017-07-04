@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
+import {mapActions} from 'vuex';
 import pageLoadingMixin from '@/mixins/pageLoadingMixin';
 
 export default {

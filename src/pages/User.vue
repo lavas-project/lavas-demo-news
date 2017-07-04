@@ -45,7 +45,6 @@
 
 <script>
 import {mapGetters, mapActions} from 'vuex';
-import types from '@/store/mutation-types';
 import pageLoadingMixin from '@/mixins/pageLoadingMixin';
 
 export default {
