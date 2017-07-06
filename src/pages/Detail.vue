@@ -19,16 +19,12 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 import types from '@/store/mutation-types';
-import pageLoadingMixin from '@/mixins/pageLoadingMixin';
 
 export default {
     name: 'detail',
-    mixins: [pageLoadingMixin],
     computed: {
         ...mapGetters([
-            'newsDetail',
-            'newsList',
-            'bannerList'
+            'newsDetail'
         ]),
         detail: function() {
             return this.newsDetail || {};
@@ -37,64 +33,32 @@ export default {
             return this.newsDetail && this.newsDetail.content || [];
         }
     },
-    props: {},
-    data() {
-        return {
-            nid: '',
-            type: ''
-        }
-    },
     methods: {
+        ...mapActions('appShell/appHeader', [
+            'setAppHeader'
+        ]),
+        ...mapActions('appShell/appBottomNavigator', [
+            'hideBottomNav'
+        ]),
         ...mapActions([
-            'setAppHeader',
-            'hideMenuTabs',
-            'setPageLoading',
-            'getNewsList',
             'getNewsDetail'
         ])
     },
-    async activated() {
-        let nid = this.nid = this.$route.query.nid;
-        let type = this.type = this.$route.query.type;
-        let category = this.category = this.$route.query.category;
 
+    async asyncData({store, route}) {
+        await store.dispatch('getNewsDetail', {nid: route.params.nid});
+    },
+
+    async activated() {
         this.setAppHeader({
-            title: '',
+            title: '百度新闻',
             show: true,
             showMenu: false,
             showBack: true,
             showLogo: false,
-            actions: [
-                {
-                    icon: 'home',
-                    route: {
-                        name: 'home'
-                    }
-                }
-            ]
+            actions: []
         });
-        this.hideMenuTabs();
-        this.setPageLoading(true);
-
-        if (type === 'news' && this.newsList.length === 0) {
-            await this.getNewsList({
-                category
-            });
-            this.getNewsDetail({nid, type});
-        }
-        else if (type === 'banner' && this.bannerList.length === 0) {
-            await this.getNewsList({
-                category
-            });
-            this.getNewsDetail({nid, type});
-        }
-
-        // 设置页面标题
-        // this.setAppHeader({
-        //     title: this.detail.title
-        // });
-
-        this.setPageLoading(false);
+        await this.$store.dispatch('getNewsDetail', {nid: this.$route.params.nid});
     }
 };
 </script>
@@ -102,30 +66,15 @@ export default {
 <style lang="stylus" scoped>
 
 .news-detail-wrapper
-    padding 20px
-    min-height 200px
-    h3
-        font-size 24px
-        line-height 36px
-        font-weight bold
-        marigin-bottom 20px
+    padding 10px
+    font-size 16px
+    line-height 30px
+    // margin-top 30px
 
-    .title-info
+    .detail-title
         margin-bottom 20px
-        font-size 13px
-        color #999
-        span
-            margin-right 10px
-
-    .content
-        line-height 27px
-        font-size 18px
-        p
-            margin-top 10px
-            text-indent 32px
-        img
-            width 100%
-            height 100%
-
+        padding 10px 0
+        font-size 36px
+        font-weight bold
 
 </style>

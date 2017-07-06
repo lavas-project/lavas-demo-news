@@ -1,23 +1,24 @@
-/* eslint-disable */
+/**
+ * @file 项目所有的配置文件
+ * @author huanghuiquan(huanghuiquanhhh@gmail.com)
+ */
 
 // see http://vuejs-templates.github.io/webpack for documentation.
-var path = require('path');
-var iconConfig = require('./icon');
-var themeConfig = require('./theme');
-var manifestConfig = require('./manifest');
-var swPrecacheConfig = require('./sw-precache');
+const path = require('path');
+const swPrecacheConfig = require('./sw-precache');
+const theme = require('./theme');
+const icon = require('./icon');
 
 module.exports = {
-    icon: iconConfig,
-    theme: themeConfig,
-    manifest: manifestConfig,
+    icon: icon,
+    theme: theme,
     swPrecache: swPrecacheConfig,
     build: {
         env: require('./prod.env'),
         index: path.resolve(__dirname, '../dist/index.html'),
         assetsRoot: path.resolve(__dirname, '../dist'),
         assetsSubDirectory: 'static',
-        assetsPublicPath: '/lavas-demo/news/',
+        assetsPublicPath: '/',
         productionSourceMap: true,
 
         // Gzip off by default as many popular static hosts such as

@@ -7,8 +7,6 @@ import axios from 'axios';
 
 export async function getNewsList(params) {
 
-    // let p = new Promise();
-
     let data = await axios('https://pwa.baidu.com/api/mockup/news/' + params.category, {
         params,
         withCredentials: true
@@ -19,7 +17,6 @@ export async function getNewsList(params) {
     if (params.nid) {
         data.data.news = news.filter(item => item.nid === params.nid) || news[0] || [];
     }
-
 
     return new Promise(resolve => {
         resolve(data.data.data);
