@@ -20,6 +20,7 @@ const express = require('express');
 const webpack = require('webpack');
 const proxyMiddleware = require('http-proxy-middleware');
 const webpackConfig = require('./webpack.dev.conf');
+const mockupMiddleware = require('./mockup-middleware');
 
 // 默认调试服务器端口
 let port = process.env.PORT || config.dev.port;
@@ -68,6 +69,8 @@ app.use(require('connect-history-api-fallback')());
 
 // 服务器部署 webpack 打包的静态资源
 app.use(devMiddleware);
+
+app.use(mockupMiddleware);
 
 // 使用热更新， 如果编译出现错误会实时展示编译错误
 app.use(hotMiddleware);
