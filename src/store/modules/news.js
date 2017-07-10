@@ -50,7 +50,11 @@ export default {
         newsDetail: {},
         category: '',
         lastListLen: 0,
-        menuTabs
+        menuTabs,
+        preview: {
+            show: false,
+            images: []
+        }
     },
     getters: {
         loaded(state) {
@@ -76,6 +80,9 @@ export default {
         },
         menuTabs(state) {
             return state.menuTabs;
+        },
+        preview(state) {
+            return state.preview;
         }
     },
     actions: {
@@ -93,6 +100,14 @@ export default {
             let {bannerList = [], topicList = [], newsList = []} = state;
             let list = [...bannerList, ...topicList, ...newsList];
             commit(types.SET_NEWS_DETAIL, list.find(item => item.nid === nid));
+        },
+        showPreview({commit, state}, item) {
+            let images = item.imageurls.map(image => ({src: image.url}));
+            console.log(images)
+            commit(types.SET_PREVIEW_DATA, {show: true, images: images});
+        },
+        closePreview({commit, state}) {
+            commit(types.SET_PREVIEW_DATA, {show: false});
         }
     },
     mutations: {
@@ -148,6 +163,9 @@ export default {
                 item.active = category === item.value;
                 return item;
             });
+        },
+        [types.SET_PREVIEW_DATA](state, data) {
+            state.preview = Object.assign(state.preview, data);
         }
     }
 };

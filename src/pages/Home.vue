@@ -17,6 +17,7 @@
               没有更多了！
             </span>
         </infinite-loading>
+        <preview :show="preview.show" :imageList="preview.images" @click-close="closePreview"></preview>
     </div>
 </template>
 
@@ -25,6 +26,7 @@ import {mapActions, mapGetters} from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
 import MenuTabs from '@/components/MenuTabs.vue'
 import HomeNewsList from '@/components/HomeNewsList.vue'
+import Preview from '@/components/Preview.vue'
 
 export default {
     name: 'home',
@@ -32,7 +34,8 @@ export default {
     components: {
         HomeNewsList,
         InfiniteLoading,
-        MenuTabs
+        MenuTabs,
+        Preview
     },
     methods: {
         ...mapActions('appShell/appHeader', [
@@ -43,7 +46,8 @@ export default {
             'activateBottomNav'
         ]),
         ...mapActions([
-            'getNewsList'
+            'getNewsList',
+            'closePreview'
         ]),
         async getMoreNews() {
             let category = this.$route.params.category || 'remen';
@@ -64,7 +68,8 @@ export default {
             'category',
             'loaded',
             'lastListLen',
-            'menuTabs'
+            'menuTabs',
+            'preview'
         ])
     },
     async asyncData({store, route}) {

@@ -71,6 +71,9 @@ export default {
     line-height 30px
     // margin-top 30px
 
+    h3
+        font-size 16px
+
     .detail-title
         margin-bottom 20px
         padding 10px 0

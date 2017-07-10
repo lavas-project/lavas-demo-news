@@ -58,6 +58,7 @@ module.exports = merge(baseWebpackConfig, {
             filename: 'index.html',
             template: 'index.html',
             inject: true,
+            cache: false,
             favicon: utils.assetsPath('img/icons/favicon.ico')
         }),
 
