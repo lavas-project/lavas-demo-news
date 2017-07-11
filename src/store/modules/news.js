@@ -6,40 +6,78 @@
 import API from '@/api';
 import * as types from '../mutation-types';
 
+const menuTabsLocalDataKey = 'menuTabsLocalDataKey';
+const otherMenuTabsLocalDataKey = 'otherMenuTabsLocalDataKey';
 let menuTabs = [
-        {
-            text: '热点',
-            value: 'remen'
-        },
-        {
-            text: '娱乐',
-            value: 'yule'
-        },
-        {
-            text: '体育',
-            value: 'tiyu'
-        },
-        {
-            text: '军事',
-            value: 'junshi'
-        },
-        {
-            text: '社会',
-            value: 'shehui'
-        },
-        {
-            text: '汽车',
-            value: 'qiche'
-        },
-        {
-            text: '国内',
-            value: 'guonei'
-        },
-        {
-            text: '国际',
-            value: 'guoji'
-        }
-    ];
+    {
+        text: '热点',
+        value: 'remen'
+    },
+    {
+        text: '娱乐',
+        value: 'yule'
+    },
+    {
+        text: '体育',
+        value: 'tiyu'
+    },
+    {
+        text: '军事',
+        value: 'junshi'
+    },
+    {
+        text: '社会',
+        value: 'shehui'
+    },
+    {
+        text: '汽车',
+        value: 'qiche'
+    },
+    {
+        text: '国内',
+        value: 'guonei'
+    },
+    {
+        text: '国际',
+        value: 'guoji'
+    }
+];
+
+let otherMenuTabs = [
+    {
+        text: '视频',
+        value: 'shipin'
+    },
+    {
+        text: '科技',
+        value: 'keji'
+    },
+    {
+        text: '财经',
+        value: 'caijing'
+    },
+    {
+        text: '动漫',
+        value: 'dongman'
+    }
+];
+
+function setLocalMenuTabsData(menuTabsKey = menuTabsLocalDataKey, menuTabsData) {
+    localStorage.setItem(menuTabsKey, JSON.stringify(menuTabsData));
+}
+
+function getLocalMenuTabsData(menuTabsKey = menuTabsLocalDataKey) {
+    let localData = localStorage.getItem(menuTabsKey);
+    let res;
+
+    try {
+        res = JSON.parse(localData);
+    }
+    catch (err) {
+        return;
+    }
+    return res;
+}
 
 export default {
     state: {
@@ -54,7 +92,9 @@ export default {
         preview: {
             show: false,
             images: []
-        }
+        },
+        otherMenuTabs
+
     },
     getters: {
         loaded(state) {
@@ -79,10 +119,15 @@ export default {
             return state.lastListLen;
         },
         menuTabs(state) {
-            return state.menuTabs;
+            // 如果有存在本地的menu数据就取本地的
+            return getLocalMenuTabsData(menuTabsLocalDataKey) || state.menuTabs;
         },
         preview(state) {
             return state.preview;
+        },
+        otherMenuTabs(state) {
+            // 如果有存在本地的menu数据就取本地的
+            return getLocalMenuTabsData(otherMenuTabsLocalDataKey) || state.otherMenuTabs;
         }
     },
     actions: {
@@ -108,6 +153,9 @@ export default {
         },
         closePreview({commit, state}) {
             commit(types.SET_PREVIEW_DATA, {show: false});
+        },
+        [types.ADD_CATEGORY]({commit}, {value: category}) {
+            commit(types.ADD_CATEGORY, category);
         }
     },
     mutations: {
@@ -166,6 +214,26 @@ export default {
         },
         [types.SET_PREVIEW_DATA](state, data) {
             state.preview = Object.assign(state.preview, data);
+        },
+        [types.DEL_CATEGORY](state, category) {
+            state.menuTabs.forEach((item, index) => {
+                if (category.value === item.value) {
+                    let deletedCategoryObj = state.menuTabs.splice(index, 1)[0];
+                    state.otherMenuTabs.unshift(deletedCategoryObj);
+                    setLocalMenuTabsData(otherMenuTabsLocalDataKey, state.otherMenuTabs);
+                }
+            });
+            setLocalMenuTabsData(menuTabsLocalDataKey, state.menuTabs);
+        },
+        [types.ADD_CATEGORY](state, category) {
+            state.otherMenuTabs.map((item, index) => {
+                if (category === item.value) {
+                    let deletedCategoryObj = state.otherMenuTabs.splice(index, 1)[0];
+                    state.menuTabs.push(deletedCategoryObj);
+                    setLocalMenuTabsData(menuTabsLocalDataKey, state.menuTabs);
+                }
+            });
+            setLocalMenuTabsData(otherMenuTabsLocalDataKey, state.otherMenuTabs);
         }
     }
 };

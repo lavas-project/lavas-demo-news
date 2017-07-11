@@ -1,6 +1,6 @@
 <template>
     <div class="home-wrapper">
-        <menu-tabs :tabs="menuTabs"></menu-tabs>
+        <menu-tabs></menu-tabs>
         <!-- 轮播banner组件 -->
 <!--         <v-carousel>
             <v-carousel-item
@@ -68,7 +68,6 @@ export default {
             'category',
             'loaded',
             'lastListLen',
-            'menuTabs',
             'preview'
         ])
     },
