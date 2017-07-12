@@ -2,7 +2,7 @@
     <router-link :to="'/detail/' + newsItem.nid" class="news-item">
         <!-- 仅一张图时的样式 -->
         <div v-if="newsItem.imageurls.length === 1" class="img-first news-content" >
-            <div class="posts" v-if="newsItem.imageurls.length">
+            <div class="posts" v-if="newsItem.imageurls.length" @click.prevent="preview">
                 <span v-for="imgUrl in newsItem.imageurls">
                     <img :src="imgUrl.url" alt="">
                 </span>
@@ -19,7 +19,7 @@
         <!-- 非一张图时的样式 -->
         <div v-if="newsItem.imageurls.length !== 1" class="title-first news-content">
             <div class="list-item-title">{{newsItem.title}}</div>
-            <div class="posts" v-if="newsItem.imageurls.length">
+            <div class="posts" v-if="newsItem.imageurls.length" @click.prevent="preview">
                 <span v-for="imgUrl in newsItem.imageurls">
                     <img :src="imgUrl.url" alt="">
                 </span>
@@ -33,11 +33,17 @@
 </template>
 
 <script>
+
 export default {
     name: 'news-item',
     props: ['newsItem'],
     data() {
         return {}
+    },
+    methods: {
+        preview(nid) {
+            this.$store.dispatch('showPreview', this.newsItem);
+        }
     }
 };
 </script>

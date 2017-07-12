@@ -1,6 +1,6 @@
 <template>
     <div class="home-wrapper">
-        <menu-tabs :tabs="menuTabs"></menu-tabs>
+        <menu-tabs></menu-tabs>
         <!-- 轮播banner组件 -->
         <carousel
             :interval=2000
@@ -17,6 +17,7 @@
               没有更多了！
             </span>
         </infinite-loading>
+        <preview :show="preview.show" :imageList="preview.images" @click-close="closePreview"></preview>
     </div>
 </template>
 
@@ -28,6 +29,7 @@ import Carousel from '@/components/Carousel.vue'
 import HomeNewsList from '@/components/HomeNewsList.vue'
 import NewsFavorList from '@/components/NewsFavorList.vue'
 import EventBus from '@/event-bus';
+import Preview from '@/components/Preview.vue'
 
 export default {
     name: 'home',
@@ -42,7 +44,8 @@ export default {
         InfiniteLoading,
         MenuTabs,
         Carousel,
-        NewsFavorList
+        NewsFavorList,
+        Preview
     },
     methods: {
         ...mapActions('appShell/appHeader', [
@@ -54,7 +57,8 @@ export default {
         ]),
         ...mapActions([
             'getNewsList',
-            'getNewsFavorList'
+            'getNewsFavorList',
+            'closePreview'
         ]),
         async getMoreNews() {
             let category = this.$route.params.category || 'remen';
@@ -79,7 +83,8 @@ export default {
             'loaded',
             'lastListLen',
             'menuTabs',
-            'newsFavorList'
+            'newsFavorList',
+            'preview'
         ])
     },
     async asyncData({store, route}) {

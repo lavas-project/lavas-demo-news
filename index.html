@@ -16,6 +16,7 @@
         <!-- Add to home screen for Windows -->
         <meta name="msapplication-TileImage" content="/static/img/icons/msapplication-icon-144x144.png">
         <meta name="msapplication-TileColor" content="#000000">
+        <script>window.PointerEvent = undefined;</script>
         <% for (var jsFilePath of htmlWebpackPlugin.files.js) { %>
             <link rel="preload" href="<%= jsFilePath %>" as="script">
         <% } %>

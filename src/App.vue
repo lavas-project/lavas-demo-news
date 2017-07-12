@@ -37,6 +37,7 @@
 </template>
 
 <script>
+
 import {mapState, mapActions} from 'vuex';
 import AppHeader from '@/components/AppHeader';
 
@@ -67,6 +68,9 @@ export default {
         handleClickHeaderBack() {
             this.$router.go(-1);
         }
+    },
+    mounted() {
+        document.documentElement.style.backgroundColor = '#fff';
     }
 };
 </script>
@@ -75,12 +79,16 @@ export default {
 
 @import './assets/styles/global'
 
+html
+    background #2874f0
+
 #app
     font-family 'Avenir', Helvetica, Arial, sans-serif
     -webkit-font-smoothing antialiased
     -moz-osx-font-smoothing grayscale
     // text-align center
     color #2c3e50
+
 </style>
 
 <style lang="stylus" scoped>
@@ -100,6 +108,7 @@ export default {
         top 0
         left 0
         right 0
+        z-index: 100
 
     .app-view-wrapper
         flex 1

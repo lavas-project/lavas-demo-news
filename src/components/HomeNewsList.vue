@@ -9,6 +9,7 @@
                 @leave="leave"
                 tag="div" appear>
                 <news-item v-for="(newsItem, i) in newsList"
+                    v-ripple="{class: 'grey--text'}"
                     :newsItem="newsItem"
                     :key="newsItem.nid"
                     :data-index="i">

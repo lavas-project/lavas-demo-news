@@ -121,6 +121,9 @@ export default {
     // margin-top 30px
     position: relative
 
+    h3
+        font-size 16px
+
     .detail-title
         margin-bottom 20px
         padding 10px 0
