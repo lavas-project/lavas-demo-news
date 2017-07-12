@@ -1,6 +1,6 @@
 <template>
     <div :class="{'menu-tabs': true, opend: opend}">
-        <div class="menu-tabs-wrap" :style="{width: len * 72 + 40 + 'px'}">
+        <div class="menu-tabs-wrap" :style="{width: len * tabWidth + 40 + 'px'}">
             <div class="menu-tabs-item"
                 v-for="(item, i) in menuTabs"
                 @click="selectItem(item)">
@@ -11,43 +11,51 @@
         <div class="edit-wrapper">
             <div class="edit-wrapper-inner">
                 <p class="title">我的栏目<span>点击删除</span></p>
-                <div class="edit-menu-tabs-wrapper">
+                <transition-group class="edit-menu-tabs-wrapper" @leave="leave" @enter="enter">
                     <div class="edit-menu-tabs-item selected"
                         v-for="(item, i) in menuTabs"
-                        @click="selectItem(item)">
-                        <span :class="{active: item.active}">{{item.text}}</span>
+                        v-if="i !== 0"
+                        @click="delItemToSelected(item)"
+                        :key="item.value">
+                        <span :class="{active: item.active}">- {{item.text}}</span>
                     </div>
-                </div>
+                </transition-group>
                 <p class="title">推荐栏目<span>点击添加</span></p>
-                <div class="edit-menu-tabs-wrapper">
+                <transition-group class="edit-menu-tabs-wrapper" @leave="leave" @enter="enter">
                     <div class="edit-menu-tabs-item"
                         v-for="(item, i) in otherMenuTabs"
-                        @click="addItemToSelected(item)">
+                        @click="addItemToSelected(item)"
+                        :key="item.value">
                         <span>+ {{item.text}}</span>
                     </div>
-                </div>
+                </transition-group>
             </div>
         </div>
+        <div class="menu-tab-mask" @click="toggleEditWrapper"></div>
     </div>
 </template>
 
 <script>
-import {mapGetters, mapActions, mapState} from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 import * as types from '../store/mutation-types';
 export default {
     name: 'menu-tabs',
 
     data() {
         return {
-            opend: false
+            opend: false,
+            tabWidth: 72
         };
     },
 
     created() {
     },
 
-    computed: {
+    mounted() {
+        this.setMenuTabsPos();
+    },
 
+    computed: {
         ...mapGetters([
             'menuTabs',
             'otherMenuTabs'
@@ -59,7 +67,8 @@ export default {
 
     methods: {
         ...mapActions([
-            types.ADD_CATEGORY
+            types.ADD_CATEGORY,
+            types.DEL_CATEGORY
         ]),
         selectItem(item) {
             // this.$store.dispatch('selectTab', item);
@@ -70,6 +79,31 @@ export default {
         },
         addItemToSelected(tabItem) {
             this[types.ADD_CATEGORY](tabItem);
+        },
+        delItemToSelected(tabItem) {
+
+            if (tabItem.active) {
+                this.selectItem(this.menuTabs[0]);
+            }
+
+            this[types.DEL_CATEGORY](tabItem);
+
+        },
+        setMenuTabsPos() {
+            let activeIndex = 0;
+            this.menuTabs.forEach((item, index) => {
+                if (item.active) {
+                    activeIndex = index;
+                }
+            });
+            this.$el.scrollLeft = this.tabWidth * activeIndex - 30;
+        },
+        leave(el) {
+            el.style.display = 'none';
+        },
+        enter(el) {
+            el.style.opacity = 0;
+            setTimeout(() => el.style.opacity = 1, 250);
         }
     }
 };
@@ -85,6 +119,7 @@ $height = 40px
     // border-top 1px solid #5dabf0
     height $height
     overflow scroll
+    transition: all ease .5s
 
     // 隐藏掉scrollbar
     &::-webkit-scrollbar
@@ -95,7 +130,7 @@ $height = 40px
     &-wrap
         display flex
         position: relative
-        z-index: 2
+        z-index: 3
     .edit
         width: 40px
         height: $height
@@ -113,13 +148,13 @@ $height = 40px
             transition: transform ease .5s
     .edit-wrapper
         position: absolute
-        top: 0
+        top: -1px
         height: 0
         width: 100%
-        z-index: 1
+        z-index: 2
         transition: height ease .5s
         background: $theme.primary
-        margin-top: 40px
+        margin-top: $height
         box-sizing: border-box
         color: #fff
         overflow: hidden
@@ -137,6 +172,7 @@ $height = 40px
                 margin-left: 5px
         .edit-menu-tabs-wrapper
             margin: 0 5px 10px 5px
+            display: block
             &:after
                 clear: both
         .edit-menu-tabs-item
@@ -151,13 +187,23 @@ $height = 40px
                 margin: 0 5px
                 border: solid 1px rgba(255, 255, 255, .6)
                 border-radius: 20px
-
+    .menu-tab-mask
+        position: absolute
+        top: $height
+        left: 0
+        bottom: 0
+        right: 0
+        background: rgba(0, 0, 0, .5)
+        z-index: 1
+        display: none
     &.opend
         .edit
             span
                 transform: rotate(45deg)
         .edit-wrapper
             height: 300px
+        .menu-tab-mask
+            display: block
 
 
 .menu-tabs-item
@@ -172,7 +218,7 @@ $height = 40px
 
     span
         display inline-block
-        height 38px
+        height $height
         padding 0 4px
 
     span.active

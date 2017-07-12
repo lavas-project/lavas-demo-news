@@ -1,32 +1,34 @@
 <template>
     <div class="home-wrapper">
         <menu-tabs></menu-tabs>
-        <!-- 轮播banner组件 -->
-<!--         <v-carousel>
-            <v-carousel-item
-                v-for="(item, i) in bannerList"
-                :src="item.imageurls[0].url"
-                :key="i">
-            </v-carousel-item>
-        </v-carousel>
- -->
-        <!-- 列表部分list组件 -->
-        <home-news-list :newsList='newsList' :lastListLen="lastListLen"></home-news-list>
-        <infinite-loading :on-infinite="getMoreNews" ref="infiniteLoading">
-            <span slot="no-more">
-              没有更多了！
-            </span>
-        </infinite-loading>
-        <preview :show="preview.show" :imageList="preview.images" @click-close="closePreview"></preview>
+        <div class="content-wrapper">
+            <!-- 轮播banner组件 -->
+    <!--         <v-carousel>
+                <v-carousel-item
+                    v-for="(item, i) in bannerList"
+                    :src="item.imageurls[0].url"
+                    :key="i">
+                </v-carousel-item>
+            </v-carousel>
+     -->
+            <!-- 列表部分list组件 -->
+            <home-news-list :newsList='newsList' :lastListLen="lastListLen"></home-news-list>
+            <infinite-loading :on-infinite="getMoreNews" ref="infiniteLoading">
+                <span slot="no-more">
+                  没有更多了！
+                </span>
+            </infinite-loading>
+            <preview :show="preview.show" :imageList="preview.images" @click-close="closePreview"></preview>
+        </div>
     </div>
 </template>
 
 <script>
 import {mapActions, mapGetters} from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
-import MenuTabs from '@/components/MenuTabs.vue'
-import HomeNewsList from '@/components/HomeNewsList.vue'
-import Preview from '@/components/Preview.vue'
+import MenuTabs from '@/components/MenuTabs.vue';
+import HomeNewsList from '@/components/HomeNewsList.vue';
+import Preview from '@/components/Preview.vue';
 
 export default {
     name: 'home',
@@ -100,5 +102,14 @@ export default {
 .carousel
     height 232px
     width 100%
+.content-wrapper
+    position: absolute
+    left: 0
+    right: 0
+    bottom: 0
+    top: 40px
+    -webkit-overflow-scrolling: touch
+    overflow-x: hidden
+    overflow-y: auto
 
 </style>
