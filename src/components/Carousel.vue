@@ -1,12 +1,13 @@
 <template>
     <div class="carousel-wrapper">
-        <transition-group name="carousel" tag="ul" class="carousel-container" :style="{width: containerW + 'px'}">
+        <transition-group name="carousel" tag="ul" 
+            class="carousel-container" :style="{width: containerW + 'px'}"
+            @before-enter="beforeEnter"
+            @enter="enter"
+            @leave="leave">
             <li class="carousel-item"
                 v-for="(item, i) in carouselList"
                 :key="item"
-                @beforeEnter="beforeEnter"
-                @enter="enter"
-                @leave="leave"
                 :style="{width: itemW + 'px'}">
                 <div class="carousel-item-inner"
                     :style="{backgroundImage:'url(' + item.imageurls[0].url + ')'}">
@@ -77,13 +78,13 @@ export default {
             clearInterval(this.loopTimer);
         },
         beforeEnter(el) {
-
+            console.log(el)
         },
         enter(el) {
-
+            console.log(el)
         },
         leave(el) {
-            el.style.opacity = 0;
+            console.log(el)
         }
     }
 };
@@ -100,9 +101,6 @@ export default {
     display: flex
     position: relative
     padding: 0
-
-.carousel-item
-    opacity: 1
 
 .carousel-item-inner
     width: 100%
@@ -123,13 +121,8 @@ export default {
 
     &:last-of-type
         padding: 0
-
 /*
-.carousel-enter, .carousel-enter-active
-
-.carousel-leave, .carousel-leave-active
-*/
 .carousel-move
     transition: all 1s
-
+*/
 </style>
