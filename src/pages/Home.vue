@@ -1,23 +1,25 @@
 <template>
     <div class="home-wrapper">
         <menu-tabs></menu-tabs>
-        <!-- 轮播banner组件 -->
-        <carousel
-            :interval=2000
-            :list="bannerList">
-        </carousel>
-        <!-- 列表部分list组件 -->
-        <home-news-list :newsList='newsList' :lastListLen="lastListLen"></home-news-list>
-        <!-- 收藏夹组件 -->
-        <news-favor-list 
-            :list='newsFavorList' :show="newsFavorListShow"
-            @hide-favorList="hideFavorList"></news-favor-list>
-        <infinite-loading :on-infinite="getMoreNews" ref="infiniteLoading">
-            <span slot="no-more">
-              没有更多了！
-            </span>
-        </infinite-loading>
-        <preview :show="preview.show" :imageList="preview.images" @click-close="closePreview"></preview>
+        <div class="content-wrapper">
+            <!-- 轮播banner组件 -->
+            <carousel
+                :interval=2000
+                :list="bannerList">
+            </carousel>
+            <!-- 列表部分list组件 -->
+            <home-news-list :newsList='newsList' :lastListLen="lastListLen"></home-news-list>
+            <!-- 收藏夹组件 -->
+            <news-favor-list 
+                :list='newsFavorList' :show="newsFavorListShow"
+                @hide-favorList="hideFavorList"></news-favor-list>
+            <infinite-loading :on-infinite="getMoreNews" ref="infiniteLoading">
+                <span slot="no-more">
+                  没有更多了！
+                </span>
+            </infinite-loading>
+            <preview :show="preview.show" :imageList="preview.images" @click-close="closePreview"></preview>
+        </div>
     </div>
 </template>
 
@@ -122,5 +124,14 @@ export default {
 .carousel
     height 232px
     width 100%
+.content-wrapper
+    position: absolute
+    left: 0
+    right: 0
+    bottom: 0
+    top: 40px
+    -webkit-overflow-scrolling: touch
+    overflow-x: hidden
+    overflow-y: auto
 
 </style>
