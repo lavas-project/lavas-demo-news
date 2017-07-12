@@ -8,10 +8,12 @@ import * as types from '../mutation-types';
 
 const menuTabsLocalDataKey = 'menuTabsLocalDataKey';
 const otherMenuTabsLocalDataKey = 'otherMenuTabsLocalDataKey';
+const defaultCategory = 'remen';
+
 let menuTabs = [
     {
         text: '热点',
-        value: 'remen'
+        value: defaultCategory
     },
     {
         text: '娱乐',
@@ -40,6 +42,10 @@ let menuTabs = [
     {
         text: '国际',
         value: 'guoji'
+    },
+    {
+        text: '美女',
+        value: 'meinv'
     }
 ];
 
@@ -79,12 +85,15 @@ function getLocalMenuTabsData(menuTabsKey = menuTabsLocalDataKey) {
     return res;
 }
 
+menuTabs = getLocalMenuTabsData(menuTabsLocalDataKey) || menuTabs;
+otherMenuTabs = getLocalMenuTabsData(otherMenuTabsLocalDataKey) || otherMenuTabs;
+
 export default {
     state: {
         loaded: false,
         newsList: [],
         topicList: [],
-        bannerList:[],
+        bannerList: [],
         newsDetail: {},
         category: '',
         lastListLen: 0,
@@ -94,7 +103,6 @@ export default {
             images: []
         },
         otherMenuTabs
-
     },
     getters: {
         loaded(state) {
@@ -119,15 +127,13 @@ export default {
             return state.lastListLen;
         },
         menuTabs(state) {
-            // 如果有存在本地的menu数据就取本地的
-            return getLocalMenuTabsData(menuTabsLocalDataKey) || state.menuTabs;
+            return state.menuTabs;
         },
         preview(state) {
             return state.preview;
         },
         otherMenuTabs(state) {
-            // 如果有存在本地的menu数据就取本地的
-            return getLocalMenuTabsData(otherMenuTabsLocalDataKey) || state.otherMenuTabs;
+            return state.otherMenuTabs;
         }
     },
     actions: {
@@ -138,7 +144,7 @@ export default {
                 commit(types.SET_NEWS_LIST, {news, banner, topic, change: params.change});
             }
             catch (e) {
-                console.log(e)
+                console.log(e);
             }
         },
         async getNewsDetail({commit, state}, {nid}) {
@@ -148,7 +154,6 @@ export default {
         },
         showPreview({commit, state}, item) {
             let images = item.imageurls.map(image => ({src: image.url}));
-            console.log(images)
             commit(types.SET_PREVIEW_DATA, {show: true, images: images});
         },
         closePreview({commit, state}) {
@@ -156,6 +161,9 @@ export default {
         },
         [types.ADD_CATEGORY]({commit}, {value: category}) {
             commit(types.ADD_CATEGORY, category);
+        },
+        [types.DEL_CATEGORY]({commit}, tabItem) {
+            commit(types.DEL_CATEGORY, tabItem.value);
         }
     },
     mutations: {
@@ -167,7 +175,7 @@ export default {
                     .substr(0, 16);
             };
 
-            let content = [];
+            // let content = [];
 
             let dataProcess = item => {
                 item.show = df(item.ts);
@@ -192,7 +200,7 @@ export default {
                     state.newsList = news;
                 }
                 else {
-                    state.newsList = state.newsList.concat(news);
+                    state.newsList = [...state.newsList, ...news];
                 }
                 state.loaded = 'loaded';
             }
@@ -217,7 +225,7 @@ export default {
         },
         [types.DEL_CATEGORY](state, category) {
             state.menuTabs.forEach((item, index) => {
-                if (category.value === item.value) {
+                if (category === item.value) {
                     let deletedCategoryObj = state.menuTabs.splice(index, 1)[0];
                     state.otherMenuTabs.unshift(deletedCategoryObj);
                     setLocalMenuTabsData(otherMenuTabsLocalDataKey, state.otherMenuTabs);
@@ -226,7 +234,7 @@ export default {
             setLocalMenuTabsData(menuTabsLocalDataKey, state.menuTabs);
         },
         [types.ADD_CATEGORY](state, category) {
-            state.otherMenuTabs.map((item, index) => {
+            state.otherMenuTabs.forEach((item, index) => {
                 if (category === item.value) {
                     let deletedCategoryObj = state.otherMenuTabs.splice(index, 1)[0];
                     state.menuTabs.push(deletedCategoryObj);
