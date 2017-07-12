@@ -134,7 +134,14 @@ export default {
                  *
                  * @type {boolean}
                  */
-                showMenu: true,
+                showMenu: false,
+
+                /**
+                 * 是否展示左侧收藏夹图标
+                 *
+                 * @type {boolean}
+                 */
+                showFavor: false,
 
                 /**
                  * 是否展示左侧返回图标

@@ -2,16 +2,16 @@
     <div class="home-wrapper">
         <menu-tabs :tabs="menuTabs"></menu-tabs>
         <!-- 轮播banner组件 -->
-<!--         <v-carousel>
-            <v-carousel-item
-                v-for="(item, i) in bannerList"
-                :src="item.imageurls[0].url"
-                :key="i">
-            </v-carousel-item>
-        </v-carousel>
- -->
+        <carousel
+            :interval=2000
+            :list="bannerList">
+        </carousel>
         <!-- 列表部分list组件 -->
         <home-news-list :newsList='newsList' :lastListLen="lastListLen"></home-news-list>
+        <!-- 收藏夹组件 -->
+        <news-favor-list 
+            :list='newsFavorList' :show="newsFavorListShow"
+            @hide-favorList="hideFavorList"></news-favor-list>
         <infinite-loading :on-infinite="getMoreNews" ref="infiniteLoading">
             <span slot="no-more">
               没有更多了！
@@ -24,15 +24,25 @@
 import {mapActions, mapGetters} from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
 import MenuTabs from '@/components/MenuTabs.vue'
+import Carousel from '@/components/Carousel.vue'
 import HomeNewsList from '@/components/HomeNewsList.vue'
+import NewsFavorList from '@/components/NewsFavorList.vue'
+import EventBus from '@/event-bus';
 
 export default {
     name: 'home',
     props: {},
+    data() {
+        return {
+            newsFavorListShow: false
+        }
+    },
     components: {
         HomeNewsList,
         InfiniteLoading,
-        MenuTabs
+        MenuTabs,
+        Carousel,
+        NewsFavorList
     },
     methods: {
         ...mapActions('appShell/appHeader', [
@@ -43,7 +53,8 @@ export default {
             'activateBottomNav'
         ]),
         ...mapActions([
-            'getNewsList'
+            'getNewsList',
+            'getNewsFavorList'
         ]),
         async getMoreNews() {
             let category = this.$route.params.category || 'remen';
@@ -54,6 +65,9 @@ export default {
                 pageSize: 20
             });
             this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded);
+        },
+        hideFavorList() {
+            this.newsFavorListShow = false;
         }
     },
     computed: {
@@ -64,18 +78,20 @@ export default {
             'category',
             'loaded',
             'lastListLen',
-            'menuTabs'
+            'menuTabs',
+            'newsFavorList'
         ])
     },
     async asyncData({store, route}) {
         let category = route.params.category || 'remen';
         await store.dispatch('getNewsList', {change: true, category});
+        store.dispatch('getNewsFavorList');
     },
     async activated() {
         this.setAppHeader({
             show: true,
             title: '百度新闻',
-            showMenu: true,
+            showFavor: true,
             showBack: false,
             showLogo: false,
             actions: [
@@ -84,6 +100,11 @@ export default {
                     route: '/search'
                 }
             ]
+        });
+    },
+    created() {
+        EventBus.$on('app-header:click-favor', () => {
+            this.newsFavorListShow = true;
         });
     }
 };
