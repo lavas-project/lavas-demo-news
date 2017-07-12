@@ -96,14 +96,17 @@ export default {
                 console.log(e)
             }
         },
-        async getNewsDetail({commit, state}, {nid}) {
-            let {bannerList = [], topicList = [], newsList = []} = state;
-            let list = [...bannerList, ...topicList, ...newsList];
-            commit(types.SET_NEWS_DETAIL, list.find(item => item.nid === nid));
+        async getNewsDetail({commit, state}, params) {
+            let list = [...state.newsList, ...state.topicList, ...state.bannerList];
+            if (!list.length) {
+                let {news, banner, topic} = await API.getNewsList({category: 'remen'});
+                list = [...news, ...banner, ...topic];
+            }
+
+            commit(types.SET_NEWS_DETAIL, list.find(item => item.nid === params.nid) || list[0]);
         },
         showPreview({commit, state}, item) {
             let images = item.imageurls.map(image => ({src: image.url}));
-            console.log(images)
             commit(types.SET_PREVIEW_DATA, {show: true, images: images});
         },
         closePreview({commit, state}) {
@@ -123,10 +126,6 @@ export default {
 
             let dataProcess = item => {
                 item.show = df(item.ts);
-                // if (!content.length && item.content.length) {
-                //     content = item.content;
-                // }
-                // item.content = item.content.length ? item.content : content;
                 return item;
             };
 

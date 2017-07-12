@@ -49,10 +49,6 @@ export default {
             setTimeout(() => el.style.transform = 'translate(0, 0)', delay)
             setTimeout(() => el.style.opacity = 1, delay / 4)
         },
-        // beforeLeave(el) {
-        //     el.style.opacity = 1;
-        //     el.style.transform = 'translate(-0px, 50px)';
-        // },
         leave(el) {
             let index = el.dataset.index;
             let delay = 100 * index;

@@ -12,7 +12,7 @@
             </v-btn>
         </header>
         <div v-if="loading" class="search-loading">
-            <v-progress-circular indeterminate v-bind:size="70" class="primary--text"></v-progress-circular>
+            <v-progress-circular indeterminate :size="40" class="primary--text"></v-progress-circular>
         </div>
         <div v-if="data && data.length" class="search-content">
             <v-list two-line>
@@ -50,9 +50,6 @@ export default {
     methods: {
         ...mapActions('appShell/appHeader', [
             'setAppHeader'
-        ]),
-        ...mapActions('appShell/appBottomNavigator', [
-            'hideBottomNav'
         ]),
         async search() {
 
@@ -109,7 +106,6 @@ export default {
     },
     activated() {
         this.setAppHeader({show: false});
-        this.hideBottomNav();
     }
 };
 </script>
