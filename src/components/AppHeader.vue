@@ -11,6 +11,12 @@
                 </v-btn>
                 <v-btn
                     icon
+                    v-if="showFavor"
+                    @click.native="handleClick('favor')">
+                    <v-icon class="app-header-icon">folder</v-icon>
+                </v-btn>
+                <v-btn
+                    icon
                     v-if="showBack"
                     @click.native="handleClick('back')">
                     <v-icon class="app-header-icon">arrow_back</v-icon>
@@ -31,8 +37,11 @@
                     v-for="action, actionIdx in actions"
                     :icon="action.icon"
                     :route="action.route">
-                    <v-btn
-                        icon="icon"
+                    <v-btn icon="icon" v-if="action.toggle"
+                        @click.native="handleClick('toggle', {actionIdx, handler: action.toggleHandler})">
+                        <v-icon class="app-header-icon">{{ action.toggleIcon }}</v-icon>
+                    </v-btn>
+                    <v-btn icon="icon" v-else
                         @click.native="handleClick('action', {actionIdx, route: action.route})">
                         <icon v-if="action.svg" :name="action.svg" class="app-header-icon"></icon>
                         <v-icon v-else-if="action.icon" class="app-header-icon">{{ action.icon }}</v-icon>
@@ -53,6 +62,7 @@ export default {
         ...mapState('appShell/appHeader', [
             'show',
             'showMenu',
+            'showFavor',
             'showBack',
             'showLogo',
             'logoIcon',
@@ -68,10 +78,10 @@ export default {
         /**
          * 处理按钮点击事件
          *
-         * @param {string} source 点击事件源名称 menu/logo/action
+         * @param {string} source 点击事件源名称 menu/favor/logo/action
          * @param {Object} data 随点击事件附带的数据对象
          */
-        handleClick(source, {actionIdx, route} = {}) {
+        handleClick(source, {handler, actionIdx, route} = {}) {
 
             // 页面正在切换中，不允许操作，防止滑动效果进行中切换
             if (this.isPageSwitching) {
@@ -82,6 +92,9 @@ export default {
             // 点击右侧动作按钮，事件对象中附加序号
             if (source === 'action') {
                 eventData.actionIdx = actionIdx;
+            }
+            if (source === 'toggle') {
+                eventData.handler = handler;
             }
 
             // 发送给父组件，内部处理

@@ -82,7 +82,7 @@ export default {
         }
     },
     updated() {
-        if (!this.iscroll) {
+        if (!this.iscroll && this.show) {
             this.iscroll = new IScroll(this.$refs.wrapper, {
                 snap: 'li',
                 scrollX: true,
