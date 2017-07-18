@@ -83,7 +83,7 @@ export default {
         ]),
         async getMoreNews() {
             await this.getNewsList(this.category);
-            this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded);
+            setTimeout(() => this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded), 100);
         },
         hideFavorList() {
             this.newsFavorListShow = false;
@@ -112,6 +112,7 @@ export default {
     },
     watch: {
         category(val, old) {
+            console.log(this.listFromCache)
             this.scrollTops[old] = this.$refs.contentWrapper.scrollTop;
         }
     },

@@ -132,7 +132,7 @@ export default {
             dy = touch.clientY - startPoint.clientY;
 
             if (!checked) {
-                toClose = dy > 0 && dy > Math.abs(dx);
+                toClose = Math.abs(dy) > Math.abs(dx);
                 checked = true;
             }
 
@@ -140,13 +140,13 @@ export default {
                 return;
             }
 
-            if (dy > maxLen) {
+            if (Math.abs(dy) > maxLen) {
                 this.close();
                 return;
             }
 
             this.touchTransiStyle = {
-                opacity: 1 - dy / maxLen * .6,
+                opacity: 1 - Math.abs(dy) / maxLen * .6,
                 transform: 'translateY(' + dy + 'px)'
             };
 

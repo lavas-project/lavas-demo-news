@@ -124,13 +124,17 @@ $height = 40px
     z-index: 3
 
     &-wrap
+        position relative
         overflow scroll
         background: $theme.primary
+        z-index 1
+
         // 隐藏掉scrollbar
         &::-webkit-scrollbar
             width 0px
             height 0px
             background transparent
+
     &-wrap-inner
         display flex
         position: relative
@@ -191,13 +195,14 @@ $height = 40px
                 border: solid 1px rgba(255, 255, 255, .6)
                 border-radius: 20px
     .menu-tab-mask
-        position: absolute
+        position: fixed
         top: $height
         left: 0
         bottom: 0
         right: 0
         background: rgba(0, 0, 0, .5)
         display: none
+
     &.opend
         height: 100%
         .edit
