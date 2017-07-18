@@ -4,7 +4,8 @@
         <div class="content-wrapper" ref="contentWrapper">
             <!-- 轮播banner组件 -->
 <!--             <carousel
-                :interval=2000
+                v-if="bannerList.length > 0"
+                :interval=3500
                 :list="bannerList">
             </carousel> -->
             <!-- 列表部分list组件 -->

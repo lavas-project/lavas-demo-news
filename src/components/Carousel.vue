@@ -1,20 +1,19 @@
 <template>
     <div class="carousel-wrapper">
         <transition-group name="carousel" tag="ul" 
-            class="carousel-container" :style="{width: containerW + 'px'}"
-            @before-enter="beforeEnter"
-            @enter="enter"
-            @leave="leave">
-            <li class="carousel-item"
+            class="carousel-container" :style="{width: containerW + 'px'}">
+            <router-link class="carousel-item" tag="li"
                 v-for="(item, i) in carouselList"
                 :key="item"
+                :to="{path:'/detail/' + item.nid}"
                 :style="{width: itemW + 'px'}">
                 <div class="carousel-item-inner"
                     :style="{backgroundImage:'url(' + item.imageurls[0].url + ')'}">
                 </div>
-            </li>
+                <div class="carousel-item-title"><p>{{ item.title }}</p></div>
+            </router-link>
         </transition-group>
-        <div class="carousel-bottom-nav-list">
+        <div class="carousel-bottom-nav-list" :style="{width: itemW * 0.3 + 'px'}">
             <v-icon 
                 v-for="i in listLen" 
                 :key="i"
@@ -46,7 +45,7 @@ export default {
     },
     computed: {
         containerW() {
-            return this.listLen * this.itemW;
+            return this.carouselList.length * this.itemW;
         }
     },
     created() {
@@ -54,8 +53,8 @@ export default {
         this.listLen = list.length;
         this.itemW = window.innerWidth;
 
-        this.carouselList = [];
-        Object.assign(this.carouselList, this.list);
+        this.carouselList = list.slice(0, this.listLen - 1);
+        this.idx = this.listLen - 2;
     },
     mounted() {
         if (this.listLen > 1) {
@@ -69,22 +68,19 @@ export default {
                 if (this.slideIdx >= this.listLen) {
                     this.slideIdx = 0;
                 }
+                this.idx++;
+                if (this.idx >= this.listLen) {
+                    this.idx = 0;
+                }
 
-                this.carouselList.push(this.carouselList[0]);
+                //this.carouselList.push(this.carouselList[0]);
+                //this.carouselList.shift();
+                this.carouselList.push(this.list[this.idx]);
                 this.carouselList.shift();
             }, this.interval);
         },
         pauseSlide() {
             clearInterval(this.loopTimer);
-        },
-        beforeEnter(el) {
-            console.log(el)
-        },
-        enter(el) {
-            console.log(el)
-        },
-        leave(el) {
-            console.log(el)
         }
     }
 };
@@ -102,6 +98,9 @@ export default {
     position: relative
     padding: 0
 
+.carousel-item
+    position: relative
+
 .carousel-item-inner
     width: 100%
     height: 0
@@ -109,20 +108,29 @@ export default {
     background-repeat: no-repeat
     background-size: cover
 
+.carousel-item-title
+    background: linear-gradient(to top,rgba(0,0,0,.7),rgba(0,0,0,.4),rgba(0,0,0,.2),rgba(0,0,0,.1),rgba(255,255,255,0))
+    position: absolute
+    bottom: 0
+    width: 100%
+    color: #fff
+
+    p
+        width: 70%
+        ellipsis()
+        padding: 8px 10px
+        box-sizing: border-box
+        margin: 0
+
 .carousel-bottom-nav-list
     position: absolute
-    bottom: 20px
-    left: 50%
-    transform: translateX(-50%)
+    bottom: 0
+    right: 0
+    padding: 8px 10px
+    display: flex
+    justify-content: space-around
 
 .carousel-bottom-nav-item
-    font-size: 14px
-    padding-right: 15px
+    font-size: 12px
 
-    &:last-of-type
-        padding: 0
-/*
-.carousel-move
-    transition: all 1s
-*/
 </style>

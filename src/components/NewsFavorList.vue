@@ -8,21 +8,19 @@
             <div class="favor-list-header">收藏夹
                 <v-icon class="delete white--text" @click="toggleDelete" :class="{shaking:showDelete}">delete_forever</v-icon>
             </div>
-            <ul class="favor-list-content">
-                <li v-if="list.length <= 0" class="favor-list-null">这里空空的</li>
-                <transition-group name="favor-item-fold" v-else>
-                    <li 
-                        v-for="item in list" :key="item.nid"
-                        class="favor-list-item"
-                        @click.stop="closeAndGo(item.nid, $event)">
-                        <v-icon v-if="showDelete" class="news-delete">highlight_off</v-icon>
-                        <div>
-                            <p class="news-title">{{ item.title }}</p>
-                            <p class="news-date">收藏时间：{{ item.time | dateFormat('yyyy年M月d日 h时m分') }}</p>
-                        </div>
-                    </li>
-                </transition-group>
-            </ul>
+            <p v-if="list.length <= 0" class="favor-list-null">这里空空的</p>
+            <transition-group name="favor-item-fold" v-else tag="ul" class="favor-list-content">
+                <li 
+                    v-for="item in list" :key="item.nid"
+                    class="favor-list-item"
+                    @click.stop="closeAndGo(item.nid, $event)">
+                    <v-icon v-if="showDelete" class="news-delete">highlight_off</v-icon>
+                    <div>
+                        <p class="news-title">{{ item.title }}</p>
+                        <p class="news-date">收藏时间：{{ item.time | dateFormat('yyyy年M月d日 h时m分') }}</p>
+                    </div>
+                </li>
+            </transition-group>
         </div>
     </div>
 </template>
@@ -170,9 +168,6 @@ $padding = 10px
     font-size 1.2em
     padding: 0 $padding
     box-shadow 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px rgba(0,0,0,.14), 0 1px 10px rgba(0,0,0,.12)
-    position: fixed
-    top: 0
-    width: 100%
 
     .delete
         float: right
@@ -180,8 +175,9 @@ $padding = 10px
 
 .favor-list-content
     list-style: none
-    padding: $app-header-height 0 0 0
+    padding: 0 0 $app-header-height 0
     overflow-y auto
+    height: 100%
 
 .favor-list-item
     position: relative
