@@ -14,6 +14,7 @@
                 :lastListLen="lastListLen"
                 :needTransition="!listFromCache">
             </home-news-list>
+            <b-loading :show="showLoading"></b-loading>
             <!-- 收藏夹组件 -->
             <infinite-loading :on-infinite="getMoreNews" ref="infiniteLoading">
                 <span slot="no-more">
@@ -43,6 +44,7 @@ import HomeNewsList from '@/components/HomeNewsList.vue'
 import NewsFavorList from '@/components/NewsFavorList.vue'
 import EventBus from '@/event-bus';
 import Preview from '@/components/Preview.vue'
+import BLoading from '@/components/BLoading.vue'
 
 export default {
     name: 'home',
@@ -50,7 +52,8 @@ export default {
     data() {
         return {
             newsFavorListShow: false,
-            scrollTops: {}
+            scrollTops: {},
+            showLoading: true
         }
     },
     components: {
@@ -59,7 +62,8 @@ export default {
         MenuTabs,
         Carousel,
         NewsFavorList,
-        Preview
+        Preview,
+        BLoading
     },
     methods: {
         ...mapActions('appShell/appHeader', [
@@ -95,9 +99,11 @@ export default {
         ]),
         newsList() {
             if (!this.data[this.category]) {
+                this.showLoading = true;
                 return [];
             }
 
+            this.showLoading = false;
             return this.data[this.category].news;
         }
     },
