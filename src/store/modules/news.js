@@ -67,6 +67,18 @@ function getLocalMenuTabsData(menuTabsKey = menuTabsLocalDataKey) {
     return res;
 }
 
+function df(t) {
+    let date = new Date(parseInt(t, 10) || Date.now());
+    return date.toISOString()
+        .replace('T', ' ')
+        .substr(0, 16);
+}
+
+function dataProcess(item) {
+    item.show = df(item.ts);
+    return item;
+}
+
 menuTabs = getLocalMenuTabsData(menuTabsLocalDataKey) || menuTabs;
 otherMenuTabs = getLocalMenuTabsData(otherMenuTabsLocalDataKey) || otherMenuTabs;
 
@@ -85,7 +97,8 @@ export default {
             images: [],
             index: 0
         },
-        otherMenuTabs
+        otherMenuTabs,
+        searchResultData: []
     },
     getters: {
         loaded(state) {
@@ -121,6 +134,9 @@ export default {
         },
         otherMenuTabs(state) {
             return state.otherMenuTabs;
+        },
+        searchResultData(state) {
+            return state.searchResultData;
         }
     },
     actions: {
@@ -171,6 +187,11 @@ export default {
                 list = [...news, ...banner, ...topic];
             }
             commit(types.SET_NEWS_DETAIL, list.find(item => item.nid === params.nid) || list[0]);
+        },
+
+        async getSearchResult({commit}, query) {
+            let data = await API.getSearchResult({query});
+            commit(types.SET_SEARCH_RESULT, data);      
         },
 
         // 收藏
@@ -238,18 +259,6 @@ export default {
     },
     mutations: {
         [types.SET_NEWS_DATA](state, {data, category, change}) {
-            let df = t => {
-                let date = new Date(parseInt(t, 10) || Date.now());
-                return date.toISOString()
-                    .replace('T', ' ')
-                    .substr(0, 16);
-            };
-
-            let dataProcess = item => {
-                item.show = df(item.ts);
-                return item;
-            };
-
             data.news = data.news.filter(item => item.content.length).map(dataProcess);
             data.banner = data.banner.filter(item => item.content.length).map(dataProcess);
 
@@ -310,6 +319,11 @@ export default {
                 }
             });
             setLocalMenuTabsData(otherMenuTabsLocalDataKey, state.otherMenuTabs);
+        },
+        [types.SET_SEARCH_RESULT](state, data) {
+            data = data.filter(item => item.content.length).map(dataProcess);
+
+            state.searchResultData = data;
         }
     }
 };

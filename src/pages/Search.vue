@@ -14,29 +14,20 @@
         <div v-if="loading" class="search-loading">
             <v-progress-circular indeterminate :size="40" class="primary--text"></v-progress-circular>
         </div>
-        <div v-if="data && data.length" class="search-content">
-            <v-list two-line>
-                <v-list-item v-for="(item, index) in data" v-bind:key="item.title">
-                    <v-list-tile avatar ripple>
-                        <v-list-tile-content>
-                            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                            <v-list-tile-sub-title class="grey--text text--darken-4">{{ item.headline }}</v-list-tile-sub-title>
-                            <v-list-tile-sub-title>{{ item.subtitle }}</v-list-tile-sub-title>
-                        </v-list-tile-content>
-                        <v-list-tile-action>
-                            <v-list-tile-action-text>{{ item.action }}</v-list-tile-action-text>
-                            <v-icon class="grey--text text--lighten-1">star_border</v-icon>
-                        </v-list-tile-action>
-                    </v-list-tile>
-                    <v-divider light v-if="index + 1 < data.length"></v-divider>
-                </v-list-item>
-            </v-list>
+
+        <div v-if="searchResultData && searchResultData.length" class="search-content">
+            <news-item v-for="(newsItem, i) in searchResultData"
+                :newsItem="newsItem"
+                :key="newsItem.nid"
+                :data-index="i">
+            </news-item>
         </div>
     </div>
 </template>
 
 <script>
-import {mapActions} from 'vuex';
+import {mapState, mapActions, mapGetters} from 'vuex';
+import NewsItem from '../components/NewsItem.vue';
 
 export default {
     name: 'search',
@@ -47,14 +38,22 @@ export default {
             data: []
         };
     },
+    components: {
+        NewsItem
+    },
+    computed: {
+        ...mapGetters([
+            'searchResultData'
+        ]),
+    },
     methods: {
         ...mapActions('appShell/appHeader', [
             'setAppHeader'
         ]),
+        ...mapActions([
+            'getSearchResult'
+        ]),
         async search() {
-
-            // 把数据清空
-            this.data = [];
 
             // 显示加载动画
             this.loading = true;
@@ -62,44 +61,8 @@ export default {
             // 让当前输入框失去焦点
             this.$el.querySelector('.search-input').blur();
 
-            // 等待 1s，模拟加载中的效果
-            await new Promise(resolve => {
-                setTimeout(resolve, 1000);
-            });
-
-            // 设置搜索结果数据
-            this.data = [
-                {
-                    title: 'Ali Connors',
-                    headline: 'Brunch this weekend?',
-                    subtitle: 'I\'ll be in your neighborhood doing errands this weekend. Do you want to hang out?',
-                    action: '15 min'
-                },
-                {
-                    title: 'me, Scrott, Jennifer',
-                    headline: 'Summer BBQ',
-                    subtitle: 'Wish I could come, but I\'m out of town this weekend.',
-                    action: '2 hr'
-                },
-                {
-                    title: 'Sandra Adams',
-                    headline: 'Oui oui',
-                    subtitle: 'Do you have Paris recommendations? Have you ever been?',
-                    action: '6 hr'
-                },
-                {
-                    title: 'Trevor Hansen',
-                    headline: 'Birthday gift',
-                    subtitle: 'Have any ideas about what we should get Heidi for her birthday?',
-                    action: '12 hr'
-                },
-                {
-                    title: 'Britta Holt',
-                    headline: 'Recipe to try',
-                    subtitle: 'We should eat this: Grate, Squash, Corn, and tomatillo Tacos.',
-                    action: '18 hr'
-                }
-            ];
+            // 获取数据
+            await this.$store.dispatch('getSearchResult', this.query);
 
             this.loading = false;
         }
@@ -134,9 +97,6 @@ form
     margin-top 30%
     display flex
     justify-content center
-
-.search-content
-    margin-top 20px
 
 li
     list-style-type none
