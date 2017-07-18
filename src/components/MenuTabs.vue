@@ -15,7 +15,7 @@
                     <div class="edit-menu-tabs-item selected"
                         v-for="(item, i) in menuTabs"
                         v-if="i !== 0"
-                        @click="delItemToSelected(item)"
+                        @click="delSelectedItem(item)"
                         :key="item.value">
                         <span :class="{active: item.active}">- {{item.text}}</span>
                     </div>
@@ -81,7 +81,7 @@ export default {
         addItemToSelected(tabItem) {
             this[types.ADD_CATEGORY](tabItem);
         },
-        delItemToSelected(tabItem) {
+        delSelectedItem(tabItem) {
 
             if (tabItem.active) {
                 this.selectItem(this.menuTabs[0]);
@@ -116,11 +116,11 @@ $btn-color = #fff
 $height = 40px
 
 .menu-tabs
-    background: $theme.primary
     // border-top 1px solid #5dabf0
-    height $height
+    // height $height
     overflow scroll
-    transition: all ease .5s
+    position: relative
+    z-index: 3
 
     // 隐藏掉scrollbar
     &::-webkit-scrollbar
@@ -132,6 +132,8 @@ $height = 40px
         display flex
         position: relative
         z-index: 3
+        background: $theme.primary
+        min-width: 100%
     .edit
         width: 40px
         height: $height
@@ -146,16 +148,14 @@ $height = 40px
         z-index: 4
         span
             display: inline-block
-            transition: transform ease .5s
+            transition: transform ease .3s
     .edit-wrapper
-        position: absolute
-        top: -1px
+        position: relative
         height: 0
         width: 100%
         z-index: 2
-        transition: height ease .5s
+        transition: height ease-out .3s
         background: $theme.primary
-        margin-top: $height
         box-sizing: border-box
         color: #fff
         overflow: hidden
@@ -195,9 +195,9 @@ $height = 40px
         bottom: 0
         right: 0
         background: rgba(0, 0, 0, .5)
-        z-index: 1
         display: none
     &.opend
+        height: 100%
         .edit
             span
                 transform: rotate(45deg)
