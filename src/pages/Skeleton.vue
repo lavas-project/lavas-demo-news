@@ -3,7 +3,7 @@
         <section class="skeleton-block">
             <div class="title" v-show="showTitle" ref="title">
                 <h1>百度新闻</h1>
-                <p>Power by Lavas</p>
+                <p>Powerd by Lavas</p>
             </div>
         </section>
     </div>
