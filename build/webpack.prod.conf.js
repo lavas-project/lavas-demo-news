@@ -19,6 +19,7 @@ const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin');
 const SwRegisterWebpackPlugin = require('sw-register-webpack-plugin');
 const WebpackCdnPlugin = require('webpack-cdn-plugin');
+const MultiPathWebpackPlugin = require('multi-path-webpack-plugin');
 
 let env = process.env.NODE_ENV === 'testing'
     ? require('../config/test.env')
@@ -139,7 +140,8 @@ let webpackConfig = merge(baseWebpackConfig, {
         new SWPrecacheWebpackPlugin(config.swPrecache.build),
         new SwRegisterWebpackPlugin({
             filePath: path.resolve(__dirname, '../src/sw-register.js')
-        })
+        }),
+        new MultiPathWebpackPlugin({})
     ]
 });
 
