@@ -42,7 +42,7 @@ export default {
     name: 'news-item',
     props: ['newsItem'],
     data() {
-        return {}
+        return {};
     },
     methods: {
         preview(event) {

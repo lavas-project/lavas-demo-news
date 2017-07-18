@@ -20,7 +20,7 @@
 
 <script>
 import {mapGetters, mapActions} from 'vuex';
-import types from '@/store/mutation-types';
+// import types from '@/store/mutation-types';
 import Preview from '@/components/Preview';
 import EventBus from '@/event-bus';
 

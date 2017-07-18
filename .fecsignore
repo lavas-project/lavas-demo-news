@@ -2,3 +2,4 @@ node_modules
 dist
 config/sw.tmpl.js
 index.html
+mockup

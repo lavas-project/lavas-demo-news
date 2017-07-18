@@ -41,13 +41,13 @@
 <script>
 import {mapActions, mapGetters} from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
-import MenuTabs from '@/components/MenuTabs.vue'
-import Carousel from '@/components/Carousel.vue'
-import HomeNewsList from '@/components/HomeNewsList.vue'
-import NewsFavorList from '@/components/NewsFavorList.vue'
+import MenuTabs from '@/components/MenuTabs.vue';
+import Carousel from '@/components/Carousel.vue';
+import HomeNewsList from '@/components/HomeNewsList.vue';
+import NewsFavorList from '@/components/NewsFavorList.vue';
 import EventBus from '@/event-bus';
-import Preview from '@/components/Preview.vue'
-import BLoading from '@/components/BLoading.vue'
+import Preview from '@/components/Preview.vue';
+import BLoading from '@/components/BLoading.vue';
 
 export default {
     name: 'home',

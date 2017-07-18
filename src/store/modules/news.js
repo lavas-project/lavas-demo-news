@@ -160,8 +160,7 @@ export default {
          *
          * @param  {Commit} options.commit vuex commit
          * @param  {State} options.state  vuex state
-         * @param  {string} category       category
-         * @return {boolean}               from cache
+         * @param  {string} category 类目
          */
         async selectTab({commit, state}, category) {
             commit(types.SET_NEWS_ACTIVE_TAB, category);
@@ -281,7 +280,7 @@ export default {
                 }
                 else {
                     // 加载更多
-                    state.lastListLen = state.data[category].news.length
+                    state.lastListLen = state.data[category].news.length;
                     state.data[category].news = [...state.data[category].news, ...data.news];
                     state.loaded = 'loaded';
                 }
