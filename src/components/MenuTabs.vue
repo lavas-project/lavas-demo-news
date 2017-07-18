@@ -209,7 +209,7 @@ $height = 40px
             span
                 transform: rotate(45deg)
         .edit-wrapper
-            height: 300px
+            height: 250px
         .menu-tab-mask
             display: block
 
