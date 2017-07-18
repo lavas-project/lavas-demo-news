@@ -19,6 +19,23 @@ export default {
         return data.data.data;
     },
 
+    async getSearchResult(params) {
+        // let data = await axios('https://pwa.baidu.com/api/mockup/news/search', {
+        //     params,
+        //     withCredentials: true
+        // });
+
+        // return data.data.data;
+        let data = await axios('https://pwa.baidu.com/api/mockup/news/shehui', {
+            withCredentials: true
+        });
+
+        let news = data.data.data.news || [];
+        data.data.data = news;
+
+        return data.data.data;
+    },
+
     getUserInfo(userId = '2459115') {
         return new Promise(resolve => {
             resolve({
