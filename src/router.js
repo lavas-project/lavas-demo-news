@@ -21,6 +21,7 @@ export function createRouter() {
 
         // history 模式，需要服务器后端配合做路由代理，将所有的前端路由同步代理到 /
         mode: 'history',
+        base: process.env.NODE_ENV === 'production' ? '/lavas-demo/news-v2/' : '/',
         routes: [
             // {
             //     path: '/',
