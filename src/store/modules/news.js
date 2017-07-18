@@ -193,6 +193,9 @@ export default {
             let data = await API.getSearchResult({query});
             commit(types.SET_SEARCH_RESULT, data);      
         },
+        clearSearchResult({commit}) {
+            commit(types.SET_SEARCH_RESULT, []);
+        },
 
         // 收藏
         addFavorItem({commit, state}, detail) {
