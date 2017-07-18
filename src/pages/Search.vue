@@ -1,7 +1,7 @@
 <template>
     <div class="app-search-page">
         <header>
-            <v-btn light icon class="search-btn" @click.native="$router.go(-1)">
+            <v-btn light icon class="search-btn" @click.native="clearAndGo">
                 <v-icon class="search-icon">arrow_back</v-icon>
             </v-btn>
             <form @submit.prevent="search">
@@ -65,17 +65,21 @@ export default {
             await this.$store.dispatch('getSearchResult', this.query);
 
             this.loading = false;
+        },
+        clearAndGo() {
+            this.query = '';
+            this.$router.go(-1);
         }
     },
     activated() {
         this.setAppHeader({show: false});
-        this.query = '';
-        this.$el.querySelector('.search-input').focus();
+        // this.query = '';
     },
     watch: {
         query(val, old) {
             if (val.length === 0) {
                 this.$store.dispatch('clearSearchResult');
+                this.$el.querySelector('.search-input').focus();
             }
         }
     }
