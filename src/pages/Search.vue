@@ -68,12 +68,12 @@ export default {
         },
         clearAndGo() {
             this.$router.go(-1);
-            this.query = '';
+            this.$store.dispatch('clearSearchResult');
         }
     },
     activated() {
         this.setAppHeader({show: false});
-        // this.query = '';
+        this.query.length === 0 && this.$el.querySelector('.search-input').focus();
     },
     watch: {
         query(val, old) {
