@@ -67,8 +67,8 @@ export default {
             this.loading = false;
         },
         clearAndGo() {
-            this.query = '';
             this.$router.go(-1);
+            this.query = '';
         }
     },
     activated() {
