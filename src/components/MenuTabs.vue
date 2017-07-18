@@ -125,6 +125,7 @@ $height = 40px
 
     &-wrap
         overflow scroll
+        background: $theme.primary
         // 隐藏掉scrollbar
         &::-webkit-scrollbar
             width 0px
@@ -134,7 +135,6 @@ $height = 40px
         display flex
         position: relative
         z-index: 3
-        background: $theme.primary
         min-width: 100%
     .edit
         width: 40px
