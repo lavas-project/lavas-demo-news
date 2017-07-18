@@ -16,9 +16,12 @@
             </home-news-list>
             <b-loading :show="showLoading"></b-loading>
             <!-- 收藏夹组件 -->
-            <infinite-loading :on-infinite="getMoreNews" ref="infiniteLoading">
+            <infinite-loading v-if="!showLoading"
+                spinner="spiral"
+                :on-infinite="getMoreNews"
+                ref="infiniteLoading">
                 <span slot="no-more">
-                  没有更多了！
+                  亲，已经拉到底啦
                 </span>
             </infinite-loading>
         </div>
@@ -110,7 +113,6 @@ export default {
     watch: {
         category(val, old) {
             this.scrollTops[old] = this.$refs.contentWrapper.scrollTop;
-            this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset');
         }
     },
     updated(data) {
@@ -147,8 +149,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-// .home-wrapper
-//     margin-top 92px !important;
 
 .carousel
     height 232px
@@ -162,5 +162,8 @@ export default {
     -webkit-overflow-scrolling: touch
     overflow-x: hidden
     overflow-y: auto
+
+// .loading-spiral
+//     border-color: $theme.primary !important
 
 </style>
