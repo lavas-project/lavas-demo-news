@@ -68,7 +68,7 @@ export default {
         },
         clearAndGo() {
             this.$router.go(-1);
-            this.query = '';
+            this.$store.dispatch('clearSearchResult');
         }
     },
     activated() {
