@@ -93,13 +93,11 @@ otherMenuTabs = getLocalMenuTabsData(otherMenuTabsLocalDataKey) || otherMenuTabs
 export default {
     state: {
         loaded: false,
-        newsList: [],
-        topicList: [],
-        bannerList: [],
+        listFromCache: false,
+        data: {},
         newsDetail: {},
         newsFavorList: [],
         detailPageFavorStatus: false,
-        category: '',
         lastListLen: 0,
         menuTabs,
         preview: {
@@ -112,17 +110,15 @@ export default {
         loaded(state) {
             return state.loaded;
         },
-        newsList(state) {
-            return state.newsList;
+        listFromCache(state) {
+            return state.listFromCache;
         },
-        topicList(state) {
-            return state.topicList;
-        },
-        bannerList(state) {
-            return state.bannerList;
+        data(state) {
+            return state.data;
         },
         category(state) {
-            return state.category;
+            let activeTab = state.menuTabs.find(tab => tab.active);
+            return activeTab.value;
         },
         newsDetail(state) {
             return state.newsDetail;
@@ -147,25 +143,56 @@ export default {
         }
     },
     actions: {
-        async getNewsList({commit}, params) {
-            commit(types.SET_NEWS_ACTIVE_TAB, params.category);
+        async getNewsList({commit, state}, category) {
             try {
-                let {news, banner, topic} = await API.getNewsList(params);
-                commit(types.SET_NEWS_LIST, {news, banner, topic, change: params.change});
+                let data = await API.getNewsList({category});
+                commit(types.SET_LIST_FROM_CACHE, false);
+                commit(types.SET_NEWS_DATA, {category, data});
             }
             catch (e) {
                 console.log(e);
             }
         },
+
+        /**
+         * 切换tab
+         *
+         * @param  {Commit} options.commit vuex commit
+         * @param  {State} options.state  vuex state
+         * @param  {string} category       category
+         * @return {boolean}               from cache
+         */
+        async selectTab({commit, state}, category) {
+            commit(types.SET_NEWS_ACTIVE_TAB, category);
+
+            if (state.data[category]) {
+                commit(types.SET_LIST_FROM_CACHE, true);
+                return;
+            }
+
+            try {
+                let data = await API.getNewsList({category});
+                commit(types.SET_NEWS_DATA, {category, change: true, data});
+            }
+            catch (e) {
+                console.log(e);
+            }
+            commit(types.SET_LIST_FROM_CACHE, false);
+        },
+
         async getNewsDetail({commit, state}, params) {
-            let list = [...state.newsList, ...state.topicList, ...state.bannerList];
+            let list = Object.keys(state.data).reduce((list, cat) => {
+                list = list.concat(state.data[cat].news);
+                return list;
+            }, []);
+
             if (!list.length) {
                 let {news, banner, topic} = await API.getNewsList({category: 'remen'});
                 list = [...news, ...banner, ...topic];
             }
-
             commit(types.SET_NEWS_DETAIL, list.find(item => item.nid === params.nid) || list[0]);
         },
+
         // 收藏
         addFavorItem({commit, state}, detail) {
             let favorList = state.newsFavorList;
@@ -230,7 +257,7 @@ export default {
         }
     },
     mutations: {
-        [types.SET_NEWS_LIST](state, {news, topic, banner, change}) {
+        [types.SET_NEWS_DATA](state, {data, category, change}) {
             let df = t => {
                 let date = new Date(parseInt(t, 10) || Date.now());
                 return date.toISOString()
@@ -238,37 +265,33 @@ export default {
                     .substr(0, 16);
             };
 
-            // let content = [];
-
             let dataProcess = item => {
                 item.show = df(item.ts);
                 return item;
             };
 
-            news = news.filter(item => item.content.length).map(dataProcess);
+            data.news = data.news.filter(item => item.content.length).map(dataProcess);
+            data.banner = data.banner.filter(item => item.content.length).map(dataProcess);
 
-            if (topic) {
-                topic = topic.filter(item => item.content.length).map(dataProcess);
-            }
-
-            banner = banner.filter(item => item.content.length).map(dataProcess);
-            state.lastListLen = state.newsList.length;
-
-            if (news && news.length) {
+            if (data.news && data.news.length) {
                 if (change) {
-                    state.newsList = news;
+                    state.data[category] = data;
+                    state.lastListLen = 0;
                 }
                 else {
-                    state.newsList = [...state.newsList, ...news];
+                    // 加载更多
+                    state.lastListLen = state.data[category].news.length
+                    state.data[category].news = [...state.data[category].news, ...data.news];
+                    state.loaded = 'loaded';
                 }
-                state.loaded = 'loaded';
+                state.data = Object.assign({}, state.data);
             }
             else {
                 state.loaded = 'complete';
             }
-
-            state.topicList = topic;
-            state.bannerList = banner;
+        },
+        [types.SET_LIST_FROM_CACHE](state, fromCache) {
+            state.listFromCache = fromCache;
         },
         [types.SET_NEWS_DETAIL](state, newsDetail) {
             state.newsDetail = newsDetail;

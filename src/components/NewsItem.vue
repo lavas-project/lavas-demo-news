@@ -55,10 +55,9 @@ export default {
     padding 10px
     line-height 16px
     border-bottom 1px solid #eee
-    transition: all 1s
 
-    &.item-leave-active
-        position absolute
+    &.item-enter-active
+        transition: all 1s
 
     .news-content
         display inline-block

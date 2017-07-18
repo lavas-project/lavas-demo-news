@@ -1,16 +1,20 @@
 <template>
     <div class="home-wrapper">
         <menu-tabs></menu-tabs>
-        <div class="content-wrapper">
+        <div class="content-wrapper" ref="contentWrapper">
             <!-- 轮播banner组件 -->
-            <carousel
+<!--             <carousel
                 :interval=2000
                 :list="bannerList">
-            </carousel>
+            </carousel> -->
             <!-- 列表部分list组件 -->
-            <home-news-list :newsList='newsList' :lastListLen="lastListLen"></home-news-list>
+            <home-news-list
+                :newsList='newsList'
+                :lastListLen="lastListLen"
+                :needTransition="!listFromCache">
+            </home-news-list>
             <!-- 收藏夹组件 -->
-            <news-favor-list 
+            <news-favor-list
                 :list='newsFavorList' :show="newsFavorListShow"
                 @hide-favorList="hideFavorList"></news-favor-list>
             <infinite-loading :on-infinite="getMoreNews" ref="infiniteLoading">
@@ -38,7 +42,8 @@ export default {
     props: {},
     data() {
         return {
-            newsFavorListShow: false
+            newsFavorListShow: false,
+            scrollTops: {}
         }
     },
     components: {
@@ -63,13 +68,7 @@ export default {
             'closePreview'
         ]),
         async getMoreNews() {
-            let category = this.$route.params.category || 'remen';
-            await this.getNewsList({
-                category,
-                change: false,
-                pageNum: Math.floor(this.newsList.length / 20),
-                pageSize: 20
-            });
+            await this.getNewsList(this.category);
             this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded);
         },
         hideFavorList() {
@@ -78,20 +77,37 @@ export default {
     },
     computed: {
         ...mapGetters([
-            'newsList',
-            'topicList',
-            'bannerList',
             'category',
+            'listFromCache',
             'loaded',
+            'data',
             'lastListLen',
             'menuTabs',
             'newsFavorList',
             'preview'
-        ])
+        ]),
+        newsList() {
+            if (!this.data[this.category]) {
+                return [];
+            }
+
+            return this.data[this.category].news;
+        }
+    },
+    watch: {
+        category(val, old) {
+            this.scrollTops[old] = this.$refs.contentWrapper.scrollTop;
+            this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset');
+        }
+    },
+    updated(data) {
+        if (this.listFromCache) {
+            this.$refs.contentWrapper.scrollTop = this.scrollTops[this.category];
+        }
     },
     async asyncData({store, route}) {
         let category = route.params.category || 'remen';
-        await store.dispatch('getNewsList', {change: true, category});
+        await store.dispatch('selectTab', category);
         store.dispatch('getNewsFavorList');
     },
     async activated() {

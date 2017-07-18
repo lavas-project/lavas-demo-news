@@ -70,9 +70,10 @@ export default {
             types.ADD_CATEGORY,
             types.DEL_CATEGORY
         ]),
-        selectItem(item) {
-            // this.$store.dispatch('selectTab', item);
-            this.$router.push('/home/' + item.value);
+        async selectItem(item) {
+            await this.$store.dispatch('selectTab', item.value);
+            // this.$router.replace('/home/' + item.value);
+            // this.$router.push('/home/' + item.value);
         },
         toggleEditWrapper() {
             this.opend = !this.opend;

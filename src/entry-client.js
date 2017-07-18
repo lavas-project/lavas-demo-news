@@ -42,7 +42,6 @@ Vue.mixin({
     // 路由切换时，保存页面滚动位置
     beforeRouteEnter(to, from, next) {
         next(vm => {
-
             // 通过 `vm` 访问组件实例
             vm.$el.scrollTop = vm.$store.state.appShell.historyPageScrollTop[to.fullPath] || 0;
         });

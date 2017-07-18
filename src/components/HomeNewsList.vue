@@ -2,31 +2,40 @@
     <div class="news-wrapper">
         <!-- 列表部分list组件，后面提出来 -->
         <div class="news-list">
-            <transition-group
-                name="item"
-                @before-enter="beforeEnter"
-                @enter="enter"
-                @leave="leave"
-                tag="div" appear>
+            <template v-if="needTransition">
+                <transition-group
+                    appear
+                    name="item"
+                    @before-enter="beforeEnter"
+                    @enter="enter"
+                    tag="div">
+                    <news-item v-for="(newsItem, i) in newsList"
+                        v-ripple="{class: 'grey--text'}"
+                        :newsItem="newsItem"
+                        :key="newsItem.nid"
+                        :data-index="i">
+                    </news-item>
+                </transition-group>
+            </template>
+            <template v-else>
                 <news-item v-for="(newsItem, i) in newsList"
                     v-ripple="{class: 'grey--text'}"
                     :newsItem="newsItem"
                     :key="newsItem.nid"
                     :data-index="i">
                 </news-item>
-            </transition-group>
+            </template>
         </div>
     </div>
 </template>
 
 <script>
 import {mapGetters, mapActions} from 'vuex';
-import EventBus from '@/event-bus';
 import NewsItem from './NewsItem.vue';
 
 export default {
     name: 'home',
-    props: ['newsList', 'lastListLen'],
+    props: ['newsList', 'lastListLen', 'needTransition'],
     components: {
         NewsItem
     },
@@ -37,25 +46,14 @@ export default {
 
     },
     methods: {
-        ...mapActions([
-            'getNewsDetail'
-        ]),
         beforeEnter(el) {
             el.style.opacity = 0;
             el.style.transform = 'translate(-0px, 50px)';
         },
-        enter(el) {
+        enter(el, done) {
             let delay = 100 * (el.dataset.index - this.lastListLen);
-            setTimeout(() => el.style.transform = 'translate(0, 0)', delay)
-            setTimeout(() => el.style.opacity = 1, delay / 4)
-        },
-        leave(el) {
-            let index = el.dataset.index;
-            let delay = 100 * index;
-            delay = delay > 500 ? 500 : delay;
-            el.style.top = 132 * index + 'px';
-            setTimeout(() => el.style.transform = 'translate(600px, 100px)', delay);
-            setTimeout(() => el.style.opacity = 0, delay);
+            setTimeout(() => el.style.transform = 'translate(0, 0)', delay);
+            setTimeout(() => el.style.opacity = 1, delay / 4);
         }
     }
 };
