@@ -15,15 +15,16 @@
                 :needTransition="!listFromCache">
             </home-news-list>
             <!-- 收藏夹组件 -->
-            <news-favor-list
-                :list='newsFavorList' :show="newsFavorListShow"
-                @hide-favorList="hideFavorList"></news-favor-list>
             <infinite-loading :on-infinite="getMoreNews" ref="infiniteLoading">
                 <span slot="no-more">
                   没有更多了！
                 </span>
             </infinite-loading>
         </div>
+        <news-favor-list
+            :list='newsFavorList' :show="newsFavorListShow"
+            @hide-favorList="hideFavorList">
+        </news-favor-list>
         <preview
             :show="preview.show"
             :imageList="preview.images"
