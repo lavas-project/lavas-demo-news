@@ -16,9 +16,12 @@
             </home-news-list>
             <b-loading :show="showLoading"></b-loading>
             <!-- 收藏夹组件 -->
-            <infinite-loading :on-infinite="getMoreNews" ref="infiniteLoading">
+            <infinite-loading v-if="!showLoading"
+                spinner="spiral"
+                :on-infinite="getMoreNews"
+                ref="infiniteLoading">
                 <span slot="no-more">
-                  没有更多了！
+                  亲，已经拉到底啦
                 </span>
             </infinite-loading>
         </div>
@@ -38,13 +41,13 @@
 <script>
 import {mapActions, mapGetters} from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
-import MenuTabs from '@/components/MenuTabs.vue'
-import Carousel from '@/components/Carousel.vue'
-import HomeNewsList from '@/components/HomeNewsList.vue'
-import NewsFavorList from '@/components/NewsFavorList.vue'
+import MenuTabs from '@/components/MenuTabs.vue';
+import Carousel from '@/components/Carousel.vue';
+import HomeNewsList from '@/components/HomeNewsList.vue';
+import NewsFavorList from '@/components/NewsFavorList.vue';
 import EventBus from '@/event-bus';
-import Preview from '@/components/Preview.vue'
-import BLoading from '@/components/BLoading.vue'
+import Preview from '@/components/Preview.vue';
+import BLoading from '@/components/BLoading.vue';
 
 export default {
     name: 'home',
@@ -80,7 +83,7 @@ export default {
         ]),
         async getMoreNews() {
             await this.getNewsList(this.category);
-            this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded);
+            setTimeout(() => this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded), 100);
         },
         hideFavorList() {
             this.newsFavorListShow = false;
@@ -109,8 +112,8 @@ export default {
     },
     watch: {
         category(val, old) {
+            console.log(this.listFromCache)
             this.scrollTops[old] = this.$refs.contentWrapper.scrollTop;
-            this.$refs.infiniteLoading.$emit('$InfiniteLoading:reset');
         }
     },
     updated(data) {
@@ -147,8 +150,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-// .home-wrapper
-//     margin-top 92px !important;
 
 .carousel
     height 232px
@@ -162,5 +163,8 @@ export default {
     -webkit-overflow-scrolling: touch
     overflow-x: hidden
     overflow-y: auto
+
+// .loading-spiral
+//     border-color: $theme.primary !important
 
 </style>

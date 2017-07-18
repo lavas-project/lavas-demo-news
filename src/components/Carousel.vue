@@ -1,6 +1,6 @@
 <template>
     <div class="carousel-wrapper">
-        <transition-group name="carousel" tag="ul" 
+        <transition-group name="carousel" tag="ul"
             class="carousel-container" :style="{width: containerW + 'px'}">
             <router-link class="carousel-item" tag="li"
                 v-for="(item, i) in carouselList"
@@ -14,8 +14,8 @@
             </router-link>
         </transition-group>
         <div class="carousel-bottom-nav-list" :style="{width: itemW * 0.3 + 'px'}">
-            <v-icon 
-                v-for="i in listLen" 
+            <v-icon
+                v-for="i in listLen"
                 :key="i"
                 :class="{'white--text': slideIdx + 1 === i}"
                 class="carousel-bottom-nav-item">fiber_manual_record</v-icon>
@@ -73,8 +73,8 @@ export default {
                     this.idx = 0;
                 }
 
-                //this.carouselList.push(this.carouselList[0]);
-                //this.carouselList.shift();
+                // this.carouselList.push(this.carouselList[0]);
+                // this.carouselList.shift();
                 this.carouselList.push(this.list[this.idx]);
                 this.carouselList.shift();
             }, this.interval);

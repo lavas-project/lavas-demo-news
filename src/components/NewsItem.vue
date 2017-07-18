@@ -42,7 +42,7 @@ export default {
     name: 'news-item',
     props: ['newsItem'],
     data() {
-        return {}
+        return {};
     },
     methods: {
         preview(event) {
@@ -62,7 +62,7 @@ export default {
     border-bottom 1px solid #eee
 
     &.item-enter-active
-        transition: all 1s
+        transition: all .5s
 
     .news-content
         display inline-block

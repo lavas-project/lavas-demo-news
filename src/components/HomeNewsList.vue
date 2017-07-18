@@ -38,7 +38,7 @@ export default {
         NewsItem
     },
     data() {
-        return {}
+        return {};
     },
     computed: {
 

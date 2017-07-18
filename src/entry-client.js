@@ -5,7 +5,6 @@
 
 import 'babel-polyfill';
 import Vue from 'vue';
-import FastClick from 'fastclick';
 import {createApp} from './app';
 import ProgressBar from '@/components/ProgressBar.vue';
 
@@ -14,7 +13,6 @@ let loading = Vue.prototype.$loading = new Vue(ProgressBar).$mount();
 let {app, router, store} = createApp();
 
 document.body.appendChild(loading.$el);
-// FastClick.attach(document.body);
 
 Vue.mixin({
 

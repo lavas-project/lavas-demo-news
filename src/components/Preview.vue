@@ -85,6 +85,7 @@ export default {
             }
 
             this.$emit('click-close');
+            this.iscroll = null;
         }
     },
     updated() {
@@ -113,8 +114,6 @@ export default {
         let toClose;
         let checked;
         let maxLen = 120;
-        let offset = 0;
-        let opacity = 1;
 
         let touchstart = e => {
             startPoint = e.touches[0];
@@ -133,7 +132,7 @@ export default {
             dy = touch.clientY - startPoint.clientY;
 
             if (!checked) {
-                toClose = dy > 0 && dy > Math.abs(dx);
+                toClose = Math.abs(dy) > Math.abs(dx);
                 checked = true;
             }
 
@@ -141,15 +140,13 @@ export default {
                 return;
             }
 
-            if (dy > maxLen) {
+            if (Math.abs(dy) > maxLen) {
                 this.close();
                 return;
             }
 
-            opacity = 1 - dy / maxLen * .6;
-
             this.touchTransiStyle = {
-                opacity,
+                opacity: 1 - Math.abs(dy) / maxLen * .6,
                 transform: 'translateY(' + dy + 'px)'
             };
 
@@ -162,6 +159,7 @@ export default {
         this.$el.addEventListener('touchstart', touchstart);
         this.$el.addEventListener('touchmove', touchmove);
         this.$el.addEventListener('touchend', touchend);
+        this.$el.addEventListener('touchcancel', touchend);
     }
 };
 </script>
