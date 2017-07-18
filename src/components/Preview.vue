@@ -88,15 +88,23 @@ export default {
             this.iscroll = null;
         }
     },
+    watch: {
+        show(val) {
+            if (val) {
+                this.showInfo = true;
+            }
+        }
+    },
     updated() {
         if (!this.iscroll && this.show) {
+
             this.iscroll = new IScroll(this.$refs.wrapper, {
                 snap: 'li',
                 scrollX: true,
                 scrollY: false,
                 startX: -ww * this.index,
                 click: true,
-                momentum: false
+                momentum: true
             });
 
             this.curIndex = this.index + 1;
@@ -113,7 +121,7 @@ export default {
         let dy;
         let toClose;
         let checked;
-        let maxLen = 120;
+        let maxLen = 60;
 
         let touchstart = e => {
             startPoint = e.touches[0];
