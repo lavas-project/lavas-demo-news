@@ -77,12 +77,13 @@ export default {
             this.showInfo = !this.showInfo;
         },
         close() {
-            if (this.iscroll) {
+            let iscroll = this.iscroll;
+            if (iscroll) {
                 setTimeout(() => {
-                    this.iscroll.destroy();
-                    this.iscroll = null;
+                    iscroll.destroy();
                 }, 200);
             }
+
             this.$emit('click-close');
         }
     },
