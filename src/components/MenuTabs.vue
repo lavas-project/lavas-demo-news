@@ -1,10 +1,12 @@
 <template>
     <div :class="{'menu-tabs': true, opend: opend}">
-        <div class="menu-tabs-wrap" :style="{width: len * tabWidth + 40 + 'px'}">
-            <div class="menu-tabs-item"
-                v-for="(item, i) in menuTabs"
-                @click="selectItem(item)">
-                <span :class="{active: item.active}">{{item.text}}</span>
+        <div class="menu-tabs-wrap">
+            <div class="menu-tabs-wrap-inner" :style="{width: len * tabWidth + 40 + 'px'}">
+                <div class="menu-tabs-item"
+                    v-for="(item, i) in menuTabs"
+                    @click="selectItem(item)">
+                    <span :class="{active: item.active}">{{item.text}}</span>
+                </div>
             </div>
         </div>
         <div class="edit" @click="toggleEditWrapper"><span>+</span></div>
@@ -118,17 +120,17 @@ $height = 40px
 .menu-tabs
     // border-top 1px solid #5dabf0
     // height $height
-    overflow scroll
     position: relative
     z-index: 3
 
-    // 隐藏掉scrollbar
-    &::-webkit-scrollbar
-        width 0px
-        height 0px
-        background transparent
-
     &-wrap
+        overflow scroll
+        // 隐藏掉scrollbar
+        &::-webkit-scrollbar
+            width 0px
+            height 0px
+            background transparent
+    &-wrap-inner
         display flex
         position: relative
         z-index: 3
