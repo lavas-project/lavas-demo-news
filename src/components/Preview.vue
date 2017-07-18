@@ -1,6 +1,6 @@
 <template>
     <transition>
-        <div class="preview" v-show="show" @click.stop="toggleInfo">
+        <div class="preview" v-show="show" @click.stop="toggleInfo" :style="touchTransiStyle">
             <div class="preview-wrapper" ref="wrapper" :style="wrapperStyle">
                 <ul :style="ulStyle">
                     <li v-for="item in imageList" :style="itemStyle">
@@ -37,11 +37,6 @@ let wh = window.innerHeight;
 
 export default {
     name: 'previewer',
-    // props: [
-    //     'imageList',
-    //     'show',
-    //     'index'
-    // ],
     props: {
         imageList: Array,
         show: Boolean,
@@ -53,7 +48,8 @@ export default {
     data() {
         return {
             showInfo: true,
-            curIndex: 1
+            curIndex: 1,
+            touchTransiStyle: {}
         }
     },
     computed: {
@@ -108,7 +104,63 @@ export default {
                 vm.curIndex = this.currentPage.pageX + 1;
             });
         }
+    },
+    mounted() {
+        let startPoint;
+        let dx;
+        let dy;
+        let toClose;
+        let checked;
+        let maxLen = 120;
+        let offset = 0;
+        let opacity = 1;
 
+        let touchstart = e => {
+            startPoint = e.touches[0];
+            checked = false;
+            toClose = true;
+            this.touchTransiStyle = {};
+        };
+
+        let touchmove = e => {
+            if (!toClose) {
+                return;
+            }
+
+            let touch = e.touches[0]
+            dx = touch.clientX - startPoint.clientX;
+            dy = touch.clientY - startPoint.clientY;
+
+            if (!checked) {
+                toClose = dy > 0 && dy > Math.abs(dx);
+                checked = true;
+            }
+
+            if (!toClose) {
+                return;
+            }
+
+            if (dy > maxLen) {
+                this.close();
+                return;
+            }
+
+            opacity = 1 - dy / maxLen * .6;
+
+            this.touchTransiStyle = {
+                opacity,
+                transform: 'translateY(' + dy + 'px)'
+            };
+
+        };
+
+        let touchend = e => {
+            this.touchTransiStyle = {};
+        };
+
+        this.$el.addEventListener('touchstart', touchstart);
+        this.$el.addEventListener('touchmove', touchmove);
+        this.$el.addEventListener('touchend', touchend);
     }
 };
 </script>
