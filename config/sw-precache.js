@@ -105,6 +105,14 @@ module.exports = {
 
                 // 五种：caheOnly cacheFirst fastest networkFirst networkOnly
                 handler: 'networkFirst'
+            },
+            {
+                urlPattern: /vue\.runtime/,
+                handler: 'networkFirst'
+            },
+            {
+                urlPattern: /\/api\/mockup/,
+                handler: 'networkFirst'
             }
             // ,
             // 如果在staticFileGlobs中设置相同的缓存路径，可能导致此处不起作用

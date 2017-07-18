@@ -32,7 +32,10 @@ let menuTabs = [
     {
         text: '社会',
         value: 'shehui'
-    },
+    }
+];
+
+let otherMenuTabs = [
     {
         text: '汽车',
         value: 'qiche'
@@ -44,29 +47,6 @@ let menuTabs = [
     {
         text: '国际',
         value: 'guoji'
-    },
-    {
-        text: '美女',
-        value: 'meinv'
-    }
-];
-
-let otherMenuTabs = [
-    {
-        text: '视频',
-        value: 'shipin'
-    },
-    {
-        text: '科技',
-        value: 'keji'
-    },
-    {
-        text: '财经',
-        value: 'caijing'
-    },
-    {
-        text: '动漫',
-        value: 'dongman'
     }
 ];
 
