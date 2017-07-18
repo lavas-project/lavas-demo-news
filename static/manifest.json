@@ -1,6 +1,6 @@
 {
-  "name": "lavas-demo-news",
-  "short_name": "lavas-demo-news",
+  "name": "news",
+  "short_name": "news",
   "icons": [
     {
       "src": "/static/img/icons/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
     }
   ],
   "start_url": "/",
-  "background_color": "#000000",
+  "background_color": "#2874f0",
   "display": "standalone",
   "theme_color": "#2874f0"
 }
