@@ -37,10 +37,19 @@ let wh = window.innerHeight;
 
 export default {
     name: 'previewer',
-    props: [
-        'imageList',
-        'show'
-    ],
+    // props: [
+    //     'imageList',
+    //     'show',
+    //     'index'
+    // ],
+    props: {
+        imageList: Array,
+        show: Boolean,
+        index: {
+            type: Number,
+            default: 0
+        }
+    },
     data() {
         return {
             showInfo: true,
@@ -87,20 +96,18 @@ export default {
                 snap: 'li',
                 scrollX: true,
                 scrollY: false,
+                startX: -ww * this.index,
                 click: true,
                 momentum: false
             });
 
-            this.curIndex = 1;
+            this.curIndex = this.index + 1;
 
             let vm = this;
             this.iscroll.on('scrollEnd', function () {
                 vm.curIndex = this.currentPage.pageX + 1;
             });
         }
-
-    },
-    mounted() {
 
     }
 };

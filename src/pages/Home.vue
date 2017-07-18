@@ -23,8 +23,13 @@
                   没有更多了！
                 </span>
             </infinite-loading>
-            <preview :show="preview.show" :imageList="preview.images" @click-close="closePreview"></preview>
         </div>
+        <preview
+            :show="preview.show"
+            :imageList="preview.images"
+            :index="preview.index"
+            @click-close="closePreview">
+        </preview>
     </div>
 </template>
 

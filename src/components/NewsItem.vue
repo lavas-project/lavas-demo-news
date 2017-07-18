@@ -1,7 +1,9 @@
 <template>
     <router-link :to="'/detail/' + newsItem.nid" class="news-item">
         <!-- 仅一张图时的样式 -->
-        <div v-if="newsItem.imageurls.length === 1" class="img-first news-content" >
+        <div v-if="newsItem.imageurls.length === 1"
+            v-ripple="{class: 'grey--text'}"
+            class="img-first news-content" >
             <div class="posts" v-if="newsItem.imageurls.length" @click.prevent="preview">
                 <span v-for="imgUrl in newsItem.imageurls">
                     <img :src="imgUrl.url" alt="">
@@ -17,11 +19,13 @@
         </div>
 
         <!-- 非一张图时的样式 -->
-        <div v-if="newsItem.imageurls.length !== 1" class="title-first news-content">
+        <div v-if="newsItem.imageurls.length !== 1"
+            v-ripple="{class: 'grey--text'}"
+            class="title-first news-content">
             <div class="list-item-title">{{newsItem.title}}</div>
             <div class="posts" v-if="newsItem.imageurls.length" @click.prevent="preview">
-                <span v-for="imgUrl in newsItem.imageurls">
-                    <img :src="imgUrl.url" alt="">
+                <span v-for="imgUrl, i in newsItem.imageurls">
+                    <img :src="imgUrl.url" alt="" :data-index="i">
                 </span>
             </div>
             <div class="some-icons">
@@ -41,8 +45,9 @@ export default {
         return {}
     },
     methods: {
-        preview(nid) {
-            this.$store.dispatch('showPreview', this.newsItem);
+        preview(event) {
+            let index = +event.target.dataset.index || 0;
+            this.$store.dispatch('showPreview', Object.assign({index}, this.newsItem));
         }
     }
 };

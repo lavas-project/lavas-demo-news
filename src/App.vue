@@ -113,7 +113,7 @@ html
     .app-view-wrapper
         flex 1
         position relative
-        overflow hidden
+        // overflow hidden
 
         .app-view
             position absolute
@@ -121,8 +121,8 @@ html
             right 0
             bottom 0
             left 0
-            overflow-x hidden
-            overflow-y auto
+            // overflow-x hidden
+            // overflow-y auto
             transition transform 0.4s cubic-bezier(.55, 0, .1, 1)
             background: $material-theme.bg-color
             color: $material-theme.text-color

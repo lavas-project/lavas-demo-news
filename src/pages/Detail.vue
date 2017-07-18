@@ -10,11 +10,11 @@
         <div class="content">
             <div v-for="content in contents" class="news-item">
                 <p v-if="content.type === 'text'">{{ content.data }}</p>
-                <img v-if="content.type === 'image'" :src="content.data.original.url" @click="preview"/>
+                <img v-if="content.type === 'image'" :src="content.data.original.url" @click="preview" ref="img"/>
             </div>
         </div>
 
-        <preview :show="previewShow" :imageList="imageList" @click-close="closePreview"></preview>
+        <preview :show="previewShow" :imageList="imageList" @click-close="closePreview" :index="imgIndex"></preview>
     </div>
 </template>
 
@@ -31,7 +31,8 @@ export default {
     },
     data() {
         return {
-            previewShow: false
+            previewShow: false,
+            imgIndex: 0
         };
     },
     computed: {
@@ -104,7 +105,8 @@ export default {
         closePreview() {
             this.previewShow = false;
         },
-        preview() {
+        preview(event) {
+            this.imgIndex = this.$refs.img.indexOf(event.target);
             this.previewShow = true;
         }
     },

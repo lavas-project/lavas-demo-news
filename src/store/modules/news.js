@@ -102,7 +102,8 @@ export default {
         menuTabs,
         preview: {
             show: false,
-            images: []
+            images: [],
+            index: 0
         },
         otherMenuTabs
     },
@@ -244,7 +245,7 @@ export default {
         },
         showPreview({commit, state}, item) {
             let images = item.imageurls.map(image => ({src: image.url}));
-            commit(types.SET_PREVIEW_DATA, {show: true, images: images});
+            commit(types.SET_PREVIEW_DATA, {show: true, images: images, index: item.index});
         },
         closePreview({commit, state}) {
             commit(types.SET_PREVIEW_DATA, {show: false});

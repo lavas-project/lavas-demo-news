@@ -10,7 +10,6 @@
                     @enter="enter"
                     tag="div">
                     <news-item v-for="(newsItem, i) in newsList"
-                        v-ripple="{class: 'grey--text'}"
                         :newsItem="newsItem"
                         :key="newsItem.nid"
                         :data-index="i">
@@ -19,7 +18,6 @@
             </template>
             <template v-else>
                 <news-item v-for="(newsItem, i) in newsList"
-                    v-ripple="{class: 'grey--text'}"
                     :newsItem="newsItem"
                     :key="newsItem.nid"
                     :data-index="i">
