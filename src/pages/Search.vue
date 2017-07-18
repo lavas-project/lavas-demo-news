@@ -73,7 +73,7 @@ export default {
     },
     activated() {
         this.setAppHeader({show: false});
-        // this.query = '';
+        this.query.length === 0 && this.$el.querySelector('.search-input').focus();
     },
     watch: {
         query(val, old) {
