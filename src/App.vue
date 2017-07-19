@@ -3,9 +3,11 @@
         <div class="app-shell">
             <app-header
                 class="app-shell-header"
+                @click-menu="handleClickHeaderMenu"
                 @click-back="handleClickHeaderBack">
                 <template slot="logo"></template>
             </app-header>
+            <app-sidebar @hide-sidebar="hideSidebar"></app-sidebar>
             <div class="app-view-wrapper">
                 <transition
                     :name="pageTransitionName"
@@ -40,14 +42,17 @@
 
 import {mapState, mapActions} from 'vuex';
 import AppHeader from '@/components/AppHeader';
+import AppSidebar from '@/components/AppSidebar';
 
 export default {
     name: 'app',
     components: {
-        AppHeader
+        AppHeader,
+        AppSidebar
     },
     data() {
-        return {};
+        return {
+        };
     },
     computed: {
         ...mapState('appShell', [
@@ -59,6 +64,10 @@ export default {
         ...mapActions('appShell', [
             'setPageSwitching'
         ]),
+        ...mapActions('appShell/appSidebar', [
+            'showSidebar',
+            'hideSidebar'
+        ]),
         handleBeforeEnter(el) {
             this.setPageSwitching(true);
         },
@@ -67,6 +76,9 @@ export default {
         },
         handleClickHeaderBack() {
             this.$router.go(-1);
+        },
+        handleClickHeaderMenu() {
+            this.showSidebar();
         }
     },
     mounted() {

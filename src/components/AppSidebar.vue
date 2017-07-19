@@ -1,5 +1,9 @@
 <template>
-    <div class="app-sidebar-wrapper">
+    <div class="app-sidebar-wrapper"
+        @touchstart="handleTouchstart($event)"
+        @touchmove="handleTouchmove($event)"
+        @touchend="handleTouchend($event)"
+        @touchcancel="handleTouchend($event)">
         <!-- 引入app-mask组件-->
         <app-mask
             :show="show || isDragging"
@@ -44,15 +48,35 @@
                     <!-- 单个区块 -->
                     <li v-for="block in blocks" class="app-sidebar-block">
                         <div v-if="block.sublistTitle" class="sub-list-title">{{ block.sublistTitle }}</div>
-                        <ul v-if="block.list">
-                            <li v-for="item in block.list" @click.stop="closeAndGo(item.route)">
+                        <ul v-if="block.sublist" class="app-sidebar-block-sublist">
+                            <li v-for="item in block.sublist" @click.stop="closeAndGo(item.route)" class="sub">
                                 <span v-if="item.icon || item.image || item.svg " class="app-sidebar-block-left-icon">
                                     <img v-if="item.image" :src="item.image" :alt="item.alt" />
                                     <icon v-else-if="item.svg" :name="item.svg"></icon>
-                                    <v-icon v-else-if="item.icon">{{ item.icon }}</v-icon>
+                                    <v-icon v-else-if="item.icon" :class="item.color + '--text'">{{ item.icon }}</v-icon>
                                 </span>
-                                <span v-if="item.text" class="app-sidebar-block-text">{{ item.text }}</span>
+                                <p v-if="item.text" class="app-sidebar-block-text">{{ item.text }}</p>
                             </li>
+                        </ul>
+
+                        <ul v-if="block.list" class="app-sidebar-block-list">
+                            <v-divider light></v-divider>
+                            <template v-for="item in block.list">
+                                <li @click.stop="closeAndGo(item.route)">
+                                    <span v-if="item.icon || item.image || item.svg " class="app-sidebar-block-left-icon">
+                                        <img v-if="item.image" :src="item.image" :alt="item.alt" />
+                                        <icon v-else-if="item.svg" :name="item.svg"></icon>
+                                        <v-icon v-else-if="item.icon">{{ item.icon }}</v-icon>
+                                    </span>
+                                    <span v-if="item.text" class="app-sidebar-block-text">{{ item.text }}</span>
+                                    <span v-if="item.iconRight || item.imageRight || item.svgRight " class="app-sidebar-block-right-icon">
+                                        <img v-if="item.imageRight" :src="item.imageRight" :alt="item.altRight" />
+                                        <icon v-else-if="item.svgRight" :name="item.svgRight"></icon>
+                                        <v-icon v-else-if="item.iconRight">{{ item.iconRight }}</v-icon>
+                                    </span>
+                                </li>
+                                <v-divider light></v-divider>
+                            </template>
                         </ul>
                     </li>
                 </ul>
@@ -156,12 +180,39 @@ export default {
             this.translateX = Math.round(-this.widthInPx);
         },
         closeAndGo(route) {
-            this.$router.push(route);
+            route && this.$router.push(route);
             this.close();
         },
         open() {
             this.$emit('show-sidebar');
             this.translateX = 0;
+        },
+        handleTouchstart(evt) {
+            this.startTouch = evt.touches[0];
+        },
+        handleTouchmove(evt) {
+            this.isDragging = true;
+
+            let touch = evt.touches[0];
+            let dx = touch.clientX - this.startTouch.clientX;
+            let dy = touch.clientY - this.startTouch.clientY;
+            let direction = dx > 0 ? DIRECTION_RIGHT : DIRECTION_LEFT;
+
+            if (direction !== this.closeDirection) {
+                return;
+            }
+
+            if (Math.abs(dx) > 80) {
+                this.isDragging = false;
+                this.close();
+                return;
+            }
+
+            let translateX = dx;
+            this.translateX = Math.round(translateX);
+        },
+        handleTouchend(evt) {
+            this.isDragging = false;
         },
         handlePanMove(event) {
             let deltaX = event.deltaX;
@@ -227,7 +278,8 @@ a
     position fixed
     top 0
     height 100%
-    background: $material-theme.bg-color
+    // background: $material-theme.bg-color
+    background: #e0e0e0
     box-shadow 3px 0 8px 1px rgba(0, 0, 0, 0.4)
     overflow-y auto
     z-index 9999
@@ -240,7 +292,8 @@ a
             text-align right
 
     .app-sidebar-title-left-icon,
-    .app-sidebar-block-left-icon
+    .app-sidebar-block-left-icon,
+    .app-sidebar-block-right-icon
         display inline-block
         width ($app-sidebar-left-icon-size + 10)px
         height 100%
@@ -261,6 +314,9 @@ a
         .material-icons
             font-size ($app-sidebar-left-icon-size)px
 
+    .app-sidebar-block-right-icon
+        float: right
+
     .app-sidebar-block-text
         display inline-block
         height 100%
@@ -275,6 +331,30 @@ a
             height 20px
             margin-right 10px
 
+    .app-sidebar-block-sublist
+        display: flex
+        background: $material-theme.bg-color
+        font-size: 0
+
+        .sub
+            flex: auto
+            text-align: center
+            padding 0!important
+            border-right 1px solid #e0e0e0
+
+            &:last-of-type
+                border-right none
+
+            &:first-of-type
+                color: #f24
+
+            .app-sidebar-block-text
+                margin: 0
+                font-size: 14px
+
+    .app-sidebar-block-list
+        margin-top: 20px
+        background: $material-theme.bg-color
 
     .app-sidebar-title
         color #fff
@@ -290,7 +370,7 @@ a
         text-align left
 
         .app-sidebar-block
-            padding 10px 0
+            // padding 10px 0
             border-bottom 1px solid #e0e0e0
             color #333
 

@@ -200,7 +200,7 @@ export default {
                     altLeft: '',
                     svgLeft: '',
                     iconLeft: 'home',
-                    text: 'Home',
+                    text: '个人中心',
                     imageRight: '',
                     altRight: '',
                     svgRight: '',
@@ -217,23 +217,31 @@ export default {
                 blocks: [
                     {
                         // 子列表1
-                        sublistTitle: 'Sublist1',
+                        sublist: [
+                            {
+                                text: '收藏',
+                                icon: 'star',
+                                route: '/favor',
+                                color: 'orange'
+                            },
+                            {
+                                text: '历史',
+                                icon: 'history',
+                                color: 'teal'
+                            }
+                        ],
                         list: [
                             {
-                                text: 'Detail Page 1',
-                                icon: 'sentiment_satisfied',
-                                route: '/detail/1'
+                                text: '消息通知',
+                                iconRight: 'keyboard_arrow_right'
                             },
                             {
-                                text: 'Detail Page 2',
-                                image: 'https://github.com/google/material-design-icons/blob/master/social/2x_web/ic_mood_bad_black_48dp.png?raw=true',
-                                alt: 'mood-bad',
-                                route: '/detail/2'
+                                text: '用户反馈',
+                                iconRight: 'keyboard_arrow_right'
                             },
                             {
-                                text: 'Detail Page 3',
-                                svg: 'svg-sentiment-very-satisfied',
-                                route: '/detail/3'
+                                text: '系统设置',
+                                iconRight: 'keyboard_arrow_right'
                             }
                         ]
                     }

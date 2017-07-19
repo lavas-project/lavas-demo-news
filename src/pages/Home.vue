@@ -130,7 +130,7 @@ export default {
         this.setAppHeader({
             show: true,
             title: '百度新闻',
-            showFavor: true,
+            showMenu: true,
             showBack: false,
             showLogo: false,
             actions: [
