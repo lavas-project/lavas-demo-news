@@ -76,6 +76,10 @@ export default {
             'showBottomNav',
             'activateBottomNav'
         ]),
+        ...mapActions('appShell/appSidebar', [
+            'disableSwipeOut',
+            'enableSwipeOut'
+        ]),
         ...mapActions([
             'getNewsList',
             'getNewsFavorList',
@@ -139,9 +143,12 @@ export default {
                 }
             ]
         });
+
+        this.enableSwipeOut();
         this.$refs.contentWrapper.scrollTop = this.scrollTops[this.category];
     },
     deactivated() {
+        this.disableSwipeOut();
         this.scrollTops[this.category] = this.$refs.contentWrapper.scrollTop;
     },
     created() {
