@@ -135,6 +135,12 @@ export default {
             actions: [this.toggleAction]
         });
         await this.$store.dispatch('getNewsDetail', {nid: this.$route.params.nid});
+    },
+    beforeRouteLeave(to, from, next) {
+        next();
+        setTimeout(() => {
+            this.changePreviewShow(false);
+        }, 500);
     }
 };
 </script>

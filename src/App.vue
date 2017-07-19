@@ -84,22 +84,32 @@ export default {
         let $appView = this.$el.querySelector('.app-view-wrapper');
         let touchStartPosX;
         let touchMoveX;
+        let touchStartPosY;
+        let touchMoveY;
+        let minOffset = 60;
 
         let touchstart = e => {
             touchStartPosX = e.touches[0].pageX;
+            touchStartPosY = e.touches[0].pageY;
         };
 
         let touchmove = e => {
             touchMoveX = e.touches[0].pageX - touchStartPosX;
+            touchMoveY = e.touches[0].pageY - touchStartPosY;
         };
 
         let touchend = e => {
 
             // 首页不能继续后退
-            if (touchMoveX > 60 && this.$router.currentRoute.path !== '/' && !this.previewShow) {
+            if (touchMoveX > minOffset
+                && Math.abs(touchMoveY) < minOffset
+                && this.$router.currentRoute.path !== '/'
+                && !this.previewShow
+            ) {
                 this.$router.go(-1);
             }
             touchMoveX = 0;
+            touchMoveY = 0;
 
         };
 
@@ -137,7 +147,7 @@ export default {
     flex-direction column
 
     .app-shell-header
-        position fixed
+        position absolute
         top 0
         left 0
         right 0
