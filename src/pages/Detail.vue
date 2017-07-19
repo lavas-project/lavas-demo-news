@@ -31,14 +31,14 @@ export default {
     },
     data() {
         return {
-            previewShow: false,
             imgIndex: 0
         };
     },
     computed: {
         ...mapGetters([
             'newsDetail',
-            'detailPageFavorStatus'
+            'detailPageFavorStatus',
+            'previewShow'
         ]),
         detail() {
             return this.newsDetail || {};
@@ -66,7 +66,8 @@ export default {
             'addFavorItem',
             'removeFavorItem',
             'getNewsFavorList',
-            'isFavored'
+            'isFavored',
+            'changePreviewShow'
         ]),
         // 收藏
         addFavoriteItem() {
@@ -103,11 +104,11 @@ export default {
             this.setAppHeader({actions: [this.toggleAction]});
         },
         closePreview() {
-            this.previewShow = false;
+            this.changePreviewShow(false);
         },
         preview(event) {
             this.imgIndex = this.$refs.img.indexOf(event.target);
-            this.previewShow = true;
+            this.changePreviewShow(true);
         }
     },
 
