@@ -110,7 +110,7 @@ const ALWAYS_BACK_PAGE = ['home'];
  * @type {Array.<string>}
  * @const
  */
-const ALWAYS_FORWARD_PAGE = ['search'];
+const ALWAYS_FORWARD_PAGE = [];
 
 /**
  * 历史记录，记录访问过的页面的 fullPath

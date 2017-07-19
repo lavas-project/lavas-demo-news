@@ -68,18 +68,27 @@ export default {
         },
         clearAndGo() {
             this.$router.go(-1);
-            this.$store.dispatch('clearSearchResult');
+            this.back = true;
+            this.query = '';
         }
     },
     activated() {
         this.setAppHeader({show: false});
-        this.query.length === 0 && this.$el.querySelector('.search-input').focus();
+        
+        if (this.query.length === 0) {
+            this.$el.querySelector('.search-input').focus();
+            this.$store.dispatch('clearSearchResult');
+        }
     },
     watch: {
         query(val, old) {
             if (val.length === 0) {
-                this.$store.dispatch('clearSearchResult');
-                this.$el.querySelector('.search-input').focus();
+                if (!this.back) {
+                    this.$el.querySelector('.search-input').focus();
+                }
+                else {
+                    this.back = false;
+                }
             }
         }
     }

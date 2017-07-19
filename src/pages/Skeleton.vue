@@ -2,10 +2,10 @@
     <div class="skeleton-wrapper">
         <section class="skeleton-block">
             <div class="title" v-show="showTitle" ref="title">
-                <h1>百度新闻</h1>
-                <p>Powerd by Lavas</p>
+                <img src="../../static/img/skeleton-bg.jpg" class="skeleton-bg">
             </div>
         </section>
+        <img src="../../static/img/skeleton-logo.jpg" class="skeleton-logo">
     </div>
 </template>
 
@@ -27,7 +27,7 @@ export default {
 @import '~normalize.css';
 
 .skeleton-wrapper
-    background #2874f0
+    background #fff
 
     .skeleton-block
         width 100%
@@ -37,17 +37,18 @@ export default {
 
         .title
             position absolute
-            left 50%
+            text-align: center
+            width: 100%
             top 50%
-            transform translate(-50%, -50%)
-
-            h1
-                font-size 36px
-                color #fff
-
-            p
-                font-size 14px
-                color #fff
+            transform translateY(-50%)
+            .skeleton-bg
+                width: (530 / 750) * 100%
+    .skeleton-logo
+        width: (350 / 750) * 100%
+        position: absolute
+        bottom: 30px
+        left: 50%
+        transform translateX(-50%)
 
 
 </style>

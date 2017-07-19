@@ -79,9 +79,6 @@ export default {
 
 @import './assets/styles/global'
 
-html
-    background #2874f0
-
 #app
     font-family 'Avenir', Helvetica, Arial, sans-serif
     -webkit-font-smoothing antialiased
