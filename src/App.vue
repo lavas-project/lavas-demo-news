@@ -38,7 +38,7 @@
 
 <script>
 
-import {mapState, mapActions} from 'vuex';
+import {mapState, mapActions, mapGetters} from 'vuex';
 import AppHeader from '@/components/AppHeader';
 
 export default {
@@ -46,13 +46,13 @@ export default {
     components: {
         AppHeader
     },
-    data() {
-        return {};
-    },
     computed: {
         ...mapState('appShell', [
             'appHeader',
             'pageTransitionName'
+        ]),
+        ...mapGetters([
+            'previewShow'
         ])
     },
     methods: {
@@ -70,7 +70,31 @@ export default {
         }
     },
     mounted() {
-        document.documentElement.style.backgroundColor = '#fff';
+        let $appView = this.$el.querySelector('.app-view-wrapper');
+        let touchStartPosX;
+        let touchMoveX;
+
+        let touchstart = e => {
+            touchStartPosX = e.touches[0].pageX;
+        };
+
+        let touchmove = e => {
+            touchMoveX = e.touches[0].pageX - touchStartPosX;
+        };
+
+        let touchend = e => {
+
+            // 首页不能继续后退
+            if (touchMoveX > 60 && this.$router.currentRoute.path !== '/' && !this.previewShow) {
+                this.$router.go(-1);
+            }
+            touchMoveX = 0;
+
+        };
+
+        $appView.addEventListener('touchstart', touchstart);
+        $appView.addEventListener('touchmove', touchmove);
+        $appView.addEventListener('touchend', touchend);
     }
 };
 </script>
