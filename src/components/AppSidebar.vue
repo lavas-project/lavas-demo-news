@@ -26,8 +26,10 @@
                     <li v-for="block in blocks" class="app-sidebar-block">
                         <v-container fluid grid-list-sm>
                           <v-layout row wrap>
-                            <v-flex xs6 v-for="item in block.sublist" :key="item.text" class="app-block-sublist-item"
-                              @click.stop="tip(item.route)">
+                            <v-flex xs6 v-for="item in block.sublist" :key="item.text"
+                              v-ripple="{class: 'grey--text'}"
+                              class="app-block-sublist-item"
+                              @click="tip(item.route)">
                               <span class="app-sidebar-block-left-icon">
                                 <v-icon :class="item.color + '--text'">{{ item.icon }}</v-icon>
                               </span>
@@ -197,6 +199,7 @@ p
     .app-block-sublist-item
         border-right: 1px solid #e0e0e0
         text-align: center
+        position relative
 
         &:last-of-type
             border-right: none
