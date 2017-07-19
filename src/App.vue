@@ -135,7 +135,6 @@ export default {
     .app-view-wrapper
         flex 1
         position relative
-        background #2874f0
         // overflow hidden
 
         .app-view
@@ -145,7 +144,7 @@ export default {
             bottom 0
             left 0
             // overflow-x hidden
-            // overflow-y auto
+            overflow-y auto
             transition transform 0.4s cubic-bezier(.55, 0, .1, 1)
             background: $material-theme.bg-color
             color: $material-theme.text-color
