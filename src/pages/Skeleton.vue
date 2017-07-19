@@ -1,9 +1,9 @@
 <template>
     <div class="skeleton-wrapper">
         <section class="skeleton-block">
-            <img src="../../static/img/skeleton-logo.jpg" class="skeleton-logo">
+            <img src="/static/img/skeleton-logo.jpg" class="skeleton-logo">
             <div class="title" v-show="showTitle" ref="title">
-                <img src="../../static/img/skeleton-bg.jpg" class="skeleton-bg">
+                <img src="/static/img/skeleton-bg.jpg" class="skeleton-bg">
             </div>
         </section>
     </div>
