@@ -162,10 +162,11 @@ export default {
     left: 0
     right: 0
     bottom: 0
-    top: 40px
+    top: 0
     -webkit-overflow-scrolling: touch
     overflow-x: hidden
     overflow-y: auto
+    padding-top: 40px
 
 // .loading-spiral
 //     border-color: $theme.primary !important
