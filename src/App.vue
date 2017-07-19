@@ -6,7 +6,8 @@
                 @click-back="handleClickHeaderBack">
                 <template slot="logo"></template>
             </app-header>
-            <div class="app-view-wrapper">
+            <div class="app-view-wrapper"
+                ref="appViewWrapper">
                 <transition
                     :name="pageTransitionName"
                     @before-enter="handleBeforeEnter"
@@ -16,7 +17,8 @@
                             v-if="!$route.meta.notKeepAlive"
                             class="app-view"
                             :class="{
-                                'app-view-with-header': appHeader.show
+                                'app-view-with-header': appHeader.show,
+                                'overflow-scrolling-touch': !previewShow
                             }"></router-view>
                     </keep-alive>
                 </transition>
@@ -28,7 +30,8 @@
                         v-if="$route.meta.notKeepAlive"
                         class="app-view"
                         :class="{
-                            'app-view-with-header': appHeader.show
+                            'app-view-with-header': appHeader.show,
+                            'overflow-scrolling-touch': !previewShow
                         }"></router-view>
                 </transition>
             </div>
@@ -70,7 +73,10 @@ export default {
         }
     },
     mounted() {
-        let $appView = this.$el.querySelector('.app-view-wrapper');
+        let $appView = this.$refs.appViewWrapper;
+
+        this.$refs.appViewWrapper.style.backgroundColor = '#fff';
+
         let touchStartPosX;
         let touchMoveX;
 
@@ -144,12 +150,14 @@ export default {
             right 0
             bottom 0
             left 0
-            // overflow-x hidden
-            // overflow-y auto
+            overflow-x hidden
+            overflow-y auto
             transition transform 0.4s cubic-bezier(.55, 0, .1, 1)
             background: $material-theme.bg-color
             color: $material-theme.text-color
-            -webkit-overflow-scrolling touch
+
+            &.overflow-scrolling-touch
+                -webkit-overflow-scrolling touch
 
             // 隐藏掉scrollbar
             &::-webkit-scrollbar
