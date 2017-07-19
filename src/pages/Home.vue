@@ -126,7 +126,7 @@ export default {
         await store.dispatch('selectTab', category);
         store.dispatch('getNewsFavorList');
     },
-    async activated() {
+    activated() {
         this.setAppHeader({
             show: true,
             title: '百度新闻',
@@ -140,6 +140,10 @@ export default {
                 }
             ]
         });
+        this.$refs.contentWrapper.scrollTop = this.scrollTops[this.category];
+    },
+    deactivated() {
+        this.scrollTops[this.category] = this.$refs.contentWrapper.scrollTop;
     },
     created() {
         EventBus.$on('app-header:click-favor', () => {
