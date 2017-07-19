@@ -24,41 +24,35 @@
                 <ul>
                     <!-- 单个区块 -->
                     <li v-for="block in blocks" class="app-sidebar-block">
-                        <div v-if="block.sublistTitle" class="sub-list-title">{{ block.sublistTitle }}</div>
-                        <ul v-if="block.sublist" class="app-sidebar-block-sublist">
-                            <li v-for="item in block.sublist" @click.stop="tip(item.route)" class="sub">
-                                <span v-if="item.icon || item.image || item.svg " class="app-sidebar-block-left-icon">
-                                    <img v-if="item.image" :src="item.image" :alt="item.alt" />
-                                    <icon v-else-if="item.svg" :name="item.svg"></icon>
-                                    <v-icon v-else-if="item.icon" :class="item.color + '--text'">{{ item.icon }}</v-icon>
-                                </span>
-                                <p v-if="item.text" class="app-sidebar-block-text">{{ item.text }}</p>
-                            </li>
-                        </ul>
+                        <v-container fluid grid-list-sm>
+                          <v-layout row wrap>
+                            <v-flex xs6 v-for="item in block.sublist" :key="item.text" class="app-block-sublist-item"
+                              @click.stop="tip(item.route)">
+                              <span class="app-sidebar-block-left-icon">
+                                <v-icon :class="item.color + '--text'">{{ item.icon }}</v-icon>
+                              </span>
+                              <span v-if="item.text" class="app-sidebar-block-text">{{ item.text }}</span>
+                            </v-flex>
+                          </v-layout>
+                        </v-container>
 
-                        <ul v-if="block.list" class="app-sidebar-block-list">
-                            <v-divider light></v-divider>
-                            <template v-for="item in block.list">
-                                <li @click.stop="tip(item.route)">
-                                    <span v-if="item.icon || item.image || item.svg " class="app-sidebar-block-left-icon">
-                                        <img v-if="item.image" :src="item.image" :alt="item.alt" />
-                                        <icon v-else-if="item.svg" :name="item.svg"></icon>
-                                        <v-icon v-else-if="item.icon">{{ item.icon }}</v-icon>
-                                    </span>
-                                    <span v-if="item.text" class="app-sidebar-block-text">{{ item.text }}</span>
-                                    <span v-if="item.iconRight || item.imageRight || item.svgRight " class="app-sidebar-block-right-icon">
-                                        <img v-if="item.imageRight" :src="item.imageRight" :alt="item.altRight" />
-                                        <icon v-else-if="item.svgRight" :name="item.svgRight"></icon>
-                                        <v-icon v-else-if="item.iconRight">{{ item.iconRight }}</v-icon>
-                                    </span>
-                                </li>
-                                <v-divider light></v-divider>
-                            </template>
-                        </ul>
+                        <v-list>
+                          <template v-for="(item, i) in block.list">
+                              <v-list-tile ripple class="app-block-list-item">
+                                <v-list-tile-content @click.stop="tip(item.route)">
+                                  <v-list-tile-title v-html="item.text"></v-list-tile-title>
+                                </v-list-tile-content>
+                                <v-list-tile-action>
+                                  <v-icon>{{ item.iconRight }}</v-icon>
+                                </v-list-tile-action>
+                              </v-list-tile>
+                              <v-divider light v-if="i !== block.list.length - 1"></v-divider>
+                          </template>
+                        </v-list>
                     </li>
                 </ul>
             </div>
-            <v-alert info value="true" v-if="showDemoTip" class="app-sidebar-tip">我只是个demo</v-alert>
+            <v-alert info value="true" v-if="showDemoTip" class="app-sidebar-tip">Only a demo</v-alert>
         </div>
     </sidebar>
 </template>
@@ -114,7 +108,7 @@ export default {
             this.showDemoTip = true;
             setTimeout(() => {
                 this.showDemoTip = false;
-            }, 3000);
+            }, 2500);
         },
     }
 };
@@ -126,8 +120,10 @@ ul,li
     margin 0
     list-style none
 a
-    text-decoration none
-    color #333
+    text-decoration: none
+    color: #333
+p
+    margin: 0
 
 .app-sidebar-content
     &.app-sidebar-content-right
@@ -138,10 +134,9 @@ a
             text-align right
 
     .app-sidebar-title-left-icon,
-    .app-sidebar-block-left-icon,
-    .app-sidebar-block-right-icon
+    .app-sidebar-block-left-icon
         display inline-block
-        width ($app-sidebar-left-icon-size + 10)px
+        width ($app-sidebar-left-icon-size + 4)px
         height 100%
 
         img
@@ -160,57 +155,23 @@ a
         .material-icons
             font-size ($app-sidebar-left-icon-size)px
 
-    .app-sidebar-block-right-icon
-        float: right
-
     .app-sidebar-block-text
         display inline-block
         height 100%
         vertical-align middle
-
-    .app-sidebar-title-right-logo,
-    .app-sidebar-block-right-logo
-        float right
-
-        img
-            width 20px
-            height 20px
-            margin-right 10px
-
-    .app-sidebar-block-sublist
-        display: flex
-        background: $material-theme.bg-color
-        font-size: 0
-
-        .sub
-            flex: auto
-            text-align: center
-            padding 0!important
-            border-right 1px solid #e0e0e0
-
-            &:last-of-type
-                border-right none
-
-            &:first-of-type
-                color: #f24
-
-            .app-sidebar-block-text
-                margin: 0
-                font-size: 14px
-
-    .app-sidebar-block-list
-        margin-top: 20px
-        background: $material-theme.bg-color
+        line-height: 24px
+        position: relative
+        top: 2px
 
     .app-sidebar-title
         color #fff
-        padding 0 10px
+        padding: 0 10px 0 36px
         font-size 16px
         font-weight bold
         height $app-sidebar-title-height
         line-height $app-sidebar-title-height
         background: $theme.primary
-        text-align center
+        text-align left
 
     .app-sidebar-blocks
         text-align left
@@ -220,15 +181,8 @@ a
             border-bottom 1px solid #e0e0e0
             color #333
 
-            .sub-list-title
-                height $app-sidebar-nav-height
-                line-height $app-sidebar-nav-height
-                text-indent ($app-sidebar-left-icon-size + 28)px
-                font-weight bold
-                color #888
-
             li
-                padding-left 15px
+                // padding-left 15px
                 height $app-sidebar-nav-height
                 line-height $app-sidebar-nav-height
 
@@ -238,6 +192,16 @@ a
 
             &:last-child
                 border-bottom none
+
+    .app-block-sublist-item
+        border-right: 1px solid #e0e0e0
+        text-align: center
+
+        &:last-of-type
+            border-right: none
+
+.list__tile
+    color: #333!important
 
 .app-sidebar-tip
     position: absolute
