@@ -377,7 +377,7 @@ a
         height $app-sidebar-title-height
         line-height $app-sidebar-title-height
         background: $theme.primary
-        text-align left
+        text-align center
 
     .app-sidebar-blocks
         text-align left
