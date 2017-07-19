@@ -49,7 +49,7 @@
                     <li v-for="block in blocks" class="app-sidebar-block">
                         <div v-if="block.sublistTitle" class="sub-list-title">{{ block.sublistTitle }}</div>
                         <ul v-if="block.sublist" class="app-sidebar-block-sublist">
-                            <li v-for="item in block.sublist" @click.stop="closeAndGo(item.route)" class="sub">
+                            <li v-for="item in block.sublist" @click.stop="tip(item.route)" class="sub">
                                 <span v-if="item.icon || item.image || item.svg " class="app-sidebar-block-left-icon">
                                     <img v-if="item.image" :src="item.image" :alt="item.alt" />
                                     <icon v-else-if="item.svg" :name="item.svg"></icon>
@@ -62,7 +62,7 @@
                         <ul v-if="block.list" class="app-sidebar-block-list">
                             <v-divider light></v-divider>
                             <template v-for="item in block.list">
-                                <li @click.stop="closeAndGo(item.route)">
+                                <li @click.stop="tip(item.route)">
                                     <span v-if="item.icon || item.image || item.svg " class="app-sidebar-block-left-icon">
                                         <img v-if="item.image" :src="item.image" :alt="item.alt" />
                                         <icon v-else-if="item.svg" :name="item.svg"></icon>
@@ -81,6 +81,7 @@
                     </li>
                 </ul>
             </div>
+            <v-alert info value="true" v-if="showDemoTip" class="app-sidebar-tip">我只是个demo</v-alert>
         </div>
     </div>
 </template>
@@ -110,7 +111,8 @@ export default {
             panOptions: { // hammer.js pan手势配置对象
                 direction: 'horizontal',
                 threshold: 10
-            }
+            },
+            showDemoTip: false
         };
     },
     computed: {
@@ -182,6 +184,17 @@ export default {
         closeAndGo(route) {
             route && this.$router.push(route);
             this.close();
+        },
+        tip(route) {
+            if (route) {
+                this.closeAndGo(route);
+                return;
+            }
+
+            this.showDemoTip = true;
+            setTimeout(() => {
+                this.showDemoTip = false;
+            }, 3000);
         },
         open() {
             this.$emit('show-sidebar');
@@ -393,4 +406,8 @@ a
             &:last-child
                 border-bottom none
 
+.app-sidebar-tip
+    position: absolute
+    bottom: 0
+    width: 100%
 </style>
