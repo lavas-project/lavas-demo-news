@@ -98,7 +98,8 @@ export default {
             index: 0
         },
         otherMenuTabs,
-        searchResultData: []
+        searchResultData: [],
+        previewShow: false
     },
     getters: {
         loaded(state) {
@@ -137,6 +138,9 @@ export default {
         },
         searchResultData(state) {
             return state.searchResultData;
+        },
+        previewShow(state) {
+            return state.previewShow;
         }
     },
     actions: {
@@ -191,7 +195,7 @@ export default {
 
         async getSearchResult({commit}, query) {
             let data = await API.getSearchResult({query});
-            commit(types.SET_SEARCH_RESULT, data);      
+            commit(types.SET_SEARCH_RESULT, data);
         },
         clearSearchResult({commit}) {
             commit(types.SET_SEARCH_RESULT, []);
@@ -258,6 +262,9 @@ export default {
         },
         [types.DEL_CATEGORY]({commit}, tabItem) {
             commit(types.DEL_CATEGORY, tabItem.value);
+        },
+        changePreviewShow({commit}, previewShowValue) {
+            commit('changePreviewShow', previewShowValue);
         }
     },
     mutations: {
@@ -327,6 +334,9 @@ export default {
             data = data.filter(item => item.content.length).map(dataProcess);
 
             state.searchResultData = data;
+        },
+        changePreviewShow(state, value) {
+            state.previewShow = value;
         }
     }
 };

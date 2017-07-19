@@ -53,10 +53,6 @@ export default {
     created() {
     },
 
-    mounted() {
-        this.setMenuTabsPos();
-    },
-
     computed: {
         ...mapGetters([
             'menuTabs',
@@ -74,6 +70,7 @@ export default {
         ]),
         async selectItem(item) {
             await this.$store.dispatch('selectTab', item.value);
+            this.setMenuTabsPos();
             // this.$router.replace('/home/' + item.value);
             // this.$router.push('/home/' + item.value);
         },
@@ -99,7 +96,7 @@ export default {
                     activeIndex = index;
                 }
             });
-            this.$el.scrollLeft = this.tabWidth * activeIndex - 30;
+            this.$el.querySelector('.menu-tabs-wrap').scrollLeft = this.tabWidth * (activeIndex - 2);
         },
         leave(el) {
             el.style.display = 'none';
@@ -108,6 +105,9 @@ export default {
             el.style.opacity = 0;
             setTimeout(() => el.style.opacity = 1, 250);
         }
+    },
+    async activated() {
+        this.setMenuTabsPos();
     }
 };
 </script>
@@ -231,5 +231,5 @@ $height = 40px
 
     span.active
         border-bottom 2px solid $btn-color
-
+        font-size 18px
 </style>

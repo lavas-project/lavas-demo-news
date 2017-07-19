@@ -40,7 +40,7 @@
 
 <script>
 
-import {mapState, mapActions} from 'vuex';
+import {mapState, mapActions, mapGetters} from 'vuex';
 import AppHeader from '@/components/AppHeader';
 import AppSidebar from '@/components/AppSidebar';
 
@@ -50,14 +50,13 @@ export default {
         AppHeader,
         AppSidebar
     },
-    data() {
-        return {
-        };
-    },
     computed: {
         ...mapState('appShell', [
             'appHeader',
             'pageTransitionName'
+        ]),
+        ...mapGetters([
+            'previewShow'
         ])
     },
     methods: {
@@ -82,7 +81,31 @@ export default {
         }
     },
     mounted() {
-        document.documentElement.style.backgroundColor = '#fff';
+        let $appView = this.$el.querySelector('.app-view-wrapper');
+        let touchStartPosX;
+        let touchMoveX;
+
+        let touchstart = e => {
+            touchStartPosX = e.touches[0].pageX;
+        };
+
+        let touchmove = e => {
+            touchMoveX = e.touches[0].pageX - touchStartPosX;
+        };
+
+        let touchend = e => {
+
+            // 首页不能继续后退
+            if (touchMoveX > 60 && this.$router.currentRoute.path !== '/' && !this.previewShow) {
+                this.$router.go(-1);
+            }
+            touchMoveX = 0;
+
+        };
+
+        $appView.addEventListener('touchstart', touchstart);
+        $appView.addEventListener('touchmove', touchmove);
+        $appView.addEventListener('touchend', touchend);
     }
 };
 </script>
@@ -91,15 +114,13 @@ export default {
 
 @import './assets/styles/global'
 
-html
-    background #2874f0
-
 #app
     font-family 'Avenir', Helvetica, Arial, sans-serif
     -webkit-font-smoothing antialiased
     -moz-osx-font-smoothing grayscale
     // text-align center
     color #2c3e50
+    height: 100%
 
 </style>
 
@@ -125,6 +146,7 @@ html
     .app-view-wrapper
         flex 1
         position relative
+        background #2874f0
         // overflow hidden
 
         .app-view
