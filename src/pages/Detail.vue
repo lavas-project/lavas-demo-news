@@ -140,6 +140,12 @@ export default {
     },
     deactivated() {
         this.scrollTop = document.body.scrollTop;
+    },
+    beforeRouteLeave(to, from, next) {
+        next();
+        setTimeout(() => {
+            this.changePreviewShow(false);
+        }, 500);
     }
 };
 </script>

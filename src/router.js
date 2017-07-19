@@ -13,6 +13,7 @@ let Detail = () => import('@/pages/Detail.vue');
 let NotFound = () => import('@/pages/NotFound.vue');
 let User = () => import('@/pages/User.vue');
 let Search = () => import('@/pages/Search.vue');
+let Favor = () => import('@/pages/Favor.vue');
 
 Vue.use(Router);
 
@@ -54,6 +55,11 @@ export function createRouter() {
                 path: '/search',
                 name: 'search',
                 component: Search
+            },
+            {
+                path: '/favor',
+                name: 'favor',
+                component: Favor
             },
             {
                 path: '*',

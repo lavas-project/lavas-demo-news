@@ -3,11 +3,12 @@
         <div class="app-shell">
             <app-header
                 class="app-shell-header"
+                @click-menu="handleClickHeaderMenu"
                 @click-back="handleClickHeaderBack">
                 <template slot="logo"></template>
             </app-header>
-            <div class="app-view-wrapper"
-                ref="appViewWrapper">
+            <app-sidebar @hide-sidebar="hideSidebar"></app-sidebar>
+            <div class="app-view-wrapper" ref="appViewWrapper">
                 <transition
                     :name="pageTransitionName"
                     @before-enter="handleBeforeEnter"
@@ -43,11 +44,13 @@
 
 import {mapState, mapActions, mapGetters} from 'vuex';
 import AppHeader from '@/components/AppHeader';
+import AppSidebar from '@/components/AppSidebar';
 
 export default {
     name: 'app',
     components: {
-        AppHeader
+        AppHeader,
+        AppSidebar
     },
     computed: {
         ...mapState('appShell', [
@@ -62,6 +65,10 @@ export default {
         ...mapActions('appShell', [
             'setPageSwitching'
         ]),
+        ...mapActions('appShell/appSidebar', [
+            'showSidebar',
+            'hideSidebar'
+        ]),
         handleBeforeEnter(el) {
             this.setPageSwitching(true);
         },
@@ -70,6 +77,9 @@ export default {
         },
         handleClickHeaderBack() {
             this.$router.go(-1);
+        },
+        handleClickHeaderMenu() {
+            this.showSidebar();
         }
     },
     mounted() {
@@ -79,22 +89,32 @@ export default {
 
         let touchStartPosX;
         let touchMoveX;
+        let touchStartPosY;
+        let touchMoveY;
+        let minOffset = 60;
 
         let touchstart = e => {
             touchStartPosX = e.touches[0].pageX;
+            touchStartPosY = e.touches[0].pageY;
         };
 
         let touchmove = e => {
             touchMoveX = e.touches[0].pageX - touchStartPosX;
+            touchMoveY = e.touches[0].pageY - touchStartPosY;
         };
 
         let touchend = e => {
 
             // 首页不能继续后退
-            if (touchMoveX > 60 && this.$router.currentRoute.path !== '/' && !this.previewShow) {
+            if (touchMoveX > minOffset
+                && Math.abs(touchMoveY) < minOffset
+                && this.$router.currentRoute.path !== '/'
+                && !this.previewShow
+            ) {
                 this.$router.go(-1);
             }
             touchMoveX = 0;
+            touchMoveY = 0;
 
         };
 
@@ -132,7 +152,7 @@ export default {
     flex-direction column
 
     .app-shell-header
-        position fixed
+        position absolute
         top 0
         left 0
         right 0
@@ -141,7 +161,6 @@ export default {
     .app-view-wrapper
         flex 1
         position relative
-        background #2874f0
         // overflow hidden
 
         .app-view
