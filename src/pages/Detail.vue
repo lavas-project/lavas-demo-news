@@ -31,7 +31,8 @@ export default {
     },
     data() {
         return {
-            imgIndex: 0
+            imgIndex: 0,
+            scrollTop: 0
         };
     },
     computed: {
@@ -135,6 +136,16 @@ export default {
             actions: [this.toggleAction]
         });
         await this.$store.dispatch('getNewsDetail', {nid: this.$route.params.nid});
+        document.body.scrollTop = this.scrollTop;
+    },
+    deactivated() {
+        this.scrollTop = document.body.scrollTop;
+    },
+    beforeRouteLeave(to, from, next) {
+        next();
+        setTimeout(() => {
+            this.changePreviewShow(false);
+        }, 500);
     }
 };
 </script>

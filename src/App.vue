@@ -8,7 +8,7 @@
                 <template slot="logo"></template>
             </app-header>
             <app-sidebar @hide-sidebar="hideSidebar"></app-sidebar>
-            <div class="app-view-wrapper">
+            <div class="app-view-wrapper" ref="appViewWrapper">
                 <transition
                     :name="pageTransitionName"
                     @before-enter="handleBeforeEnter"
@@ -18,7 +18,8 @@
                             v-if="!$route.meta.notKeepAlive"
                             class="app-view"
                             :class="{
-                                'app-view-with-header': appHeader.show
+                                'app-view-with-header': appHeader.show,
+                                'overflow-scrolling-touch': !previewShow
                             }"></router-view>
                     </keep-alive>
                 </transition>
@@ -30,7 +31,8 @@
                         v-if="$route.meta.notKeepAlive"
                         class="app-view"
                         :class="{
-                            'app-view-with-header': appHeader.show
+                            'app-view-with-header': appHeader.show,
+                            'overflow-scrolling-touch': !previewShow
                         }"></router-view>
                 </transition>
             </div>
@@ -81,25 +83,38 @@ export default {
         }
     },
     mounted() {
-        let $appView = this.$el.querySelector('.app-view-wrapper');
+        let $appView = this.$refs.appViewWrapper;
+
+        this.$refs.appViewWrapper.style.backgroundColor = '#fff';
+
         let touchStartPosX;
         let touchMoveX;
+        let touchStartPosY;
+        let touchMoveY;
+        let minOffset = 60;
 
         let touchstart = e => {
             touchStartPosX = e.touches[0].pageX;
+            touchStartPosY = e.touches[0].pageY;
         };
 
         let touchmove = e => {
             touchMoveX = e.touches[0].pageX - touchStartPosX;
+            touchMoveY = e.touches[0].pageY - touchStartPosY;
         };
 
         let touchend = e => {
 
             // 首页不能继续后退
-            if (touchMoveX > 60 && this.$router.currentRoute.path !== '/' && !this.previewShow) {
+            if (touchMoveX > minOffset
+                && Math.abs(touchMoveY) < minOffset
+                && this.$router.currentRoute.path !== '/'
+                && !this.previewShow
+            ) {
                 this.$router.go(-1);
             }
             touchMoveX = 0;
+            touchMoveY = 0;
 
         };
 
@@ -137,7 +152,7 @@ export default {
     flex-direction column
 
     .app-shell-header
-        position fixed
+        position absolute
         top 0
         left 0
         right 0
@@ -146,7 +161,6 @@ export default {
     .app-view-wrapper
         flex 1
         position relative
-        background #2874f0
         // overflow hidden
 
         .app-view
@@ -155,12 +169,14 @@ export default {
             right 0
             bottom 0
             left 0
-            // overflow-x hidden
-            // overflow-y auto
+            overflow-x hidden
+            overflow-y auto
             transition transform 0.4s cubic-bezier(.55, 0, .1, 1)
             background: $material-theme.bg-color
             color: $material-theme.text-color
-            -webkit-overflow-scrolling touch
+
+            &.overflow-scrolling-touch
+                -webkit-overflow-scrolling touch
 
             // 隐藏掉scrollbar
             &::-webkit-scrollbar

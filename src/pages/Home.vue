@@ -112,7 +112,6 @@ export default {
     },
     watch: {
         category(val, old) {
-            console.log(this.listFromCache)
             this.scrollTops[old] = this.$refs.contentWrapper.scrollTop;
         }
     },
@@ -126,7 +125,7 @@ export default {
         await store.dispatch('selectTab', category);
         store.dispatch('getNewsFavorList');
     },
-    async activated() {
+    activated() {
         this.setAppHeader({
             show: true,
             title: '百度新闻',
@@ -140,6 +139,10 @@ export default {
                 }
             ]
         });
+        this.$refs.contentWrapper.scrollTop = this.scrollTops[this.category];
+    },
+    deactivated() {
+        this.scrollTops[this.category] = this.$refs.contentWrapper.scrollTop;
     },
     created() {
         EventBus.$on('app-header:click-favor', () => {
@@ -159,10 +162,11 @@ export default {
     left: 0
     right: 0
     bottom: 0
-    top: 40px
+    top: 0
     -webkit-overflow-scrolling: touch
     overflow-x: hidden
     overflow-y: auto
+    padding-top: 40px
 
 // .loading-spiral
 //     border-color: $theme.primary !important

@@ -1,30 +1,7 @@
 <template>
-    <div class="app-sidebar-wrapper"
-        @touchstart="handleTouchstart($event)"
-        @touchmove="handleTouchmove($event)"
-        @touchend="handleTouchend($event)"
-        @touchcancel="handleTouchend($event)">
-        <!-- 引入app-mask组件-->
-        <app-mask
-            :show="show || isDragging"
-            @close-mask="close"
-        ></app-mask>
-
-        <v-touch
-            @panmove="handlePanMove"
-            @panend="handlePanEnd"
-            :enabled="{ pan: true, tap: false }"
-            :pan-options="panOptions">
-            <div
-                class="app-sidebar-swipe"
-                :class="{'app-sidebar-swipe-right': slideFrom !== 'left'}"></div>
-        </v-touch>
-
+    <sidebar v-model="sidebarStatus">
         <!-- sidebar 内容部分 -->
-        <div
-            class="app-sidebar-content"
-            :class="classList"
-            :style="inlineStyle">
+        <div class="app-sidebar-content">
             <!-- 头部 -->
             <div v-if="title" class="app-sidebar-title" @click.stop="close">
                 <span class="app-sidebar-title-left-icon">
@@ -83,106 +60,49 @@
             </div>
             <v-alert info value="true" v-if="showDemoTip" class="app-sidebar-tip">我只是个demo</v-alert>
         </div>
-    </div>
+    </sidebar>
 </template>
 
 <script>
 import {mapState} from 'vuex';
-import AppMask from './AppMask.vue';
-
-// hammer.js 方向常量
-const DIRECTION_LEFT = 2;
-const DIRECTION_RIGHT = 4;
-
-// 左/右阴影宽度
-const BOX_SHADOW_WIDTH = 12;
+import Sidebar from './Sidebar';
 
 export default {
     components: {
-        AppMask
-    },
-    data() {
-        return {
-            isDragging: false, // 是否处于拖拽状态
-            translateX: 0, // 当前水平位移
-            clientWidth: 0, // 窗口宽度
-            widthInPx: 0, // sidebar以px为单位的宽度
-            showWidthThresholdInPx: 0, // 展示阈值以px为单位
-            panOptions: { // hammer.js pan手势配置对象
-                direction: 'horizontal',
-                threshold: 10
-            },
-            showDemoTip: false
-        };
+        Sidebar
     },
     computed: {
         ...mapState('appShell/appSidebar', [
             'show',
-            'slideFrom',
             'title',
-            'blocks',
-            'width',
-            'showWidthThreshold'
+            'user',
+            'blocks'
         ]),
-        classList() {
-            return {
-                'app-sidebar-content-right': this.slideFrom !== 'left'
-            };
-        },
-        inlineStyle() {
-
-            // 拖拽时取消transition
-            let transition = this.isDragging ? 'none' : 'transform .5s ease';
-
-            // 隐藏状态时的位置
-            let initTranslateX = this.widthInPx + BOX_SHADOW_WIDTH;
-            if (this.slideFrom === 'left') {
-                initTranslateX = -initTranslateX;
+        sidebarStatus: {
+            get() {
+                return this.show;
+            },
+            set(val) {
+                if (val) {
+                    this.$emit('show-sidebar');
+                }
+                else {
+                    this.$emit('hide-sidebar');
+                }
             }
-
-            // 当前水平方向平移距离
-            let currentTranslateX = this.isDragging
-                ? this.translateX
-                : (this.show ? 0 : initTranslateX);
-            let styleObj = {
-                'width': `${this.widthInPx}px`,
-                'transition': transition,
-                '-webkit-transition': transition,
-                'transform': `translate3d(${currentTranslateX}px, 0, 0)`,
-                '-webkit-transform': `translate3d(${currentTranslateX}px, 0, 0)`,
-                [this.slideFrom]: 0 // 展示状态绝对定位靠左/右
-            };
-
-            return styleObj;
-        },
-        closeDirection() {
-            return this.slideFrom === 'left' ? DIRECTION_LEFT : DIRECTION_RIGHT;
         }
     },
+    data() {
+        return {
+            showDemoTip: false
+        };
+    },
     methods: {
-        caclWidth() {
-            this.clientWidth = document.body.clientWidth;
-
-            if (this.width > 1) {
-                this.widthInPx = this.width;
-            }
-            else {
-                this.widthInPx = Math.round(this.clientWidth * this.width);
-            }
-
-            if (this.showWidthThreshold > 1) {
-                this.showWidthThresholdInPx = this.showWidthThreshold;
-            }
-            else {
-                this.showWidthThresholdInPx = this.widthInPx * this.showWidthThreshold;
-            }
-        },
         close() {
-            this.$emit('hide-sidebar');
-            this.translateX = Math.round(-this.widthInPx);
+            this.sidebarStatus = false;
         },
         closeAndGo(route) {
-            route && this.$router.push(route);
+            this.$router.push(route);
             this.close();
         },
         tip(route) {
@@ -196,74 +116,11 @@ export default {
                 this.showDemoTip = false;
             }, 3000);
         },
-        open() {
-            this.$emit('show-sidebar');
-            this.translateX = 0;
-        },
-        handleTouchstart(evt) {
-            this.startTouch = evt.touches[0];
-        },
-        handleTouchmove(evt) {
-            this.isDragging = true;
-
-            let touch = evt.touches[0];
-            let dx = touch.clientX - this.startTouch.clientX;
-            let dy = touch.clientY - this.startTouch.clientY;
-            let direction = dx > 0 ? DIRECTION_RIGHT : DIRECTION_LEFT;
-
-            if (direction !== this.closeDirection) {
-                return;
-            }
-
-            if (Math.abs(dx) > 80) {
-                this.isDragging = false;
-                this.close();
-                return;
-            }
-
-            let translateX = dx;
-            this.translateX = Math.round(translateX);
-        },
-        handleTouchend(evt) {
-            this.isDragging = false;
-        },
-        handlePanMove(event) {
-            let deltaX = event.deltaX;
-            let translateX = deltaX + (this.slideFrom === 'left' ? -this.widthInPx : this.widthInPx);
-            this.isDragging = true;
-            if (this.widthInPx < Math.abs(deltaX)) { // 滑动超过了sidebar宽度
-                return;
-            }
-            this.translateX = Math.round(translateX);
-        },
-        handlePanEnd(event) {
-            let {direction, deltaX} = event;
-            this.isDragging = false;
-
-            if (direction === this.closeDirection) {
-                this.close();
-            }
-            else if (Math.abs(deltaX) > this.showWidthThresholdInPx) { // 停止时滑动距离超过阈值，认为需要展示
-                this.open();
-            }
-            else {
-                this.close();
-            }
-        }
-    },
-    created() {
-        if (!this.$isServer) {
-            this.caclWidth();
-        }
     }
 };
 </script>
 
 <style lang="stylus" scoped>
-
-// 左侧触发滑动宽度
-$swipe-width = 20px
-
 ul,li
     padding 0
     margin 0
@@ -272,31 +129,7 @@ a
     text-decoration none
     color #333
 
-.app-sidebar-wrapper
-    z-index 9999
-
-    .app-sidebar-swipe
-        position fixed
-        top 0
-        bottom 0
-        left 0
-        width $swipe-width
-        user-select none
-
-        &.app-sidebar-swipe-right
-            left initial
-            right 0
-
 .app-sidebar-content
-    position fixed
-    top 0
-    height 100%
-    // background: $material-theme.bg-color
-    background: #e0e0e0
-    box-shadow 3px 0 8px 1px rgba(0, 0, 0, 0.4)
-    overflow-y auto
-    z-index 9999
-
     &.app-sidebar-content-right
         box-shadow -3px 0 8px 1px rgba(0, 0, 0, 0.4)
 
