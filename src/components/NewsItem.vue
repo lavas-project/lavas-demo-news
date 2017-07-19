@@ -4,7 +4,7 @@
         <div v-if="newsItem.imageurls.length === 1"
             v-ripple="{class: 'grey--text'}"
             class="img-first news-content" >
-            <div class="posts" v-if="newsItem.imageurls.length" @click.prevent="preview">
+            <div class="posts" v-if="newsItem.imageurls.length">
                 <span v-for="imgUrl in newsItem.imageurls">
                     <img :src="imgUrl.url" alt="">
                 </span>
@@ -23,7 +23,7 @@
             v-ripple="{class: 'grey--text'}"
             class="title-first news-content">
             <div class="list-item-title">{{newsItem.title}}</div>
-            <div class="posts" v-if="newsItem.imageurls.length" @click.prevent="preview">
+            <div class="posts" v-if="newsItem.imageurls.length">
                 <span v-for="imgUrl, i in newsItem.imageurls">
                     <img :src="imgUrl.url" alt="" :data-index="i">
                 </span>

@@ -191,7 +191,7 @@ export default {
 
         async getSearchResult({commit}, query) {
             let data = await API.getSearchResult({query});
-            commit(types.SET_SEARCH_RESULT, data);      
+            commit(types.SET_SEARCH_RESULT, data);
         },
         clearSearchResult({commit}) {
             commit(types.SET_SEARCH_RESULT, []);
