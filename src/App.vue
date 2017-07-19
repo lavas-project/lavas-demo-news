@@ -110,6 +110,7 @@ export default {
     .app-view-wrapper
         flex 1
         position relative
+        background #2874f0
         // overflow hidden
 
         .app-view
