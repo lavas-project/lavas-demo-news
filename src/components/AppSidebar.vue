@@ -1,5 +1,5 @@
 <template>
-    <sidebar v-model="sidebarStatus">
+    <sidebar v-model="sidebarStatus" :enableSwipeOut="enableSwipeOut">
         <!-- sidebar 内容部分 -->
         <div class="app-sidebar-content">
             <!-- 头部 -->
@@ -70,7 +70,8 @@ export default {
             'show',
             'title',
             'user',
-            'blocks'
+            'blocks',
+            'enableSwipeOut'
         ]),
         sidebarStatus: {
             get() {

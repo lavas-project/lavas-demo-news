@@ -86,7 +86,6 @@ export default {
                 return;
             }
             this.$router.push('/detail/'+ nid);
-            this.close();
         },
         removeItem(nid) {
             this.removeFavorItem({nid});

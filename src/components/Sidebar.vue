@@ -49,6 +49,10 @@ export default {
         width: {
             'type': Number,
             'default': 0.75
+        },
+        enableSwipeOut: {
+            type: Boolean,
+            default: false
         }
     },
     data() {
@@ -93,6 +97,10 @@ export default {
          * @param {Event} e 原生事件对象
          */
         toggleTouchStart(e) {
+            if (!this.enableSwipeOut) {
+                return;
+            }
+
             if (this.wrapperClass.expand) {
                 return;
             }
@@ -109,6 +117,11 @@ export default {
          * @param {Event} e 原生事件对象
          */
         toggleTouchMove(e) {
+
+            if (!this.enableSwipeOut) {
+                return;
+            }
+
             if (this.wrapperClass.expand) {
                 return;
             }

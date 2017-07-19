@@ -7,6 +7,7 @@
                 @click-back="handleClickHeaderBack">
                 <template slot="logo"></template>
             </app-header>
+
             <app-sidebar @hide-sidebar="hideSidebar" @show-sidebar="showSidebar"></app-sidebar>
             <div class="app-view-wrapper" ref="appViewWrapper">
                 <transition
