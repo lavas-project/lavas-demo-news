@@ -74,6 +74,11 @@ export default {
             font-size 16px
             line-height 24px
             color #333
+            text-overflow: ellipsis
+            display: -webkit-box
+            -webkit-line-clamp: 3
+            overflow : hidden
+            -webkit-box-orient: vertical
 
         .posts
             margin-top 5px
