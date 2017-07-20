@@ -56,6 +56,7 @@ export default {
     computed: {
         ...mapState('appShell', [
             'appHeader',
+            'appSidebar',
             'pageTransitionName'
         ]),
         ...mapGetters([
@@ -150,7 +151,7 @@ export default {
     flex-direction column
 
     .app-shell-header
-        position absolute
+        position fixed
         top 0
         left 0
         right 0
@@ -165,10 +166,7 @@ export default {
             position absolute
             top 0
             right 0
-            bottom 0
             left 0
-            overflow-x hidden
-            overflow-y auto
             transition transform 0.4s cubic-bezier(.55, 0, .1, 1)
             background: $material-theme.bg-color
             color: $material-theme.text-color

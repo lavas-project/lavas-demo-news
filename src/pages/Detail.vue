@@ -114,7 +114,7 @@ export default {
     },
 
     created() {
-        EventBus.$on('app-header:click-toggle', (data) => {
+        EventBus.$on('app-header:click-toggle', data => {
             this[data.handler] && this[data.handler]();
         });
     },
@@ -124,6 +124,7 @@ export default {
     },
 
     async activated() {
+
         this.isFavored({nid: this.$route.params.nid});
         this.updateFavoriteAction(this.detailPageFavorStatus);
         this.setAppHeader({
