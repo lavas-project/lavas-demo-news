@@ -101,12 +101,8 @@ module.exports = {
          */
         runtimeCaching: [
             {
-                urlPattern: /vue\.runtime/,
-                // 五种：caheOnly cacheFirst fastest networkFirst networkOnly
-                handler: 'networkFirst'
-            },
-            {
                 urlPattern: /\/api\/mockup/,
+                // 五种：caheOnly cacheFirst fastest networkFirst networkOnly
                 handler: 'networkFirst'
             }
             // ,
