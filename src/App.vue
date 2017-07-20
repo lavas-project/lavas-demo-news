@@ -81,41 +81,41 @@ export default {
         }
     },
     mounted() {
-        let $appView = this.$el.querySelector('.app-view-wrapper');
-        let touchStartPosX;
-        let touchMoveX;
-        let touchStartPosY;
-        let touchMoveY;
-        let minOffset = 60;
+        // let $appView = this.$el.querySelector('.app-view-wrapper');
+        // let touchStartPosX;
+        // let touchMoveX;
+        // let touchStartPosY;
+        // let touchMoveY;
+        // let minOffset = 60;
 
-        let touchstart = e => {
-            touchStartPosX = e.touches[0].pageX;
-            touchStartPosY = e.touches[0].pageY;
-        };
+        // let touchstart = e => {
+        //     touchStartPosX = e.touches[0].pageX;
+        //     touchStartPosY = e.touches[0].pageY;
+        // };
 
-        let touchmove = e => {
-            touchMoveX = e.touches[0].pageX - touchStartPosX;
-            touchMoveY = e.touches[0].pageY - touchStartPosY;
-        };
+        // let touchmove = e => {
+        //     touchMoveX = e.touches[0].pageX - touchStartPosX;
+        //     touchMoveY = e.touches[0].pageY - touchStartPosY;
+        // };
 
-        let touchend = e => {
+        // let touchend = e => {
 
-            // 首页不能继续后退
-            if (touchMoveX > minOffset
-                && Math.abs(touchMoveY) < minOffset
-                && this.$router.currentRoute.path !== '/'
-                && !this.previewShow
-            ) {
-                this.$router.go(-1);
-            }
-            touchMoveX = 0;
-            touchMoveY = 0;
+        //     // 首页不能继续后退
+        //     if (touchMoveX > minOffset
+        //         && Math.abs(touchMoveY) < minOffset
+        //         && this.$router.currentRoute.path !== '/'
+        //         && !this.previewShow
+        //     ) {
+        //         this.$router.go(-1);
+        //     }
+        //     touchMoveX = 0;
+        //     touchMoveY = 0;
 
-        };
+        // };
 
-        $appView.addEventListener('touchstart', touchstart);
-        $appView.addEventListener('touchmove', touchmove);
-        $appView.addEventListener('touchend', touchend);
+        // $appView.addEventListener('touchstart', touchstart);
+        // $appView.addEventListener('touchmove', touchmove);
+        // $appView.addEventListener('touchend', touchend);
     }
 };
 </script>
