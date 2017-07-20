@@ -1,5 +1,5 @@
 <template>
-    <sidebar v-model="sidebarStatus">
+    <sidebar v-model="sidebarStatus" :enableSwipeOut="enableSwipeOut">
         <!-- sidebar 内容部分 -->
         <div
             class="app-sidebar-content">
@@ -62,20 +62,21 @@ import {mapState} from 'vuex';
 import Sidebar from './Sidebar';
 
 export default {
-    components: {
-        Sidebar
-    },
     data() {
         return {
             toast: false
         }
+    },
+    components: {
+        Sidebar
     },
     computed: {
         ...mapState('appShell/appSidebar', [
             'show',
             'title',
             'user',
-            'blocks'
+            'blocks',
+            'enableSwipeOut'
         ]),
         sidebarStatus: {
             get() {
