@@ -30,7 +30,7 @@ export default {
 
     props: {
         interval: {
-            default: 3000
+            'default': 3000
         },
         list: {
             requires: true

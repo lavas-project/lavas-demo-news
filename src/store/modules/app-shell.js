@@ -216,35 +216,32 @@ export default {
                 // 侧滑
                 enableSwipeOut: false,
 
+                user: {
+                    name: '度熊',
+                    location: '中国北京',
+                    email: 'example@baidu.com'
+                },
                 // 分块组
                 blocks: [
                     {
                         // 子列表1
-                        sublist: [
+                        list: [
                             {
                                 text: '收藏',
                                 icon: 'star',
-                                route: '/favor',
-                                color: 'orange'
+                                route: '/favor'
                             },
                             {
-                                text: '历史',
-                                icon: 'history',
-                                color: 'teal'
-                            }
-                        ],
-                        list: [
-                            {
                                 text: '消息通知',
-                                iconRight: 'keyboard_arrow_right'
+                                icon: 'message'
                             },
                             {
                                 text: '用户反馈',
-                                iconRight: 'keyboard_arrow_right'
+                                icon: 'feedback'
                             },
                             {
                                 text: '系统设置',
-                                iconRight: 'keyboard_arrow_right'
+                                icon: 'settings'
                             }
                         ]
                     }

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
+// import {mapGetters, mapActions} from 'vuex';
 import NewsItem from './NewsItem.vue';
 
 export default {
@@ -61,9 +61,9 @@ export default {
 a
     text-decoration none
 
-.news-wrapper
-    // min-height 200px
-    .news-list
-        padding 10px
+// .news-wrapper
+//     // min-height 200px
+//     .news-list
+//         padding 10px
 
 </style>
