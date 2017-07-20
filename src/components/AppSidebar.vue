@@ -125,6 +125,7 @@ a
     text-decoration none
     color #333
 
+
 .app-sidebar-content
     &.app-sidebar-content-right
         box-shadow -3px 0 8px 1px rgba(0, 0, 0, 0.4)
@@ -222,7 +223,7 @@ a
                 padding-left 15px
                 height $app-sidebar-nav-height
                 line-height $app-sidebar-nav-height
-
+                position relative
 
                 &:last-child
                     border none

@@ -101,17 +101,8 @@ module.exports = {
          */
         runtimeCaching: [
             {
-                urlPattern: /\/material-design-icon/,
-
-                // 五种：caheOnly cacheFirst fastest networkFirst networkOnly
-                handler: 'networkFirst'
-            },
-            {
-                urlPattern: /vue\.runtime/,
-                handler: 'networkFirst'
-            },
-            {
                 urlPattern: /\/api\/mockup/,
+                // 五种：caheOnly cacheFirst fastest networkFirst networkOnly
                 handler: 'networkFirst'
             }
             // ,

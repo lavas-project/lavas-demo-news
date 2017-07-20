@@ -18,7 +18,6 @@ const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin');
 const SwRegisterWebpackPlugin = require('sw-register-webpack-plugin');
-const WebpackCdnPlugin = require('webpack-cdn-plugin');
 const MultiPathWebpackPlugin = require('multi-path-webpack-plugin');
 
 let env = process.env.NODE_ENV === 'testing'
@@ -31,9 +30,6 @@ let webpackConfig = merge(baseWebpackConfig, {
             sourceMap: config.build.productionSourceMap,
             extract: true
         })
-    },
-    externals: {
-        vue: 'Vue'
     },
     devtool: config.build.productionSourceMap ? '#source-map' : false,
     output: {
@@ -94,17 +90,6 @@ let webpackConfig = merge(baseWebpackConfig, {
             chunksSortMode: 'dependency'
         }),
 
-        // https://github.com/van-nguyen/webpack-cdn-plugin
-        new WebpackCdnPlugin({
-            modules: [
-                {
-                    'name': 'vue',
-                    'var': 'Vue',
-                    'path': 'dist/vue.runtime.min.js'
-                }
-            ]
-        }),
-
         // split vendor js into its own file
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
@@ -120,11 +105,23 @@ let webpackConfig = merge(baseWebpackConfig, {
             }
         }),
 
+        // split vue, vue-router and vuex into vue chunk
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vue',
+            minChunks: function (module, count) {
+                let context = module.context;
+                let targets = ['vue', 'vue-router', 'vuex'];
+                return context
+                    && context.indexOf('node_modules') >= 0
+                    && targets.find(t => new RegExp('/' + t + '/', 'i').test(context));
+            }
+        }),
+
         // extract webpack runtime and module manifest to its own file in order to
         // prevent vendor hash from being updated whenever app bundle is updated
         new webpack.optimize.CommonsChunkPlugin({
             name: 'manifest',
-            chunks: ['vendor']
+            chunks: ['vue']
         }),
 
         // copy custom static assets

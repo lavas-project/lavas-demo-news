@@ -8,10 +8,7 @@ import Vuex from 'vuex';
 import appShell from './modules/app-shell';
 import news from './modules/news';
 
-// 生产环境使用 cdn，此时引入 vuex 会自动注册，无需调用
-if (process.env.NODE_ENV !== 'production') {
-    Vue.use(Vuex);
-}
+Vue.use(Vuex);
 
 export default new Vuex.Store({
     modules: {
