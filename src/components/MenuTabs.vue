@@ -1,7 +1,7 @@
 <template>
     <div :class="{'menu-tabs': true, opend: opend}">
-        <div class="menu-tabs-wrap">
-            <div class="menu-tabs-wrap-inner" :style="{width: len * tabWidth + 40 + 'px'}">
+        <div class="menu-tabs-wrap" ref="menuTabsWrap">
+            <div class="menu-tabs-wrap-inner" :style="{width: len * tabWidth + extraWidth + 'px'}">
                 <div class="menu-tabs-item"
                     v-for="(item, i) in menuTabs"
                     @click="selectItem(item)">
@@ -40,13 +40,15 @@
 <script>
 import {mapGetters, mapActions} from 'vuex';
 import * as types from '../store/mutation-types';
+import Iscroll from 'iscroll';
 export default {
     name: 'menu-tabs',
 
     data() {
         return {
             opend: false,
-            tabWidth: 72
+            tabWidth: 72,
+            extraWidth: 40
         };
     },
 
@@ -79,6 +81,7 @@ export default {
         },
         addItemToSelected(tabItem) {
             this[types.ADD_CATEGORY](tabItem);
+            this.refreshScroll();
         },
         delSelectedItem(tabItem) {
 
@@ -87,7 +90,7 @@ export default {
             }
 
             this[types.DEL_CATEGORY](tabItem);
-
+            this.refreshScroll();
         },
         setMenuTabsPos() {
             let activeIndex = 0;
@@ -96,18 +99,46 @@ export default {
                     activeIndex = index;
                 }
             });
-            this.$el.querySelector('.menu-tabs-wrap').scrollLeft = this.tabWidth * (activeIndex - 2);
+
+            let menuTabsScroll = this.menuTabsScroll;
+            let scrollLeft = this.tabWidth * (activeIndex - 2);
+            let maxScrollLeft = Math.abs(menuTabsScroll.maxScrollX);
+
+            if (scrollLeft <= 0) {
+                scrollLeft = 0;
+            }
+            if (scrollLeft > maxScrollLeft) {
+                scrollLeft = maxScrollLeft;
+            }
+            if (scrollLeft !== Math.abs(menuTabsScroll.x)) {
+                menuTabsScroll.scrollTo(-scrollLeft, 0, 300);
+            }
         },
         leave(el) {
             el.style.display = 'none';
         },
         enter(el) {
             el.style.opacity = 0;
-            setTimeout(() => el.style.opacity = 1, 250);
+            setTimeout(() => el.style.opacity = 1, 200);
+        },
+        refreshScroll() {
+            setTimeout(() => {
+                this.menuTabsScroll.refresh();
+            });
+
         }
     },
     async activated() {
         this.setMenuTabsPos();
+    },
+    mounted() {
+        this.menuTabsScroll = new Iscroll(this.$refs.menuTabsWrap, {
+            momentum: true,
+            scrollX: true,
+            scrollY: false,
+            click: true,
+            tap: true
+        });
     }
 };
 </script>
@@ -125,7 +156,6 @@ $height = 40px
 
     &-wrap
         position relative
-        overflow scroll
         background: $theme.primary
         z-index 1
 
@@ -220,9 +250,9 @@ $height = 40px
     line-height $height
     color $btn-color
     font-size 16px
-    width 60px
+    width 72px
     text-align center
-    margin 0 6px
+    padding 0 8px
 
     span
         display inline-block
