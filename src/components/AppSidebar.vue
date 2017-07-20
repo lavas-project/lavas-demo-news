@@ -232,7 +232,7 @@ a
 
 .app-sidebar-toast
     position: absolute
-    bottom: 100px
+    bottom: 20px
     left: 50%
     transform: translateX(-50%)
     border-radius: 4px
@@ -245,7 +245,7 @@ a
   transition: all .5s ease
 
 .toast-enter, .toast-leave-to, .toast-leave-active
-  transform: translateY(50px) translateX(-50%);
+  transform: translateY(10px) translateX(-50%);
   opacity: 0;
 
 </style>
