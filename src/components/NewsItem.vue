@@ -68,6 +68,7 @@ export default {
     .news-content
         display inline-block
         width 100%
+        overflow hidden
 
         .list-item-title
             font-size 16px
