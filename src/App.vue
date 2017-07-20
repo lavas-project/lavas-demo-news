@@ -167,9 +167,12 @@ export default {
             top 0
             right 0
             left 0
+            bottom 0
             transition transform 0.4s cubic-bezier(.55, 0, .1, 1)
             background: $material-theme.bg-color
             color: $material-theme.text-color
+            overflow-x hidden
+            overflow-y auto
 
             &.overflow-scrolling-touch
                 -webkit-overflow-scrolling touch
