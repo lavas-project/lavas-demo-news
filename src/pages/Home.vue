@@ -59,7 +59,7 @@ export default {
             newsFavorListShow: false,
             scrollTops: {},
             showLoading: true
-        }
+        };
     },
     components: {
         HomeNewsList,

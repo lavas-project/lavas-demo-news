@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import {mapState, mapActions, mapGetters} from 'vuex';
+import {mapActions, mapGetters} from 'vuex';
 import NewsItem from '../components/NewsItem.vue';
 
 export default {
@@ -44,7 +44,7 @@ export default {
     computed: {
         ...mapGetters([
             'searchResultData'
-        ]),
+        ])
     },
     methods: {
         ...mapActions('appShell/appHeader', [
@@ -73,7 +73,7 @@ export default {
     },
     activated() {
         this.setAppHeader({show: false});
-        
+
         if (this.query.length === 0) {
             this.$store.dispatch('clearSearchResult');
         }

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
+// import {mapGetters, mapActions} from 'vuex';
 import NewsItem from './NewsItem.vue';
 
 export default {

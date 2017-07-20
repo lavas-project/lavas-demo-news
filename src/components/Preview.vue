@@ -29,11 +29,9 @@
 </template>
 
 <script>
-import IScroll from 'iscroll'
-import {mapActions, mapGetters} from 'vuex';
+import IScroll from 'iscroll';
 
-let ww = window.innerWidth;
-let wh = window.innerHeight;
+let {innerWidth: ww, innerHeight: wh} = window;
 
 export default {
     name: 'previewer',
@@ -41,8 +39,8 @@ export default {
         imageList: Array,
         show: Boolean,
         index: {
-            type: Number,
-            default: 0
+            'type': Number,
+            'default': 0
         }
     },
     data() {
@@ -50,7 +48,7 @@ export default {
             showInfo: true,
             curIndex: 1,
             touchTransiStyle: {}
-        }
+        };
     },
     computed: {
         itemStyle() {
@@ -74,7 +72,8 @@ export default {
     },
     methods: {
         toggleInfo() {
-            this.showInfo = !this.showInfo;
+            // this.showInfo = !this.showInfo;
+            this.close();
         },
         close() {
             let iscroll = this.iscroll;
@@ -138,7 +137,7 @@ export default {
                 return;
             }
 
-            let touch = e.touches[0]
+            let touch = e.touches[0];
             dx = touch.clientX - startPoint.clientX;
             dy = touch.clientY - startPoint.clientY;
 
