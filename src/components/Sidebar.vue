@@ -303,7 +303,7 @@ export default {
         top 0
         bottom 0
         left 0
-        width 45px
+        width 40px
         z-index 100
         opacity 0
         transition opacity .3s
@@ -314,7 +314,7 @@ export default {
             padding-left 0 !important
         .touch-toggle
             padding-left 0 !important
-            top 64px
+            top 92px
 
     &.expand
         position fixed
