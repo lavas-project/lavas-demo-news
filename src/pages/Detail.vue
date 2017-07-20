@@ -124,6 +124,7 @@ export default {
     },
 
     async activated() {
+
         this.isFavored({nid: this.$route.params.nid});
         this.updateFavoriteAction(this.detailPageFavorStatus);
         this.setAppHeader({

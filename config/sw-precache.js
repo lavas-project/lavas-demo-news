@@ -107,10 +107,6 @@ module.exports = {
                 handler: 'networkFirst'
             },
             {
-                urlPattern: /vue\.runtime/,
-                handler: 'networkFirst'
-            },
-            {
                 urlPattern: /\/api\/mockup/,
                 handler: 'networkFirst'
             }
