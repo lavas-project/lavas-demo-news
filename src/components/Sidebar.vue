@@ -1,6 +1,7 @@
 <template>
     <div class="sidebar-wrapper"
         ref="sidebarWrapper"
+        v-show="enableSwipeOut"
         :class="wrapperClass"
     >
         <div class="sidebar-scroller"

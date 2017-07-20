@@ -121,10 +121,13 @@ export default {
         let dy;
         let toClose;
         let checked;
-        let maxLen = 60;
+        let maxLen = 30;
 
         let touchstart = e => {
-            startPoint = e.touches[0];
+            startPoint = {
+                clientX: e.touches[0].clientX,
+                clientY: e.touches[0].clientY
+            };
             checked = false;
             toClose = true;
             this.touchTransiStyle = {};
@@ -140,7 +143,8 @@ export default {
             dy = touch.clientY - startPoint.clientY;
 
             if (!checked) {
-                toClose = Math.abs(dy) > Math.abs(dx);
+                // toClose = Math.abs(dy) > Math.abs(dx);
+                toClose = dy > Math.abs(dx);
                 checked = true;
             }
 
