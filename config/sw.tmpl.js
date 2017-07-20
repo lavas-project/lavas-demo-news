@@ -243,7 +243,8 @@ self.addEventListener('fetch', function(event) {
         // 则 event.respondWith()匹配缓存返回结果，匹配不成就直接请求.
         if (shouldRespond) {
             event.respondWith(
-                  caches.open(cacheName).then(function(cache) {
+                caches.open(cacheName).then(function(cache) {
+
                     return cache.match(urlsToCacheKeys.get(url)).then(function(response) {
                         if (response) {
                             return response;
@@ -251,6 +252,7 @@ self.addEventListener('fetch', function(event) {
                         throw Error('The cached response that was expected is missing.');
                     });
                 }).catch(function(e) {
+
                     // 如果捕获到异常错误，直接返回 fetch() 请求资源
                     console.warn('Couldn\'t serve response for "%s" from cache: %O', event.request.url, e);
                     return fetch(event.request);

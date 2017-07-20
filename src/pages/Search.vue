@@ -68,7 +68,6 @@ export default {
         },
         clearAndGo() {
             this.$router.go(-1);
-            this.back = true;
             this.query = '';
         }
     },
@@ -76,20 +75,7 @@ export default {
         this.setAppHeader({show: false});
         
         if (this.query.length === 0) {
-            this.$el.querySelector('.search-input').focus();
             this.$store.dispatch('clearSearchResult');
-        }
-    },
-    watch: {
-        query(val, old) {
-            if (val.length === 0) {
-                if (!this.back) {
-                    this.$el.querySelector('.search-input').focus();
-                }
-                else {
-                    this.back = false;
-                }
-            }
         }
     }
 };

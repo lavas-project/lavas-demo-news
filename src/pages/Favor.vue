@@ -2,7 +2,7 @@
     <div class="favor-list-wrapper">
         <div class="favor-list-container">
             <div class="favor-list-header">
-                <v-btn icon @click.native="$router.go(-1)">
+                <v-btn class="white--text" ripple icon @click.native="$router.go(-1)">
                     <v-icon class="app-header-icon">arrow_back</v-icon>
                 </v-btn>
                 <span>收藏夹</span>
@@ -12,10 +12,11 @@
                 <img src="http://gss0.bdstatic.com/9rkZbzqaKgQUohGko9WTAnF6hhy/movie/edison/assets/8b82b9014a90f6030671398c3912b31bb151ed3c_1500452980851.jpg" />
                 <span>这里空空的</span>
             </div>
-            
+
             <transition-group name="favor-item-fold" v-else tag="ul" class="favor-list-content">
-                <li 
+                <li
                     v-for="item in newsFavorList" :key="item.nid"
+                    v-ripple="{class: 'grey--text'}"
                     class="favor-list-item"
                     @click.stop="closeAndGo(item.nid, $event)">
                     <v-icon v-if="showDelete" class="news-delete">highlight_off</v-icon>
@@ -85,7 +86,6 @@ export default {
                 return;
             }
             this.$router.push('/detail/'+ nid);
-            this.close();
         },
         removeItem(nid) {
             this.removeFavorItem({nid});

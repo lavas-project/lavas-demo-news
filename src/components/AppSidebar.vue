@@ -1,30 +1,7 @@
 <template>
-    <div class="app-sidebar-wrapper"
-        @touchstart="handleTouchstart($event)"
-        @touchmove="handleTouchmove($event)"
-        @touchend="handleTouchend($event)"
-        @touchcancel="handleTouchend($event)">
-        <!-- 引入app-mask组件-->
-        <app-mask
-            :show="show || isDragging"
-            @close-mask="close"
-        ></app-mask>
-
-        <v-touch
-            @panmove="handlePanMove"
-            @panend="handlePanEnd"
-            :enabled="{ pan: true, tap: false }"
-            :pan-options="panOptions">
-            <div
-                class="app-sidebar-swipe"
-                :class="{'app-sidebar-swipe-right': slideFrom !== 'left'}"></div>
-        </v-touch>
-
+    <sidebar v-model="sidebarStatus" :enableSwipeOut="enableSwipeOut">
         <!-- sidebar 内容部分 -->
-        <div
-            class="app-sidebar-content"
-            :class="classList"
-            :style="inlineStyle">
+        <div class="app-sidebar-content">
             <!-- 头部 -->
             <div v-if="title" class="app-sidebar-title" @click.stop="close">
                 <span class="app-sidebar-title-left-icon">
@@ -47,142 +24,82 @@
                 <ul>
                     <!-- 单个区块 -->
                     <li v-for="block in blocks" class="app-sidebar-block">
-                        <div v-if="block.sublistTitle" class="sub-list-title">{{ block.sublistTitle }}</div>
-                        <ul v-if="block.sublist" class="app-sidebar-block-sublist">
-                            <li v-for="item in block.sublist" @click.stop="tip(item.route)" class="sub">
-                                <span v-if="item.icon || item.image || item.svg " class="app-sidebar-block-left-icon">
-                                    <img v-if="item.image" :src="item.image" :alt="item.alt" />
-                                    <icon v-else-if="item.svg" :name="item.svg"></icon>
-                                    <v-icon v-else-if="item.icon" :class="item.color + '--text'">{{ item.icon }}</v-icon>
-                                </span>
-                                <p v-if="item.text" class="app-sidebar-block-text">{{ item.text }}</p>
-                            </li>
-                        </ul>
+                        <v-container fluid grid-list-sm>
+                          <v-layout row wrap>
+                            <v-flex xs6 v-for="item in block.sublist" :key="item.text"
+                              v-ripple="{class: 'grey--text'}"
+                              class="app-block-sublist-item"
+                              @click="tip(item.route)">
+                              <span class="app-sidebar-block-left-icon">
+                                <v-icon :class="item.color + '--text'">{{ item.icon }}</v-icon>
+                              </span>
+                              <span v-if="item.text" class="app-sidebar-block-text">{{ item.text }}</span>
+                            </v-flex>
+                          </v-layout>
+                        </v-container>
 
-                        <ul v-if="block.list" class="app-sidebar-block-list">
-                            <v-divider light></v-divider>
-                            <template v-for="item in block.list">
-                                <li @click.stop="tip(item.route)">
-                                    <span v-if="item.icon || item.image || item.svg " class="app-sidebar-block-left-icon">
-                                        <img v-if="item.image" :src="item.image" :alt="item.alt" />
-                                        <icon v-else-if="item.svg" :name="item.svg"></icon>
-                                        <v-icon v-else-if="item.icon">{{ item.icon }}</v-icon>
-                                    </span>
-                                    <span v-if="item.text" class="app-sidebar-block-text">{{ item.text }}</span>
-                                    <span v-if="item.iconRight || item.imageRight || item.svgRight " class="app-sidebar-block-right-icon">
-                                        <img v-if="item.imageRight" :src="item.imageRight" :alt="item.altRight" />
-                                        <icon v-else-if="item.svgRight" :name="item.svgRight"></icon>
-                                        <v-icon v-else-if="item.iconRight">{{ item.iconRight }}</v-icon>
-                                    </span>
-                                </li>
-                                <v-divider light></v-divider>
-                            </template>
-                        </ul>
+                        <v-list>
+                          <template v-for="(item, i) in block.list">
+                              <v-list-tile ripple class="app-block-list-item">
+                                <v-list-tile-content @click.stop="tip(item.route)">
+                                  <v-list-tile-title v-html="item.text"></v-list-tile-title>
+                                </v-list-tile-content>
+                                <v-list-tile-action>
+                                  <v-icon>{{ item.iconRight }}</v-icon>
+                                </v-list-tile-action>
+                              </v-list-tile>
+                              <v-divider light v-if="i !== block.list.length - 1"></v-divider>
+                          </template>
+                        </v-list>
                     </li>
                 </ul>
             </div>
-            <v-alert info value="true" v-if="showDemoTip" class="app-sidebar-tip">我只是个demo</v-alert>
+            <v-alert info value="true" v-if="showDemoTip" class="app-sidebar-tip">Only a demo</v-alert>
         </div>
-    </div>
+    </sidebar>
 </template>
 
 <script>
 import {mapState} from 'vuex';
-import AppMask from './AppMask.vue';
-
-// hammer.js 方向常量
-const DIRECTION_LEFT = 2;
-const DIRECTION_RIGHT = 4;
-
-// 左/右阴影宽度
-const BOX_SHADOW_WIDTH = 12;
+import Sidebar from './Sidebar';
 
 export default {
     components: {
-        AppMask
-    },
-    data() {
-        return {
-            isDragging: false, // 是否处于拖拽状态
-            translateX: 0, // 当前水平位移
-            clientWidth: 0, // 窗口宽度
-            widthInPx: 0, // sidebar以px为单位的宽度
-            showWidthThresholdInPx: 0, // 展示阈值以px为单位
-            panOptions: { // hammer.js pan手势配置对象
-                direction: 'horizontal',
-                threshold: 10
-            },
-            showDemoTip: false
-        };
+        Sidebar
     },
     computed: {
         ...mapState('appShell/appSidebar', [
             'show',
-            'slideFrom',
             'title',
+            'user',
             'blocks',
-            'width',
-            'showWidthThreshold'
+            'enableSwipeOut'
         ]),
-        classList() {
-            return {
-                'app-sidebar-content-right': this.slideFrom !== 'left'
-            };
-        },
-        inlineStyle() {
-
-            // 拖拽时取消transition
-            let transition = this.isDragging ? 'none' : 'transform .5s ease';
-
-            // 隐藏状态时的位置
-            let initTranslateX = this.widthInPx + BOX_SHADOW_WIDTH;
-            if (this.slideFrom === 'left') {
-                initTranslateX = -initTranslateX;
+        sidebarStatus: {
+            get() {
+                return this.show;
+            },
+            set(val) {
+                if (val) {
+                    this.$emit('show-sidebar');
+                }
+                else {
+                    this.$emit('hide-sidebar');
+                }
             }
-
-            // 当前水平方向平移距离
-            let currentTranslateX = this.isDragging
-                ? this.translateX
-                : (this.show ? 0 : initTranslateX);
-            let styleObj = {
-                'width': `${this.widthInPx}px`,
-                'transition': transition,
-                '-webkit-transition': transition,
-                'transform': `translate3d(${currentTranslateX}px, 0, 0)`,
-                '-webkit-transform': `translate3d(${currentTranslateX}px, 0, 0)`,
-                [this.slideFrom]: 0 // 展示状态绝对定位靠左/右
-            };
-
-            return styleObj;
-        },
-        closeDirection() {
-            return this.slideFrom === 'left' ? DIRECTION_LEFT : DIRECTION_RIGHT;
         }
     },
+    data() {
+        return {
+            showDemoTip: false
+        };
+    },
     methods: {
-        caclWidth() {
-            this.clientWidth = document.body.clientWidth;
-
-            if (this.width > 1) {
-                this.widthInPx = this.width;
-            }
-            else {
-                this.widthInPx = Math.round(this.clientWidth * this.width);
-            }
-
-            if (this.showWidthThreshold > 1) {
-                this.showWidthThresholdInPx = this.showWidthThreshold;
-            }
-            else {
-                this.showWidthThresholdInPx = this.widthInPx * this.showWidthThreshold;
-            }
-        },
         close() {
-            this.$emit('hide-sidebar');
-            this.translateX = Math.round(-this.widthInPx);
+            this.sidebarStatus = false;
         },
         closeAndGo(route) {
-            route && this.$router.push(route);
+            this.$router.push(route);
             this.close();
         },
         tip(route) {
@@ -194,109 +111,24 @@ export default {
             this.showDemoTip = true;
             setTimeout(() => {
                 this.showDemoTip = false;
-            }, 3000);
+            }, 2500);
         },
-        open() {
-            this.$emit('show-sidebar');
-            this.translateX = 0;
-        },
-        handleTouchstart(evt) {
-            this.startTouch = evt.touches[0];
-        },
-        handleTouchmove(evt) {
-            this.isDragging = true;
-
-            let touch = evt.touches[0];
-            let dx = touch.clientX - this.startTouch.clientX;
-            let dy = touch.clientY - this.startTouch.clientY;
-            let direction = dx > 0 ? DIRECTION_RIGHT : DIRECTION_LEFT;
-
-            if (direction !== this.closeDirection) {
-                return;
-            }
-
-            if (Math.abs(dx) > 80) {
-                this.isDragging = false;
-                this.close();
-                return;
-            }
-
-            let translateX = dx;
-            this.translateX = Math.round(translateX);
-        },
-        handleTouchend(evt) {
-            this.isDragging = false;
-        },
-        handlePanMove(event) {
-            let deltaX = event.deltaX;
-            let translateX = deltaX + (this.slideFrom === 'left' ? -this.widthInPx : this.widthInPx);
-            this.isDragging = true;
-            if (this.widthInPx < Math.abs(deltaX)) { // 滑动超过了sidebar宽度
-                return;
-            }
-            this.translateX = Math.round(translateX);
-        },
-        handlePanEnd(event) {
-            let {direction, deltaX} = event;
-            this.isDragging = false;
-
-            if (direction === this.closeDirection) {
-                this.close();
-            }
-            else if (Math.abs(deltaX) > this.showWidthThresholdInPx) { // 停止时滑动距离超过阈值，认为需要展示
-                this.open();
-            }
-            else {
-                this.close();
-            }
-        }
-    },
-    created() {
-        if (!this.$isServer) {
-            this.caclWidth();
-        }
     }
 };
 </script>
 
 <style lang="stylus" scoped>
-
-// 左侧触发滑动宽度
-$swipe-width = 20px
-
 ul,li
     padding 0
     margin 0
     list-style none
 a
-    text-decoration none
-    color #333
-
-.app-sidebar-wrapper
-    z-index 9999
-
-    .app-sidebar-swipe
-        position fixed
-        top 0
-        bottom 0
-        left 0
-        width $swipe-width
-        user-select none
-
-        &.app-sidebar-swipe-right
-            left initial
-            right 0
+    text-decoration: none
+    color: #333
+p
+    margin: 0
 
 .app-sidebar-content
-    position fixed
-    top 0
-    height 100%
-    // background: $material-theme.bg-color
-    background: #e0e0e0
-    box-shadow 3px 0 8px 1px rgba(0, 0, 0, 0.4)
-    overflow-y auto
-    z-index 9999
-
     &.app-sidebar-content-right
         box-shadow -3px 0 8px 1px rgba(0, 0, 0, 0.4)
 
@@ -305,10 +137,9 @@ a
             text-align right
 
     .app-sidebar-title-left-icon,
-    .app-sidebar-block-left-icon,
-    .app-sidebar-block-right-icon
+    .app-sidebar-block-left-icon
         display inline-block
-        width ($app-sidebar-left-icon-size + 10)px
+        width ($app-sidebar-left-icon-size + 4)px
         height 100%
 
         img
@@ -327,57 +158,23 @@ a
         .material-icons
             font-size ($app-sidebar-left-icon-size)px
 
-    .app-sidebar-block-right-icon
-        float: right
-
     .app-sidebar-block-text
         display inline-block
         height 100%
         vertical-align middle
-
-    .app-sidebar-title-right-logo,
-    .app-sidebar-block-right-logo
-        float right
-
-        img
-            width 20px
-            height 20px
-            margin-right 10px
-
-    .app-sidebar-block-sublist
-        display: flex
-        background: $material-theme.bg-color
-        font-size: 0
-
-        .sub
-            flex: auto
-            text-align: center
-            padding 0!important
-            border-right 1px solid #e0e0e0
-
-            &:last-of-type
-                border-right none
-
-            &:first-of-type
-                color: #f24
-
-            .app-sidebar-block-text
-                margin: 0
-                font-size: 14px
-
-    .app-sidebar-block-list
-        margin-top: 20px
-        background: $material-theme.bg-color
+        line-height: 24px
+        position: relative
+        top: 2px
 
     .app-sidebar-title
         color #fff
-        padding 0 10px
+        padding: 0 10px 0 36px
         font-size 16px
         font-weight bold
         height $app-sidebar-title-height
         line-height $app-sidebar-title-height
         background: $theme.primary
-        text-align center
+        text-align left
 
     .app-sidebar-blocks
         text-align left
@@ -387,15 +184,8 @@ a
             border-bottom 1px solid #e0e0e0
             color #333
 
-            .sub-list-title
-                height $app-sidebar-nav-height
-                line-height $app-sidebar-nav-height
-                text-indent ($app-sidebar-left-icon-size + 28)px
-                font-weight bold
-                color #888
-
             li
-                padding-left 15px
+                // padding-left 15px
                 height $app-sidebar-nav-height
                 line-height $app-sidebar-nav-height
 
@@ -405,6 +195,17 @@ a
 
             &:last-child
                 border-bottom none
+
+    .app-block-sublist-item
+        border-right: 1px solid #e0e0e0
+        text-align: center
+        position relative
+
+        &:last-of-type
+            border-right: none
+
+.list__tile
+    color: #333!important
 
 .app-sidebar-tip
     position: absolute

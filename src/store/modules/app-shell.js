@@ -213,6 +213,9 @@ export default {
                 // 滑动距离展示阈值
                 showWidthThreshold: 0.25,
 
+                // 侧滑
+                enableSwipeOut: false,
+
                 // 分块组
                 blocks: [
                     {
@@ -265,11 +268,21 @@ export default {
                  */
                 hideSidebar({commit}) {
                     commit(types.SET_SIDEBAR_VISIBILITY, false);
+                },
+
+                enableSwipeOut({commit}) {
+                    commit(types.SET_SWIPE_OUT, true);
+                },
+                disableSwipeOut({commit}) {
+                    commit(types.SET_SWIPE_OUT, false);
                 }
             },
             mutations: {
                 [types.SET_SIDEBAR_VISIBILITY](state, sidebarVisibility) {
                     state.show = sidebarVisibility;
+                },
+                [types.SET_SWIPE_OUT](state, enable) {
+                    state.enableSwipeOut = enable;
                 }
             }
         },
