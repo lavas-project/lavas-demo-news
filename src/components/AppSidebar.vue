@@ -65,7 +65,7 @@ export default {
     data() {
         return {
             toast: false
-        }
+        };
     },
     components: {
         Sidebar
