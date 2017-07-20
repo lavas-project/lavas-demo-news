@@ -9,7 +9,6 @@
                 <v-icon class="delete white--text" @click="toggleDelete" :class="{shaking:showDelete}">delete_forever</v-icon>
             </div>
             <div v-if="newsFavorList.length <= 0" class="favor-list-null">
-                <img src="http://gss0.bdstatic.com/9rkZbzqaKgQUohGko9WTAnF6hhy/movie/edison/assets/8b82b9014a90f6030671398c3912b31bb151ed3c_1500452980851.jpg" />
                 <span>这里空空的</span>
             </div>
 
@@ -112,6 +111,9 @@ export default {
                 }
             ]
         });
+    },
+    deactivated() {
+        this.showDelete = false;
     }
 };
 </script>
