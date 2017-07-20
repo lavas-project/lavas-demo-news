@@ -10,7 +10,7 @@
             </div>
             <p v-if="list.length <= 0" class="favor-list-null">这里空空的</p>
             <transition-group name="favor-item-fold" v-else tag="ul" class="favor-list-content">
-                <li 
+                <li
                     v-for="item in list" :key="item.nid"
                     class="favor-list-item"
                     @click.stop="closeAndGo(item.nid, $event)">
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import {mapState, mapActions, mapGetters} from 'vuex';
+import {mapActions} from 'vuex';
 import AppMask from './AppMask.vue';
 
 // 左/右阴影宽度
@@ -40,7 +40,7 @@ export default {
     },
     props: {
         show: {
-            default: false
+            'default': false
         },
         list: {
             required: true
@@ -55,32 +55,6 @@ export default {
             width: 0.85,
             showDelete: false
         };
-    },
-    filters: {
-        dateFormat(date = Date.now(), fmt) {
-            date = new Date(date);
-            var o = {
-                'M+': date.getMonth() + 1, // 月份
-                'd+': date.getDate(), // 日
-                'h+': date.getHours(), // 小时
-                'm+': date.getMinutes(), // 分
-                's+': date.getSeconds(), // 秒
-                'q+': Math.floor((date.getMonth() + 3) / 3), // 季度
-                'S': date.getMilliseconds() // 毫秒
-            };
-            if (/(y+)/.test(fmt)) {
-                fmt = fmt.replace(RegExp.$1, (date.getFullYear() + '').substr(4 - RegExp.$1.length));
-            }
-            for (var k in o) {
-                if (new RegExp('(' + k + ')').test(fmt)) {
-                    fmt = fmt.replace(
-                        RegExp.$1,
-                        (RegExp.$1.length === 1) ? (o[k]) : (('00' + o[k]).substr(('' + o[k]).length))
-                    );
-                }
-            }
-            return fmt;
-        }
     },
     computed: {
         inlineStyle() {
@@ -133,7 +107,7 @@ export default {
                 }
                 return;
             }
-            this.$router.push('/detail/'+ nid);
+            this.$router.push('/detail/' + nid);
             this.close();
         },
         removeItem(nid) {

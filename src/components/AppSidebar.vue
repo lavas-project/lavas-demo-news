@@ -112,7 +112,7 @@ export default {
             setTimeout(() => {
                 this.showDemoTip = false;
             }, 2500);
-        },
+        }
     }
 };
 </script>

@@ -9,11 +9,17 @@ import {createRouter} from './router';
 import store from './store';
 import App from './App.vue';
 import Icon from 'vue-awesome/components/Icon.vue';
+import filters from './util/filters';
 
 Vue.use(Vuetify);
 Vue.component('icon', Icon);
 
 Vue.config.productionTip = false;
+
+// register global utility filters.
+Object.keys(filters).forEach(key => {
+    Vue.filter(key, filters[key]);
+});
 
 /* eslint-disable no-new */
 export function createApp() {
@@ -21,6 +27,7 @@ export function createApp() {
     let app = new Vue({
         router,
         store,
+        filters,
         ...App
     });
     return {app, router, store};

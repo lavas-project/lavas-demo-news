@@ -52,8 +52,8 @@ export default {
             'default': 0.75
         },
         enableSwipeOut: {
-            type: Boolean,
-            default: false
+            'type': Boolean,
+            'default': false
         }
     },
     data() {

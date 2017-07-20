@@ -114,7 +114,7 @@ export default {
     },
 
     created() {
-        EventBus.$on('app-header:click-toggle', (data) => {
+        EventBus.$on('app-header:click-toggle', data => {
             this[data.handler] && this[data.handler]();
         });
     },

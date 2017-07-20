@@ -151,7 +151,7 @@ export default {
                 commit(types.SET_NEWS_DATA, {category, data});
             }
             catch (e) {
-                console.log(e);
+                // console.log(e);
             }
         },
 
@@ -175,7 +175,7 @@ export default {
                 commit(types.SET_NEWS_DATA, {category, change: true, data});
             }
             catch (e) {
-                console.log(e);
+                // console.log(e);
             }
             commit(types.SET_LIST_FROM_CACHE, false);
         },
