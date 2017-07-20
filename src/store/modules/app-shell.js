@@ -216,6 +216,11 @@ export default {
                 // 侧滑
                 enableSwipeOut: false,
 
+                user: {
+                    name: '度熊',
+                    location: '中国北京',
+                    email: 'example@baidu.com'
+                },
                 // 分块组
                 blocks: [
                     {

@@ -39,7 +39,7 @@
                     <li v-for="(block, index) in blocks" :key="index" class="app-sidebar-block">
                         <div v-if="block.sublistTitle" class="sub-list-title">{{ block.sublistTitle }}</div>
                         <ul v-if="block.list">
-                            <li v-for="item in block.list" :key="item.text" @click.stop="closeAndGo(item.route)">
+                            <li v-for="item in block.list" :key="item.text" @click.stop="closeAndGo(item.route)" v-ripple="{class: 'grey--text'}">
                                 <span v-if="item.icon || item.image || item.svg " class="app-sidebar-block-left-icon">
                                     <img v-if="item.image" :src="item.image" :alt="item.alt"></img>
                                     <icon v-else-if="item.svg" :name="item.svg"></icon>
@@ -98,8 +98,9 @@ export default {
         },
         closeAndGo(route) {
             if (!route) {
+                clearTimeout(this.timer);
                 this.toast = true;
-                setTimeout(() => {
+                this.timer = setTimeout(() => {
                     this.toast = false;
                 }, 2500);
                 return;
@@ -184,13 +185,15 @@ a
         font-size 16px
         .user-avatar
             margin 30px auto 0 auto
-            height 100px
-            width 100px
+            height 80px
+            width 80px
+
             i
-                font-size 100px
+                font-size 80px
+                height: 100%
                 color #666
         .user-info
-            padding 20px 0
+            padding 10px 0 20px
             text-align center
             border-bottom 1px solid #e0e0e0
             >div
@@ -206,6 +209,7 @@ a
             padding 10px 0
             border-bottom 1px solid #e0e0e0
             color #333
+            position: relative
 
             .sub-list-title
                 height $app-sidebar-nav-height
