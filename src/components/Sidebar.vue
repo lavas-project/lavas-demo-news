@@ -276,8 +276,8 @@ export default {
          */
         changeOpacity() {
             if (this.wrapperClass.expand && this.iscroll) {
-                //this.opacity = (this.iscroll.x + this.itsWidth) / this.itsWidth * 0.5;
-                setTimeout(() => {this.opacity = (this.iscroll.x + this.itsWidth) / this.itsWidth * 0.5;}, 80);
+                this.opacity = (this.iscroll.x + this.itsWidth) / this.itsWidth * 0.5;
+                //setTimeout(() => {this.opacity = (this.iscroll.x + this.itsWidth) / this.itsWidth * 0.5;}, 80);
                 rAF(this.changeOpacity.bind(this));
             }
         }
