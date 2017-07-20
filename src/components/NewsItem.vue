@@ -60,6 +60,7 @@ export default {
     padding 10px
     line-height 16px
     border-bottom 1px solid #eee
+    position relative
 
     &.item-enter-active
         transition: all .5s

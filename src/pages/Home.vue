@@ -1,7 +1,9 @@
 <template>
     <div class="home-wrapper">
         <menu-tabs></menu-tabs>
-        <div class="content-wrapper" ref="contentWrapper">
+        <div
+            class="content-wrapper"
+            ref="contentWrapper">
             <!-- 轮播banner组件 -->
 <!--             <carousel
                 v-if="bannerList.length > 0"
