@@ -9,17 +9,20 @@
             </app-header>
 
             <app-sidebar @hide-sidebar="hideSidebar" @show-sidebar="showSidebar"></app-sidebar>
-            <div class="app-view-wrapper" ref="appViewWrapper">
+            <div class="app-view-wrapper" ref="appViewWrapper"
+                :class="{
+                    'app-view-with-header': appHeader.show
+                }">
                 <transition
                     :name="pageTransitionName"
                     @before-enter="handleBeforeEnter"
-                    @after-enter="handleAfterEnter">
+                    @after-enter="handleAfterEnter"
+                    @after-leave="handleAfterLeave">
                     <keep-alive>
                         <router-view
                             v-if="!$route.meta.notKeepAlive"
                             class="app-view"
                             :class="{
-                                'app-view-with-header': appHeader.show,
                                 'overflow-scrolling-touch': !previewShow
                             }"></router-view>
                     </keep-alive>
@@ -27,12 +30,12 @@
                 <transition
                     :name="pageTransitionName"
                     @before-enter="handleBeforeEnter"
-                    @after-enter="handleAfterEnter">
+                    @after-enter="handleAfterEnter"
+                    @after-leave="handleAfterLeave">
                     <router-view
                         v-if="$route.meta.notKeepAlive"
                         class="app-view"
                         :class="{
-                            'app-view-with-header': appHeader.show,
                             'overflow-scrolling-touch': !previewShow
                         }"></router-view>
                 </transition>
@@ -76,6 +79,11 @@ export default {
         },
         handleAfterEnter(el) {
             this.setPageSwitching(false);
+            el.classList.remove('enable-scroll');
+            window.scrollTo(0, el.dataset.scrollTop || 0);
+        },
+        handleAfterLeave(el) {
+            el.classList.remove('enable-scroll');
         },
         handleClickHeaderBack() {
             this.$router.go(-1);
@@ -159,20 +167,26 @@ export default {
 
     .app-view-wrapper
         flex 1
-        position relative
-        // overflow hidden
+        position absolute
+        top 0
+        left 0
+        right 0
+        bottom 0
+        
+        &.app-view-with-header
+            top $app-header-height
+
+        &.app-view-with-footer
+            bottom $app-footer-height
 
         .app-view
             position absolute
             top 0
             right 0
             left 0
-            bottom 0
             transition transform 0.4s cubic-bezier(.55, 0, .1, 1)
             background: $material-theme.bg-color
             color: $material-theme.text-color
-            overflow-x hidden
-            overflow-y auto
 
             &.overflow-scrolling-touch
                 -webkit-overflow-scrolling touch
@@ -182,21 +196,18 @@ export default {
                 width 0px
                 background transparent
 
-            &.app-view-with-header
-                top $app-header-height
-
-            &.app-view-with-footer
-                bottom $app-footer-height
-
             &.slide-left-enter
                 transform translate(100%, 0)
 
             &.slide-right-enter
                 transform translate(-100%, 0)
 
-            &.slide-right-leave-active
+            &.slide-right-leave-to
                 transform translate(100%, 0)
 
-            &.slide-left-leave-active
+            &.slide-left-leave-to
                 transform translate(-100%, 0)
+                
+            &.enable-scroll
+                overflow-y auto
 </style>

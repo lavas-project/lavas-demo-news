@@ -37,15 +37,20 @@ Vue.mixin({
         }
     },
 
-    // 路由切换时，保存页面滚动位置
     beforeRouteEnter(to, from, next) {
         next(vm => {
-            // 通过 `vm` 访问组件实例
-            window.scrollTo(0, vm.$store.state.appShell.historyPageScrollTop[to.fullPath] || 0);
+            let $el = vm.$el;
+            $el.classList.add('enable-scroll');
+            $el.scrollTop = $el.dataset.scrollTop || 0;
         });
     },
+
     beforeRouteLeave(to, from, next) {
-        this.$store.dispatch('appShell/saveScrollTop', {path: from.fullPath, scrollTop: window.scrollY});
+        let $el = this.$el;
+        let prevScrollTop = window.scrollY || 0;
+        $el.dataset.scrollTop = prevScrollTop;
+        $el.classList.add('enable-scroll');
+        $el.scrollTop = prevScrollTop || 0;
         next();
     }
 });

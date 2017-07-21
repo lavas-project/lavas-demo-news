@@ -1,6 +1,6 @@
 <template>
     <div class="home-wrapper">
-        <menu-tabs></menu-tabs>
+        <menu-tabs class="menu-tabs"></menu-tabs>
         <div
             class="content-wrapper"
             ref="contentWrapper">
@@ -163,19 +163,23 @@ export default {
 
 <style lang="stylus" scoped>
 
+.app-view
+    &.slide-right-enter-active
+    &.slide-left-leave-active
+        .menu-tabs
+            top 0
+
+.menu-tabs
+    position fixed !important
+    top $app-header-height
+    left 0
+    right 0
+
 .carousel
     height 232px
     width 100%
 
 .content-wrapper
-    position: absolute
-    left: 0
-    right: 0
-    bottom: 0
-    top: 0
-    -webkit-overflow-scrolling: touch
-    overflow-x: hidden
-    overflow-y: auto
     padding-top: 40px
 
 // .loading-spiral

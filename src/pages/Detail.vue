@@ -137,10 +137,10 @@ export default {
             actions: [this.toggleAction]
         });
         await this.$store.dispatch('getNewsDetail', {nid: this.$route.params.nid});
-        document.body.scrollTop = this.scrollTop;
+        // document.body.scrollTop = this.scrollTop;
     },
     deactivated() {
-        this.scrollTop = document.body.scrollTop;
+        // this.scrollTop = document.body.scrollTop;
     },
     beforeRouteLeave(to, from, next) {
         next();
