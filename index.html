@@ -2,35 +2,30 @@
 <html lang="zh_CN">
     <head>
         <meta charset="utf-8">
-        <title>pwa-news</title>
+        <title>百度新闻</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, minimum-scale=1.0">
         <!-- Add to home screen for Android and modern mobile browsers -->
         <link rel="manifest" href="/static/manifest.json">
-        <meta name="theme-color" content="<!-- META_THEME_COLOR -->">
+        <meta name="theme-color" content="#2874f0">
         <!-- Add to home screen for Safari on iOS -->
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="black">
-        <meta name="apple-mobile-web-app-title" content="pwa-news">
+        <meta name="apple-mobile-web-app-title" content="百度新闻">
         <link rel="apple-touch-icon" href="/static/img/icons/apple-touch-icon-152x152.png">
         <!-- Add to home screen for Windows -->
         <meta name="msapplication-TileImage" content="/static/img/icons/msapplication-icon-144x144.png">
         <meta name="msapplication-TileColor" content="#000000">
+        <script>window.PointerEvent = undefined;</script>
         <% for (var jsFilePath of htmlWebpackPlugin.files.js) { %>
             <link rel="preload" href="<%= jsFilePath %>" as="script">
         <% } %>
         <% for (var cssFilePath of htmlWebpackPlugin.files.css) { %>
             <link rel="preload" href="<%= cssFilePath %>" as="style">
         <% } %>
-        <!-- CDN_CSS -->
-        <!-- SKELETON_STYLE -->
     </head>
     <body>
-        <div id="app">
-            <!-- SKELETON_HTML -->
-        </div>
-
-        <!-- CDN_JS -->
+        <div id="app"></div>
         <!-- built files will be auto injected -->
     </body>
 </html>

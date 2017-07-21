@@ -1,117 +1,188 @@
 <template>
     <div class="home-wrapper">
-        <div class="news-wrapper">
-
+        <menu-tabs class="menu-tabs"></menu-tabs>
+        <div
+            class="content-wrapper"
+            ref="contentWrapper">
             <!-- 轮播banner组件 -->
-            <ui-carousel :items="bannerList"></ui-carousel>
+<!--             <carousel
+                v-if="bannerList.length > 0"
+                :interval=3500
+                :list="bannerList">
+            </carousel> -->
             <!-- 列表部分list组件 -->
-            <home-news-list :newsList='topicList'></home-news-list>
-
-            <home-news-list :newsList='newsList'></home-news-list>
-            <infinite-loading :on-infinite="getMoreNews" ref="infiniteLoading">
+            <home-news-list
+                :newsList='newsList'
+                :lastListLen="lastListLen"
+                :needTransition="!listFromCache">
+            </home-news-list>
+            <b-loading :show="showLoading"></b-loading>
+            <!-- 收藏夹组件 -->
+            <infinite-loading v-if="!showLoading"
+                spinner="spiral"
+                :on-infinite="getMoreNews"
+                ref="infiniteLoading">
                 <span slot="no-more">
-                  没有更多了！
+                  亲，已经拉到底啦
                 </span>
             </infinite-loading>
         </div>
+        <news-favor-list
+            :list='newsFavorList' :show="newsFavorListShow"
+            @hide-favorList="hideFavorList">
+        </news-favor-list>
+        <preview
+            :show="preview.show"
+            :imageList="preview.images"
+            :index="preview.index"
+            @click-close="closePreview">
+        </preview>
     </div>
 </template>
 
 <script>
-import HomeNewsList from '@/components/HomeNewsList.vue';
-import {mapGetters, mapActions} from 'vuex';
-import pageLoadingMixin from '@/mixins/pageLoadingMixin';
-import uiCarousel from '@/components/ui/carousel';
+import {mapActions, mapGetters} from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
+import MenuTabs from '@/components/MenuTabs.vue';
+import Carousel from '@/components/Carousel.vue';
+import HomeNewsList from '@/components/HomeNewsList.vue';
+import NewsFavorList from '@/components/NewsFavorList.vue';
+import EventBus from '@/event-bus';
+import Preview from '@/components/Preview.vue';
+import BLoading from '@/components/BLoading.vue';
 
 export default {
     name: 'home',
-    mixins: [pageLoadingMixin],
-    props: {
+    props: {},
+    data() {
+        return {
+            newsFavorListShow: false,
+            scrollTops: {},
+            showLoading: true
+        };
     },
     components: {
-        uiCarousel,
         HomeNewsList,
-        InfiniteLoading
+        InfiniteLoading,
+        MenuTabs,
+        Carousel,
+        NewsFavorList,
+        Preview,
+        BLoading
+    },
+    methods: {
+        ...mapActions('appShell/appHeader', [
+            'setAppHeader'
+        ]),
+        ...mapActions('appShell/appBottomNavigator', [
+            'showBottomNav',
+            'activateBottomNav'
+        ]),
+        ...mapActions('appShell/appSidebar', [
+            'disableSwipeOut',
+            'enableSwipeOut'
+        ]),
+        ...mapActions([
+            'getNewsList',
+            'getNewsFavorList',
+            'closePreview'
+        ]),
+        async getMoreNews() {
+            await this.getNewsList(this.category);
+            setTimeout(() => this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded), 100);
+        },
+        hideFavorList() {
+            this.newsFavorListShow = false;
+        }
     },
     computed: {
         ...mapGetters([
-            'newsList',
-            'topicList',
-            'bannerList',
             'category',
-            'loaded'
-        ])
-    },
-
-    data() {
-        return {
-            path: '/'
-        };
-    },
-    methods: {
-        ...mapActions([
-            'setPageLoading',
-            'setAppHeader',
-            'getNewsList',
-            'showMenuTabs',
-            'checkTabCategory'
+            'listFromCache',
+            'loaded',
+            'data',
+            'lastListLen',
+            'menuTabs',
+            'newsFavorList',
+            'preview'
         ]),
-        async getMoreNews() {
-            const category = this.$route.query.category || 'remen';
-            await this.getNewsList({
-                category: category,
-                change: false,
-                pageNum: Math.floor(this.newsList.length / 20),
-                pageSize: 20
-            });
-            this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded);
+        newsList() {
+            if (!this.data[this.category]) {
+                this.showLoading = true;
+                return [];
+            }
+
+            this.showLoading = false;
+            return this.data[this.category].news;
         }
     },
     watch: {
-        async category(newC, oldC) {
-            if (!oldC) {
-                return;
-            }
-            await this.getNewsList({
-                category: this.category,
-                change: true,
-                pageNum: 0,
-                pageSize: 20
-            });
-            this.setPageLoading(false);
-
+        category(val, old) {
+            this.scrollTops[old] = this.$refs.contentWrapper.scrollTop;
         }
+    },
+    updated(data) {
+        if (this.listFromCache) {
+            this.$refs.contentWrapper.scrollTop = this.scrollTops[this.category];
+        }
+    },
+    async asyncData({store, route}) {
+        let category = route.params.category || 'remen';
+        await store.dispatch('selectTab', category);
+        store.dispatch('getNewsFavorList');
     },
     activated() {
         this.setAppHeader({
             show: true,
-            title: '',
-            showMenu: false,
+            title: '百度新闻',
+            showMenu: true,
             showBack: false,
-            showLogo: true,
+            showLogo: false,
             actions: [
                 {
                     icon: 'search',
                     route: '/search'
-                },
-                {
-                    icon: 'person',
-                    route: '/user'
                 }
             ]
         });
-        this.setPageLoading(false);
-        this.showMenuTabs();
-        this.checkTabCategory(this.$route.query.category || 'remen');
-        if (this.category === 'remen') {
-            this.getMoreNews();
-        }
+
+        this.enableSwipeOut();
+        this.$refs.contentWrapper.scrollTop = this.scrollTops[this.category];
+    },
+    deactivated() {
+        this.disableSwipeOut();
+        this.scrollTops[this.category] = this.$refs.contentWrapper.scrollTop;
+    },
+    created() {
+        EventBus.$on('app-header:click-favor', () => {
+            this.newsFavorListShow = true;
+        });
     }
 };
 </script>
 
 <style lang="stylus" scoped>
-.home-wrapper
-    margin-top 92px !important;
+
+.app-view
+    &.slide-right-enter-active
+    &.slide-left-leave-active
+        .menu-tabs
+            top 0
+
+.menu-tabs
+    position fixed !important
+    top $app-header-height
+    left 0
+    right 0
+
+.carousel
+    height 232px
+    width 100%
+
+.content-wrapper
+    padding-top: 40px
+
+// .loading-spiral
+//     border-color: $theme.primary !important
+
 </style>

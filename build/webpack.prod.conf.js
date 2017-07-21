@@ -1,34 +1,35 @@
-/* eslint-disable */
+/**
+ * @file 生产环境 webpack 配置文件
+ * @author huanghuiquan(huanghuiquanhhh@gmail.com)
+ */
 
-var path = require('path');
-var utils = require('./utils');
-var webpack = require('webpack');
-var config = require('../config');
-var merge = require('webpack-merge');
-var baseWebpackConfig = require('./webpack.base.conf');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
-var SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
-var ManifestWebpackPlugin = require('./plugins/manifest-webpack-plugin');
-var CdnWebpackPlugin = require('./plugins/cdn-webpack-plugin');
-var SwRegisterWebpackPlugin = require('sw-register-webpack-plugin');
-var MultiPathWebpackPlugin = require('multi-path-webpack-plugin');
+'use strict';
 
-var env = process.env.NODE_ENV === 'testing'
+const path = require('path');
+const utils = require('./utils');
+const webpack = require('webpack');
+const config = require('../config');
+const merge = require('webpack-merge');
+const baseWebpackConfig = require('./webpack.base.conf');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
+const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin');
+const SwRegisterWebpackPlugin = require('sw-register-webpack-plugin');
+const MultiPathWebpackPlugin = require('multi-path-webpack-plugin');
+
+let env = process.env.NODE_ENV === 'testing'
     ? require('../config/test.env')
     : config.build.env;
 
-var webpackConfig = merge(baseWebpackConfig, {
+let webpackConfig = merge(baseWebpackConfig, {
     module: {
         rules: utils.styleLoaders({
             sourceMap: config.build.productionSourceMap,
             extract: true
         })
-    },
-    externals: {
-        vue: 'Vue'
     },
     devtool: config.build.productionSourceMap ? '#source-map' : false,
     output: {
@@ -37,6 +38,7 @@ var webpackConfig = merge(baseWebpackConfig, {
         chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
     },
     plugins: [
+
         // http://vuejs.github.io/vue-loader/en/workflow/production.html
         new webpack.DefinePlugin({
             'process.env': env
@@ -62,11 +64,8 @@ var webpackConfig = merge(baseWebpackConfig, {
             }
         }),
 
-        // add cdn in index.html
-        new CdnWebpackPlugin({
-            js: {
-                vue: 'https://cdn.bootcss.com/vue/2.3.3/vue.min.js'
-            }
+        new SkeletonWebpackPlugin({
+            webpackConfig: require('./webpack.skeleton.conf')
         }),
 
         // generate dist index.html with correct asset hash for caching.
@@ -82,12 +81,11 @@ var webpackConfig = merge(baseWebpackConfig, {
                 removeComments: true,
                 collapseWhitespace: true,
                 removeAttributeQuotes: true
+
                 // more options:
                 // https://github.com/kangax/html-minifier#options-quick-reference
             },
             favicon: utils.assetsPath('img/icons/favicon.ico'),
-            // exclude skeleton chunk
-            excludeChunks: ['skeleton'],
             // necessary to consistently work with multiple chunks via CommonsChunkPlugin
             chunksSortMode: 'dependency'
         }),
@@ -107,11 +105,23 @@ var webpackConfig = merge(baseWebpackConfig, {
             }
         }),
 
+        // split vue, vue-router and vuex into vue chunk
+        new webpack.optimize.CommonsChunkPlugin({
+            name: 'vue',
+            minChunks: function (module, count) {
+                let context = module.context;
+                let targets = ['vue', 'vue-router', 'vuex'];
+                return context
+                    && context.indexOf('node_modules') >= 0
+                    && targets.find(t => new RegExp('/' + t + '/', 'i').test(context));
+            }
+        }),
+
         // extract webpack runtime and module manifest to its own file in order to
         // prevent vendor hash from being updated whenever app bundle is updated
         new webpack.optimize.CommonsChunkPlugin({
             name: 'manifest',
-            chunks: ['vendor']
+            chunks: ['vue']
         }),
 
         // copy custom static assets
@@ -125,24 +135,15 @@ var webpackConfig = merge(baseWebpackConfig, {
 
         // service worker caching
         new SWPrecacheWebpackPlugin(config.swPrecache.build),
-
-        // generate manifest.json, include theme
-        new ManifestWebpackPlugin(Object.assign(config.manifest, {
-            fileName: utils.assetsPath(config.manifest.fileName)
-        }, config.theme.manifest)),
-
         new SwRegisterWebpackPlugin({
-            filePath: path.resolve(__dirname, '../src/service-worker.js')
+            filePath: path.resolve(__dirname, '../src/sw-register.js')
         }),
-
-        new MultiPathWebpackPlugin({
-            ignore: []
-        })
+        new MultiPathWebpackPlugin({})
     ]
 });
 
 if (config.build.productionGzip) {
-    var CompressionWebpackPlugin = require('compression-webpack-plugin');
+    let CompressionWebpackPlugin = require('compression-webpack-plugin');
 
     webpackConfig.plugins.push(
         new CompressionWebpackPlugin({
@@ -160,7 +161,7 @@ if (config.build.productionGzip) {
 }
 
 if (config.build.bundleAnalyzerReport) {
-    var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+    let BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
     webpackConfig.plugins.push(new BundleAnalyzerPlugin());
 }
 

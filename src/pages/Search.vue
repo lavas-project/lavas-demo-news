@@ -1,172 +1,117 @@
 <template>
     <div class="app-search-page">
         <header>
-            <v-btn light icon @click.native="$router.go(-1)">
-                <v-icon>arrow_back</v-icon>
+            <v-btn light icon class="search-btn" @click.native="clearAndGo">
+                <v-icon class="search-icon">arrow_back</v-icon>
             </v-btn>
-            <morph-search
-                class="search-wrapper"
-                :history="searchHistory"
-                @search="handleSearch"
-                @delete-history="handleDeleteHistory"></morph-search>
+            <form @submit.prevent="search">
+                <input class="search-input" v-model="query" type="search" autocomplete="off" placeholder="请输入搜索词" autocapitalize="off" />
+            </form>
+            <v-btn light icon class="search-btn" @click.native="query = ''">
+                <v-icon class="search-icon">close</v-icon>
+            </v-btn>
         </header>
+        <div v-if="loading" class="search-loading">
+            <v-progress-circular indeterminate :size="40" class="primary--text"></v-progress-circular>
+        </div>
 
-        <div class="result-wrapper">
-            <transition name="slide-left">
-                <v-card class="result-card" v-show="searchResult && searchResult.length">
-                    <v-card-row class="blue darken-4">
-                        <v-card-title>
-                            <v-icon class="red--text text--lighten-1">search</v-icon>
-                            <span class="white--text">“{{lastQuery}}”的搜索结果</span>
-                        </v-card-title>
-                    </v-card-row>
-                    <v-card-text>
-                        <v-list two-line>
-                            <v-list-item v-for="(item, index) in searchResult" v-bind:key="index">
-                                <v-list-tile avatar ripple>
-                                    <v-list-tile-content>
-                                        <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                                        <v-list-tile-sub-title class="grey--text text--darken-4">{{ item.abs }}</v-list-tile-sub-title>
-                                    </v-list-tile-content>
-                                    <v-list-tile-action>
-                                        <v-list-tile-action-text class="news-date">{{ item.ts | formatDateToNow }}</v-list-tile-action-text>
-                                        <v-icon class="grey--text text--lighten-1">star_border</v-icon>
-                                    </v-list-tile-action>
-                                </v-list-tile>
-                            </v-list-item>
-                        </v-list>
-                    </v-card-text>
-                </v-card>
-            </transition>
-
-            <v-card class="result-card">
-                <v-card-row class="blue darken-4">
-                    <v-card-title>
-                        <v-icon class="red--text text--lighten-1">whatshot</v-icon>
-                        <span class="white--text">热搜榜</span>
-                    </v-card-title>
-                </v-card-row>
-                <v-card-text>
-                    <v-list two-line v-show="hotNews && hotNews.length">
-                        <v-list-item v-for="(item, index) in hotNews" v-bind:key="index">
-                            <v-list-tile avatar ripple>
-                                <v-list-tile-content>
-                                    <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                                    <v-list-tile-sub-title class="grey--text text--darken-4">{{ item.abs }}</v-list-tile-sub-title>
-                                </v-list-tile-content>
-                                <v-list-tile-action>
-                                    <v-list-tile-action-text class="news-date">{{ item.ts | formatDateToNow }}</v-list-tile-action-text>
-                                    <v-icon class="grey--text text--lighten-1">star_border</v-icon>
-                                </v-list-tile-action>
-                            </v-list-tile>
-                        </v-list-item>
-                    </v-list>
-                </v-card-text>
-            </v-card>
+        <div v-if="searchResultData && searchResultData.length" class="search-content">
+            <news-item v-for="(newsItem, i) in searchResultData"
+                :newsItem="newsItem"
+                :key="newsItem.nid"
+                :data-index="i">
+            </news-item>
         </div>
     </div>
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
-import pageLoadingMixin from '@/mixins/pageLoadingMixin';
-import MorphSearch from '@/components/MorphSearch';
+import {mapActions, mapGetters} from 'vuex';
+import NewsItem from '../components/NewsItem.vue';
 
 export default {
     name: 'search',
-    components: {
-        MorphSearch
-    },
-    mixins: [pageLoadingMixin],
-    computed: {
-        ...mapGetters([
-            'hotNews',
-            'searchHistory',
-            'searchResult'
-        ])
-    },
     data() {
         return {
-            lastQuery: ''
+            query: '',
+            loading: false,
+            data: []
         };
     },
+    components: {
+        NewsItem
+    },
+    computed: {
+        ...mapGetters([
+            'searchResultData'
+        ])
+    },
     methods: {
-        ...mapActions([
-            'setPageLoading',
-            'setAppHeader',
-            'getHotNews',
-            'searchNews',
-            'deleteQueryHistory',
-            'hideMenuTabs'
+        ...mapActions('appShell/appHeader', [
+            'setAppHeader'
         ]),
-        async handleSearch(query) {
-            this.setPageLoading(true);
-            await this.searchNews(query);
-            this.lastQuery = query;
-            this.setPageLoading(false);
+        ...mapActions([
+            'getSearchResult'
+        ]),
+        async search() {
+
+            // 显示加载动画
+            this.loading = true;
+
+            // 让当前输入框失去焦点
+            this.$el.querySelector('.search-input').blur();
+
+            // 获取数据
+            await this.$store.dispatch('getSearchResult', this.query);
+
+            this.loading = false;
         },
-        handleDeleteHistory(historyItem) {
-            this.deleteQueryHistory(historyItem);
+        clearAndGo() {
+            this.$router.go(-1);
+            this.query = '';
         }
     },
     activated() {
         this.setAppHeader({show: false});
-        this.setPageLoading(false);
-        this.hideMenuTabs();
-    },
-    async mounted() {
-        await this.getHotNews();
+
+        if (this.query.length === 0) {
+            this.$store.dispatch('clearSearchResult');
+        }
     }
 };
 </script>
 
 <style lang="stylus" scoped>
 
-.app-search-page
-    background #eee !important
+header
+    display flex
+    align-items center
+    height 52px
+    box-shadow 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px rgba(0,0,0,.14), 0 1px 10px rgba(0,0,0,.12)
+    position: fixed
+    top: 0
+    background: #fff
 
-    header
-        display flex
-        align-items center
-        height $app-header-height
-        background: $theme.primary
-        box-shadow 0 2px 4px -1px rgba(0,0,0,.2), 0 4px 5px rgba(0,0,0,.14), 0 1px 10px rgba(0,0,0,.12)
+form
+    flex 1
 
-        .search-wrapper
-            flex 1
+.search-input
+    width 100%
+    outline none
+    font-size 16px
+    height 50px
 
-    .result-wrapper
-        padding 6px
+.search-btn
+    color #959595
 
-        .result-card
-            background: $material-theme.bg-color
-            margin-bottom 6px
-            transition transform 0.2s ease-in-out
-            transform translate3d(0,0,0)
+.search-content
+    margin-top: 52px
 
-            &.slide-left-enter
-                transform translate(100%, 0)
+.search-loading
+    margin-top 30%
+    display flex
+    justify-content center
 
-            &.slide-right-enter
-                transform translate(-100%, 0)
-
-            &.slide-right-leave-active
-                transform translate(100%, 0)
-
-            &.slide-left-leave-active
-                transform translate(-100%, 0)
-
-            .card__row
-                height $app-header-height
-                .card__title
-                    font-size 16px
-                    padding 12px 16px
-            .card__text
-                padding 0
-
-                .news-date
-                    text-align right
-                    white-space normal
-
-
+li
+    list-style-type none
 </style>
