@@ -1,6 +1,8 @@
 <template>
     <div class="home-wrapper">
-        <menu-tabs class="menu-tabs"></menu-tabs>
+        <!-- <div class="menu-tabs-wrapper" :style="{top: menuTabsTop + 'px'}"> -->
+            <!-- <menu-tabs class="menu-tabs"></menu-tabs> -->
+        <!-- </div> -->
         <div
             class="content-wrapper"
             ref="contentWrapper">
@@ -41,7 +43,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex';
+import {mapActions, mapGetters, mapState} from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
 import MenuTabs from '@/components/MenuTabs.vue';
 import Carousel from '@/components/Carousel.vue';
@@ -51,6 +53,8 @@ import EventBus from '@/event-bus';
 import Preview from '@/components/Preview.vue';
 import BLoading from '@/components/BLoading.vue';
 
+const APP_HEADER_HEIGHT = 52;
+
 export default {
     name: 'home',
     props: {},
@@ -58,7 +62,8 @@ export default {
         return {
             newsFavorListShow: false,
             scrollTops: {},
-            showLoading: true
+            showLoading: true,
+            menuTabsTop: APP_HEADER_HEIGHT
         };
     },
     components: {
@@ -105,6 +110,9 @@ export default {
             'menuTabs',
             'newsFavorList',
             'preview'
+        ]),
+        ...mapState('appShell', [
+            'historyPageScrollTop'
         ]),
         newsList() {
             if (!this.data[this.category]) {
@@ -157,30 +165,39 @@ export default {
         EventBus.$on('app-header:click-favor', () => {
             this.newsFavorListShow = true;
         });
+        /**
+         * 即将离开当前页面，切换动画开始前，设置 menu-tabs 定位
+         * 动画时 fixed 定位会表现出 absolute
+         */
+        // EventBus.$on('transition:before-leave', () => {
+        //     console.log('transition leave....');
+        //     this.menuTabsTop = this.historyPageScrollTop[this.$route.fullPath];
+        // });
     }
 };
 </script>
 
 <style lang="stylus" scoped>
 
-.app-view
-    &.slide-right-enter-active
-    &.slide-left-leave-active
-        .menu-tabs
-            top 0
+// .app-view
+//     &.slide-right-enter-active
+//     &.slide-left-leave-active
+//         .menu-tabs
+//             top 0
 
 .menu-tabs
     position fixed !important
     top $app-header-height
     left 0
     right 0
+    z-index 3
 
 .carousel
     height 232px
     width 100%
 
 .content-wrapper
-    padding-top: 40px
+    // padding-top: 40px
 
 // .loading-spiral
 //     border-color: $theme.primary !important

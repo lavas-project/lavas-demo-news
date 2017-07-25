@@ -46,6 +46,7 @@
 
 <script>
 
+import EventBus from '@/event-bus';
 import {mapState, mapActions, mapGetters} from 'vuex';
 import AppHeader from '@/components/AppHeader';
 import AppSidebar from '@/components/AppSidebar';
@@ -60,7 +61,8 @@ export default {
         ...mapState('appShell', [
             'appHeader',
             'appSidebar',
-            'pageTransitionName'
+            'pageTransitionName',
+            'historyPageScrollTop'
         ]),
         ...mapGetters([
             'previewShow'
@@ -79,8 +81,14 @@ export default {
         },
         handleAfterEnter(el) {
             this.setPageSwitching(false);
+            let $wrapper = document.querySelector('.app-view-wrapper');
+            $wrapper.style.top = '52px';
+            // 动画结束，恢复 body 上的滚动距离
             el.classList.remove('enable-scroll');
-            window.scrollTo(0, el.dataset.scrollTop || 0);
+            let scrollTop = this.historyPageScrollTop[this.$route.fullPath];
+            this.$nextTick(() => {
+                window.scrollTo(0, scrollTop);
+            });
         },
         handleAfterLeave(el) {
             el.classList.remove('enable-scroll');
@@ -140,7 +148,6 @@ export default {
     font-family 'Avenir', Helvetica, Arial, sans-serif
     -webkit-font-smoothing antialiased
     -moz-osx-font-smoothing grayscale
-    // text-align center
     color #2c3e50
     height: 100%
 
@@ -150,11 +157,11 @@ export default {
 .app-shell
     position absolute
     top 0
-    right 0
     bottom 0
     left 0
-    width 100%
+    right 0
     height 100%
+    width 100%
     display flex
     flex-direction column
 
@@ -172,7 +179,7 @@ export default {
         left 0
         right 0
         bottom 0
-        
+
         &.app-view-with-header
             top $app-header-height
 
@@ -182,8 +189,8 @@ export default {
         .app-view
             position absolute
             top 0
-            right 0
             left 0
+            right 0
             transition transform 0.4s cubic-bezier(.55, 0, .1, 1)
             background: $material-theme.bg-color
             color: $material-theme.text-color
@@ -208,6 +215,14 @@ export default {
             &.slide-left-leave-to
                 transform translate(-100%, 0)
                 
+            &.slide-left-enter-active,
+            &.slide-left-leave-active,
+            &.slide-right-enter-active,
+            &.slide-right-leave-active
+                overflow-y auto
+                bottom 0
+                
             &.enable-scroll
                 overflow-y auto
+                bottom 0
 </style>
