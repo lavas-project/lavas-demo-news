@@ -1,8 +1,8 @@
 <template>
     <div class="home-wrapper">
-        <!-- <div class="menu-tabs-wrapper" :style="{top: menuTabsTop + 'px'}"> -->
-            <!-- <menu-tabs class="menu-tabs"></menu-tabs> -->
-        <!-- </div> -->
+        <div class="menu-tabs-wrapper" :style="{top: menuTabsTop + 'px'}">
+            <menu-tabs class="menu-tabs"></menu-tabs>
+        </div>
         <div
             class="content-wrapper"
             ref="contentWrapper">
@@ -62,8 +62,7 @@ export default {
         return {
             newsFavorListShow: false,
             scrollTops: {},
-            showLoading: true,
-            menuTabsTop: APP_HEADER_HEIGHT
+            showLoading: true
         };
     },
     components: {
@@ -112,7 +111,11 @@ export default {
             'preview'
         ]),
         ...mapState('appShell', [
-            'historyPageScrollTop'
+            'historyPageScrollTop',
+            'isPageSwitching'
+        ]),
+        ...mapState('route', [
+            'from'
         ]),
         newsList() {
             if (!this.data[this.category]) {
@@ -122,6 +125,14 @@ export default {
 
             this.showLoading = false;
             return this.data[this.category].news;
+        },
+        menuTabsTop() {
+            /**
+             * https://stackoverflow.com/a/37953806
+             * 切换动画时，由于父元素应用transform，子元素fixed定位实效，会表现地像absolute
+             * 因此需要设置top为之前保存的滚动距离
+             */
+            return this.isPageSwitching ? this.historyPageScrollTop['/'] : APP_HEADER_HEIGHT;
         }
     },
     watch: {
@@ -165,29 +176,14 @@ export default {
         EventBus.$on('app-header:click-favor', () => {
             this.newsFavorListShow = true;
         });
-        /**
-         * 即将离开当前页面，切换动画开始前，设置 menu-tabs 定位
-         * 动画时 fixed 定位会表现出 absolute
-         */
-        // EventBus.$on('transition:before-leave', () => {
-        //     console.log('transition leave....');
-        //     this.menuTabsTop = this.historyPageScrollTop[this.$route.fullPath];
-        // });
     }
 };
 </script>
 
 <style lang="stylus" scoped>
 
-// .app-view
-//     &.slide-right-enter-active
-//     &.slide-left-leave-active
-//         .menu-tabs
-//             top 0
-
-.menu-tabs
-    position fixed !important
-    top $app-header-height
+.menu-tabs-wrapper
+    position fixed
     left 0
     right 0
     z-index 3
@@ -197,7 +193,7 @@ export default {
     width 100%
 
 .content-wrapper
-    // padding-top: 40px
+    padding-top: 40px
 
 // .loading-spiral
 //     border-color: $theme.primary !important

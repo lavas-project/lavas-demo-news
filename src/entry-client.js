@@ -21,9 +21,9 @@ let firstPaint = true;
  * https://developers.google.com/web/updates/2015/09/history-api-scroll-restoration
  * 关闭浏览器存储滚动距离默认行为
  */
-// if ('scrollRestoration' in window.history) {
-//     window.history.scrollRestoration = 'manual';
-// }
+if ('scrollRestoration' in window.history) {
+    window.history.scrollRestoration = 'manual';
+}
 
 Vue.mixin({
 
@@ -56,29 +56,21 @@ Vue.mixin({
             }
             let $el = vm.$el;
             // 滚动内部页面到之前保存的位置
-            let scrollTop = vm.$store.state.appShell.historyPageScrollTop[to.fullPath] || 0;
+            let scrollTop = vm.$store.state.appShell.historyPageScrollTop[to.path] || 0;
             $el.classList.add('enable-scroll');
             $el.scrollTop = scrollTop;
         });
     },
 
     beforeRouteLeave(to, from, next) {
-        let $wrapper = document.querySelector('.app-view-wrapper');
         let $el = this.$el;
         // 取得当前 body 上的滚动距离
         let scrollTop = window.scrollY || 0;
-        let wrapperStyle = window.getComputedStyle($wrapper);
-        let wrapperHeight = wrapperStyle.height;
-        // 取得 wrapper 初始上边距
-        let originalScrollTop = Number(wrapperStyle.top.replace('px', ''));
-        // 移动 wrapper 到指定位置
-        $wrapper.style.top = `${scrollTop + originalScrollTop}px`;
-        $wrapper.style.height = wrapperHeight;
         // 滚动内部页面
         $el.classList.add('enable-scroll');
         $el.scrollTop = scrollTop;
         // 记录当前页面滚动位置
-        this.$store.dispatch('appShell/saveScrollTop', {path: from.fullPath, scrollTop});
+        this.$store.dispatch('appShell/saveScrollTop', {path: from.path, scrollTop});
         next();
     }
 });
