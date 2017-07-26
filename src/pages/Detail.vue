@@ -46,7 +46,7 @@ export default {
         Preview,
         BLoading,
         NewsItem,
-        Error,
+        Error
     },
 
     data() {
@@ -150,9 +150,9 @@ export default {
         });
     },
 
-    // async asyncData({store, route}) {
-    //     await store.dispatch('getDetail', {nid: route.params.nid});
-    // },
+    async asyncData({store, route}) {
+        await store.dispatch('getDetail', {nid: route.params.nid});
+    },
 
     async activated() {
         let nid = this.$route.params.nid;
@@ -172,7 +172,7 @@ export default {
         await this.$store.dispatch('getDetail', {nid});
         // await this.$store.dispatch('getNewsDetail', {nid: this.$route.params.nid});
         this.showLoading = false;
-        let relatedNewsData = await API.getNewsList({
+        let relatedNewsData = await API.getNewsData({
             nid,
             category: 'getbodyinfo',
             ver: 5

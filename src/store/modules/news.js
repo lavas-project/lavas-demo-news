@@ -98,7 +98,7 @@ export default {
     actions: {
         async getNewsList({commit, state}, category) {
             try {
-                let data = await API.getNewsList({category});
+                let data = await API.getNewsData({category});
                 commit(types.SET_LIST_FROM_CACHE, false);
                 commit(types.SET_NEWS_DATA, {category, data});
             }
@@ -117,7 +117,7 @@ export default {
             }
 
             try {
-                let data = await API.getNewsList({category});
+                let data = await API.getNewsData({category});
                 commit(types.SET_NEWS_DATA, {category, change: true, data});
             }
             catch (e) {
@@ -138,11 +138,11 @@ export default {
             }
             commit(types.SET_NEWS_DETAIL, list.find(item => item.nid === params.nid) || list[0]);
         },
-        [types.ADD_CATEGORY]({commit}, {value: category}) {
+        [types.ADD_CATEGORY]({commit}, {text: category}) {
             commit(types.ADD_CATEGORY, category);
         },
         [types.DEL_CATEGORY]({commit}, tabItem) {
-            commit(types.DEL_CATEGORY, tabItem.value);
+            commit(types.DEL_CATEGORY, tabItem.text);
         }
     },
     mutations: {
