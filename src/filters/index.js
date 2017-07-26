@@ -1,12 +1,13 @@
 /**
  * @file lavas news filter
- * @author mj(zoumiaojiang@gmail.com)
+ * @author huanghuiquan (huanghuiquanhhh@gmail.com)
  */
 
 export function formatDateToNow(date, now, isNews) {
     if (!now) {
         now = (new Date()).getTime();
     }
+
     date = Number(date);
 
     const diff = now - date;
@@ -14,6 +15,7 @@ export function formatDateToNow(date, now, isNews) {
     if (diff < 0) {
         return null;
     }
+
     // 0-60s
     if (diff < 60000) {
         return '刚刚';
@@ -28,10 +30,12 @@ export function formatDateToNow(date, now, isNews) {
     if (diff < 900000) {
         return Math.round(diff / 60000) + '分钟前';
     }
+
     // 16-30min
     if (diff < 1800000) {
         return '半小时前';
     }
+
     // 30-60min
     if (diff < 3600000) {
         return '1小时前';
@@ -42,15 +46,19 @@ export function formatDateToNow(date, now, isNews) {
         if (isNews) {
             return Math.floor(diff / 3600000) + '小时前';
         }
+
         return Math.ceil(diff / 3600000) + '小时前';
     }
+
     // 1d-4d
     if (diff < 345600000) {
         if (isNews) {
             return Math.floor(diff / 86400000) + '天前';
         }
+
         return Math.ceil(diff / 86400000) + '天前';
     }
+
     // > 4d
     date = new Date(date);
     now = new Date(now);

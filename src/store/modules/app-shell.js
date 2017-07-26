@@ -29,6 +29,13 @@ let state = {
     pageTransitionName: '',
 
     /**
+     * 是否要禁止滚动容器的overflow-scrolling-touch属性
+     *
+     * @type {boolean}
+     */
+    overflowScrollingTouch: false,
+
+    /**
      * 上个页面 scroll 的信息
      *
      * @type {Object}
@@ -75,6 +82,24 @@ let actions = {
      */
     saveScrollTop({commit}, {path, scrollTop}) {
         commit(types.SAVE_SCROLLTOP, {path, scrollTop});
+    },
+
+    /**
+     * 设置overflow-scroll为默认状态
+     *
+     * @param {Function} options.commit commit
+     */
+    disableOverflowScrollingTouch({commit}) {
+        commit(types.UPDATE_OVERFLOW_SCROLLING_TOUCH, false);
+    },
+
+    /**
+     * 设置overflow-scroll为touch
+     *
+     * @param {Function} options.commit commit
+     */
+    enableOverflowScrollingTouch({commit}) {
+        commit(types.UPDATE_OVERFLOW_SCROLLING_TOUCH, true);
     }
 };
 
@@ -87,6 +112,9 @@ let mutations = {
     },
     [types.SAVE_SCROLLTOP](state, {path, scrollTop}) {
         state.historyPageScrollTop[path] = scrollTop;
+    },
+    [types.UPDATE_OVERFLOW_SCROLLING_TOUCH](state, enable) {
+        state.overflowScrollingTouch = enable;
     }
 };
 

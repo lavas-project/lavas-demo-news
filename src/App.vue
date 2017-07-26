@@ -23,7 +23,7 @@
                             v-if="!$route.meta.notKeepAlive"
                             class="app-view"
                             :class="{
-                                'overflow-scrolling-touch': !previewShow
+                                'overflow-scrolling-touch': overflowScrollingTouch
                             }"></router-view>
                     </keep-alive>
                 </transition>
@@ -36,7 +36,7 @@
                         v-if="$route.meta.notKeepAlive"
                         class="app-view"
                         :class="{
-                            'overflow-scrolling-touch': !previewShow
+                            'overflow-scrolling-touch': overflowScrollingTouch
                         }"></router-view>
                 </transition>
             </div>
@@ -60,10 +60,8 @@ export default {
         ...mapState('appShell', [
             'appHeader',
             'appSidebar',
-            'pageTransitionName'
-        ]),
-        ...mapGetters([
-            'previewShow'
+            'pageTransitionName',
+            'overflowScrollingTouch'
         ])
     },
     methods: {
@@ -172,7 +170,7 @@ export default {
         left 0
         right 0
         bottom 0
-        
+
         &.app-view-with-header
             top $app-header-height
 
@@ -207,7 +205,7 @@ export default {
 
             &.slide-left-leave-to
                 transform translate(-100%, 0)
-                
+
             &.enable-scroll
                 overflow-y auto
 </style>

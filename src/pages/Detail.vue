@@ -14,7 +14,7 @@
             </div>
         </div>
 
-        <preview :show="previewShow" :imageList="imageList" @click-close="closePreview" :index="imgIndex"></preview>
+        <preview :show="previewShow" :imageList="imageList" @click-close="closePreview" :index="previewIndex"></preview>
     </div>
 </template>
 
@@ -32,14 +32,15 @@ export default {
     data() {
         return {
             imgIndex: 0,
-            scrollTop: 0
+            scrollTop: 0,
+            previewShow: false,
+            previewIndex: 0
         };
     },
     computed: {
         ...mapGetters([
             'newsDetail',
-            'detailPageFavorStatus',
-            'previewShow'
+            'detailPageFavorStatus'
         ]),
         detail() {
             return this.newsDetail || {};
@@ -49,10 +50,10 @@ export default {
         },
         imageList() {
             return this.contents
-            .filter(item => item.type === 'image')
-            .map(item => {
-                return {src: item.data.original.url};
-            });
+                .filter(item => item.type === 'image')
+                .map(item => {
+                    return {src: item.data.original.url};
+                });
         }
     },
     methods: {
@@ -67,8 +68,7 @@ export default {
             'addFavorItem',
             'removeFavorItem',
             'getNewsFavorList',
-            'isFavored',
-            'changePreviewShow'
+            'isFavored'
         ]),
         // 收藏
         addFavoriteItem() {
@@ -105,11 +105,13 @@ export default {
             this.setAppHeader({actions: [this.toggleAction]});
         },
         closePreview() {
-            this.changePreviewShow(false);
+            this.previewShow = false;
+            this.$store.dispatch('appShell/enableOverflowScrollingTouch');
         },
         preview(event) {
-            this.imgIndex = this.$refs.img.indexOf(event.target);
-            this.changePreviewShow(true);
+            this.previewIndex = this.$refs.img.indexOf(event.target);
+            this.previewShow = true;
+            this.$store.dispatch('appShell/disableOverflowScrollingTouch');
         }
     },
 
@@ -144,9 +146,7 @@ export default {
     },
     beforeRouteLeave(to, from, next) {
         next();
-        setTimeout(() => {
-            this.changePreviewShow(false);
-        }, 500);
+        setTimeout(() => this.closePreview(), 500);
     }
 };
 </script>

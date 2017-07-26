@@ -11,11 +11,11 @@
                 :list="bannerList">
             </carousel> -->
             <!-- 列表部分list组件 -->
-            <home-news-list
+            <news-list
                 :newsList='newsList'
                 :lastListLen="lastListLen"
                 :needTransition="!listFromCache">
-            </home-news-list>
+            </news-list>
             <b-loading :show="showLoading"></b-loading>
             <!-- 收藏夹组件 -->
             <infinite-loading v-if="!showLoading"
@@ -31,12 +31,6 @@
             :list='newsFavorList' :show="newsFavorListShow"
             @hide-favorList="hideFavorList">
         </news-favor-list>
-        <preview
-            :show="preview.show"
-            :imageList="preview.images"
-            :index="preview.index"
-            @click-close="closePreview">
-        </preview>
     </div>
 </template>
 
@@ -45,10 +39,9 @@ import {mapActions, mapGetters} from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
 import MenuTabs from '@/components/MenuTabs.vue';
 import Carousel from '@/components/Carousel.vue';
-import HomeNewsList from '@/components/HomeNewsList.vue';
+import NewsList from '@/components/NewsList.vue';
 import NewsFavorList from '@/components/NewsFavorList.vue';
 import EventBus from '@/event-bus';
-import Preview from '@/components/Preview.vue';
 import BLoading from '@/components/BLoading.vue';
 
 export default {
@@ -62,12 +55,11 @@ export default {
         };
     },
     components: {
-        HomeNewsList,
+        NewsList,
         InfiniteLoading,
         MenuTabs,
         Carousel,
         NewsFavorList,
-        Preview,
         BLoading
     },
     methods: {
@@ -84,8 +76,7 @@ export default {
         ]),
         ...mapActions([
             'getNewsList',
-            'getNewsFavorList',
-            'closePreview'
+            'getNewsFavorList'
         ]),
         async getMoreNews() {
             await this.getNewsList(this.category);
@@ -103,8 +94,7 @@ export default {
             'data',
             'lastListLen',
             'menuTabs',
-            'newsFavorList',
-            'preview'
+            'newsFavorList'
         ]),
         newsList() {
             if (!this.data[this.category]) {

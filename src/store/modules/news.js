@@ -92,14 +92,7 @@ export default {
         detailPageFavorStatus: false,
         lastListLen: 0,
         menuTabs,
-        preview: {
-            show: false,
-            images: [],
-            index: 0
-        },
-        otherMenuTabs,
-        searchResultData: [],
-        previewShow: false
+        otherMenuTabs
     },
     getters: {
         loaded(state) {
@@ -130,17 +123,8 @@ export default {
         detailPageFavorStatus(state) {
             return state.detailPageFavorStatus;
         },
-        preview(state) {
-            return state.preview;
-        },
         otherMenuTabs(state) {
             return state.otherMenuTabs;
-        },
-        searchResultData(state) {
-            return state.searchResultData;
-        },
-        previewShow(state) {
-            return state.previewShow;
         }
     },
     actions: {
@@ -155,13 +139,7 @@ export default {
             }
         },
 
-        /**
-         * 切换tab
-         *
-         * @param  {Commit} options.commit vuex commit
-         * @param  {State} options.state  vuex state
-         * @param  {string} category 类目
-         */
+        // 切换tab
         async selectTab({commit, state}, category) {
             commit(types.SET_NEWS_ACTIVE_TAB, category);
 
@@ -191,14 +169,6 @@ export default {
                 list = [...news, ...banner, ...topic];
             }
             commit(types.SET_NEWS_DETAIL, list.find(item => item.nid === params.nid) || list[0]);
-        },
-
-        async getSearchResult({commit}, query) {
-            let data = await API.getSearchResult({query});
-            commit(types.SET_SEARCH_RESULT, data);
-        },
-        clearSearchResult({commit}) {
-            commit(types.SET_SEARCH_RESULT, []);
         },
 
         // 收藏
@@ -250,21 +220,11 @@ export default {
             });
             commit(types.SET_NEWS_DETAIL_FAVOR_STATUS, favorList.length > 0);
         },
-        showPreview({commit, state}, item) {
-            let images = item.imageurls.map(image => ({src: image.url}));
-            commit(types.SET_PREVIEW_DATA, {show: true, images: images, index: item.index});
-        },
-        closePreview({commit, state}) {
-            commit(types.SET_PREVIEW_DATA, {show: false});
-        },
         [types.ADD_CATEGORY]({commit}, {value: category}) {
             commit(types.ADD_CATEGORY, category);
         },
         [types.DEL_CATEGORY]({commit}, tabItem) {
             commit(types.DEL_CATEGORY, tabItem.value);
-        },
-        changePreviewShow({commit}, previewShowValue) {
-            commit('changePreviewShow', previewShowValue);
         }
     },
     mutations: {
@@ -307,9 +267,6 @@ export default {
         [types.SET_NEWS_DETAIL_FAVOR_STATUS](state, status) {
             state.detailPageFavorStatus = status;
         },
-        [types.SET_PREVIEW_DATA](state, data) {
-            state.preview = Object.assign(state.preview, data);
-        },
         [types.DEL_CATEGORY](state, category) {
             state.menuTabs.forEach((item, index) => {
                 if (category === item.value) {
@@ -334,9 +291,6 @@ export default {
             data = data.filter(item => item.content.length).map(dataProcess);
 
             state.searchResultData = data;
-        },
-        changePreviewShow(state, value) {
-            state.previewShow = value;
         }
     }
 };
