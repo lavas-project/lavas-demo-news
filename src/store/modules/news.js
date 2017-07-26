@@ -8,45 +8,19 @@ import * as types from '../mutation-types';
 
 const menuTabsLocalDataKey = 'menuTabsLocalDataKey';
 const otherMenuTabsLocalDataKey = 'otherMenuTabsLocalDataKey';
-const defaultCategory = 'remen';
+const defaultCategory = '推荐';
 
-let menuTabs = [
-    {
-        text: '热点',
-        value: defaultCategory
-    },
-    {
-        text: '娱乐',
-        value: 'yule'
-    },
-    {
-        text: '体育',
-        value: 'tiyu'
-    },
-    {
-        text: '军事',
-        value: 'junshi'
-    },
-    {
-        text: '社会',
-        value: 'shehui'
-    }
-];
+let menuTabs = `${defaultCategory}|本地|娱乐|社会|军事|女人|互联网|科技|生活|国际|国内|体育|汽车`;
+menuTabs = handleMenuTabsOriginData(menuTabs);
 
-let otherMenuTabs = [
-    {
-        text: '汽车',
-        value: 'qiche'
-    },
-    {
-        text: '国内',
-        value: 'guonei'
-    },
-    {
-        text: '国际',
-        value: 'guoji'
-    }
-];
+let otherMenuTabs = '房产|财经|时尚|教育|游戏|旅游|人文|创意';
+otherMenuTabs = handleMenuTabsOriginData(otherMenuTabs);
+
+function handleMenuTabsOriginData(menuData) {
+    return menuData.split('|').map(item => {
+        return {text: item};
+    });
+}
 
 function setLocalMenuTabsData(menuTabsKey = menuTabsLocalDataKey, menuTabsData) {
     localStorage.setItem(menuTabsKey, JSON.stringify(menuTabsData));
@@ -103,7 +77,7 @@ export default {
         },
         category(state) {
             let activeTab = state.menuTabs.find(tab => tab.active);
-            return activeTab.value;
+            return activeTab.text;
         },
         newsDetail(state) {
             return state.newsDetail;
@@ -173,8 +147,11 @@ export default {
     },
     mutations: {
         [types.SET_NEWS_DATA](state, {data, category, change}) {
-            data.news = data.news.filter(item => item.content.length).map(dataProcess);
-            data.banner = data.banner.filter(item => item.content.length).map(dataProcess);
+            data.news = data.news.map(dataProcess);
+
+            if (data.banner) {
+                data.banner = data.banner.map(dataProcess);
+            }
 
             if (data.news && data.news.length) {
                 if (change) {
@@ -196,18 +173,15 @@ export default {
         [types.SET_LIST_FROM_CACHE](state, fromCache) {
             state.listFromCache = fromCache;
         },
-        [types.SET_NEWS_DETAIL](state, newsDetail) {
-            state.newsDetail = newsDetail;
-        },
         [types.SET_NEWS_ACTIVE_TAB](state, category) {
             state.menuTabs = state.menuTabs.map(item => {
-                item.active = category === item.value;
+                item.active = category === item.text;
                 return item;
             });
         },
         [types.DEL_CATEGORY](state, category) {
             state.menuTabs.forEach((item, index) => {
-                if (category === item.value) {
+                if (category === item.text) {
                     let deletedCategoryObj = state.menuTabs.splice(index, 1)[0];
                     state.otherMenuTabs.unshift(deletedCategoryObj);
                     setLocalMenuTabsData(otherMenuTabsLocalDataKey, state.otherMenuTabs);
@@ -217,7 +191,7 @@ export default {
         },
         [types.ADD_CATEGORY](state, category) {
             state.otherMenuTabs.forEach((item, index) => {
-                if (category === item.value) {
+                if (category === item.text) {
                     let deletedCategoryObj = state.otherMenuTabs.splice(index, 1)[0];
                     state.menuTabs.push(deletedCategoryObj);
                     setLocalMenuTabsData(menuTabsLocalDataKey, state.menuTabs);
@@ -226,7 +200,7 @@ export default {
             setLocalMenuTabsData(otherMenuTabsLocalDataKey, state.otherMenuTabs);
         },
         [types.SET_SEARCH_RESULT](state, data) {
-            data = data.filter(item => item.content.length).map(dataProcess);
+            data = data.map(dataProcess);
 
             state.searchResultData = data;
         }

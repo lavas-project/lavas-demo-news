@@ -1,7 +1,7 @@
 <template>
     <router-link :to="'/detail/' + newsItem.nid" class="news-item">
         <!-- 仅一张图时的样式 -->
-        <div v-if="newsItem.imageurls.length === 1"
+        <div v-if="newsItem.imageurls && newsItem.imageurls.length === 1"
             v-ripple="{class: 'grey--text'}"
             class="img-first news-content" >
             <div class="posts" v-if="newsItem.imageurls.length">
@@ -19,7 +19,7 @@
         </div>
 
         <!-- 非一张图时的样式 -->
-        <div v-if="newsItem.imageurls.length !== 1"
+        <div v-if="newsItem.imageurls && newsItem.imageurls.length !== 1"
             v-ripple="{class: 'grey--text'}"
             class="title-first news-content">
             <div class="list-item-title">{{newsItem.title}}</div>

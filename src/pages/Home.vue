@@ -1,6 +1,8 @@
 <template>
     <div class="home-wrapper">
-        <menu-tabs class="menu-tabs"></menu-tabs>
+        <div class="menu-tabs-wrapper" :style="{top: menuTabsTop + 'px'}">
+            <menu-tabs class="menu-tabs"></menu-tabs>
+        </div>
         <div
             class="content-wrapper"
             ref="contentWrapper">
@@ -30,12 +32,14 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex';
+import {mapActions, mapGetters, mapState} from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
 import MenuTabs from '@/components/MenuTabs.vue';
 import Carousel from '@/components/Carousel.vue';
 import NewsList from '@/components/NewsList.vue';
 import BLoading from '@/components/BLoading.vue';
+
+const APP_HEADER_HEIGHT = 52;
 
 export default {
     name: 'home',
@@ -83,6 +87,13 @@ export default {
             'lastListLen',
             'menuTabs'
         ]),
+        ...mapState('appShell', [
+            'historyPageScrollTop',
+            'isPageSwitching'
+        ]),
+        ...mapState('route', [
+            'from'
+        ]),
         newsList() {
             if (!this.data[this.category]) {
                 this.showLoading = true;
@@ -91,6 +102,14 @@ export default {
 
             this.showLoading = false;
             return this.data[this.category].news;
+        },
+        menuTabsTop() {
+            /**
+             * https://stackoverflow.com/a/37953806
+             * 切换动画时，由于父元素应用transform，子元素fixed定位实效，会表现地像absolute
+             * 因此需要设置top为之前保存的滚动距离
+             */
+            return this.isPageSwitching ? this.historyPageScrollTop['/'] : APP_HEADER_HEIGHT;
         }
     },
     watch: {
@@ -104,7 +123,7 @@ export default {
         }
     },
     async asyncData({store, route}) {
-        let category = route.params.category || 'remen';
+        let category = route.params.category || '推荐';
         await store.dispatch('selectTab', category);
     },
     activated() {
@@ -134,17 +153,11 @@ export default {
 
 <style lang="stylus" scoped>
 
-.app-view
-    &.slide-right-enter-active
-    &.slide-left-leave-active
-        .menu-tabs
-            top 0
-
-.menu-tabs
-    position fixed !important
-    top $app-header-height
+.menu-tabs-wrapper
+    position fixed
     left 0
     right 0
+    z-index 3
 
 .carousel
     height 232px

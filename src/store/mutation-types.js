@@ -16,7 +16,11 @@ export const SET_SIDEBAR_VISIBILITY = 'SET_SIDEBAR_VISIBILITY';
 export const SAVE_SCROLLTOP = 'SAVE_SCROLLTOP';
 export const SET_SWIPE_OUT = 'SET_SWIPE_OUT';
 export const UPDATE_OVERFLOW_SCROLLING_TOUCH = 'UPDATE_OVERFLOW_SCROLLING_TOUCH';
+<<<<<<< HEAD
 export const SET_USER_INFO = 'SET_USER_INFO';
+=======
+export const UPDATE_SWIPE_BACK = 'UPDATE_SWIPE_BACK';
+>>>>>>> b362b98a7e91f91fa811b12efb7085d152b450d3
 
 // home
 export const SET_NEWS_DATA = 'SET_NEWS_DATA';
@@ -36,6 +40,11 @@ export const SET_SEARCH_RESULT = 'SET_SEARCH_RESULT';
 // search
 export const UPDATE_RESULT = 'UPDATE_RESULT';
 
+<<<<<<< HEAD
 // favor
 export const SET_NEWS_FAVOR_LIST = 'SET_NEWS_FAVOR_LIST';
 export const SET_NEWS_DETAIL_FAVOR_STATUS = 'SET_NEWS_DETAIL_FAVOR_STATUS';
+=======
+// detail
+export const UPDATE_DETAIL = 'UPDATE_DETAIL';
+>>>>>>> b362b98a7e91f91fa811b12efb7085d152b450d3

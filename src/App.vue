@@ -46,7 +46,7 @@
 
 <script>
 
-import {mapState, mapActions, mapGetters} from 'vuex';
+import {mapState, mapActions} from 'vuex';
 import AppHeader from '@/components/AppHeader';
 import AppSidebar from '@/components/AppSidebar';
 
@@ -61,7 +61,9 @@ export default {
             'appHeader',
             'appSidebar',
             'pageTransitionName',
-            'overflowScrollingTouch'
+            'overflowScrollingTouch',
+            'enableSwipeBack',
+            'historyPageScrollTop'
         ])
     },
     methods: {
@@ -76,12 +78,14 @@ export default {
             this.setPageSwitching(true);
         },
         handleAfterEnter(el) {
-            this.setPageSwitching(false);
+            // 动画结束，恢复 body 上的滚动距离
             el.classList.remove('enable-scroll');
-            window.scrollTo(0, el.dataset.scrollTop || 0);
+            let scrollTop = this.historyPageScrollTop[this.$route.path];
+            window.scrollTo(0, scrollTop);
         },
         handleAfterLeave(el) {
             el.classList.remove('enable-scroll');
+            this.setPageSwitching(false);
         },
         handleClickHeaderBack() {
             this.$router.go(-1);
@@ -113,8 +117,7 @@ export default {
             // 首页不能继续后退
             if (touchMoveX > minOffset
                 && Math.abs(touchMoveY) < minOffset
-                && this.$router.currentRoute.path !== '/'
-                && !this.previewShow
+                && this.enableSwipeBack
             ) {
                 this.$router.go(-1);
             }
@@ -138,7 +141,6 @@ export default {
     font-family 'Avenir', Helvetica, Arial, sans-serif
     -webkit-font-smoothing antialiased
     -moz-osx-font-smoothing grayscale
-    // text-align center
     color #2c3e50
     height: 100%
 
@@ -148,13 +150,11 @@ export default {
 .app-shell
     position absolute
     top 0
-    right 0
     bottom 0
     left 0
-    width 100%
+    right 0
     height 100%
-    display flex
-    flex-direction column
+    width 100%
 
     .app-shell-header
         position fixed
@@ -164,7 +164,6 @@ export default {
         z-index: 100
 
     .app-view-wrapper
-        flex 1
         position absolute
         top 0
         left 0
@@ -178,10 +177,7 @@ export default {
             bottom $app-footer-height
 
         .app-view
-            position absolute
-            top 0
-            right 0
-            left 0
+            // transform translate(0, 0)
             transition transform 0.4s cubic-bezier(.55, 0, .1, 1)
             background: $material-theme.bg-color
             color: $material-theme.text-color
@@ -200,12 +196,28 @@ export default {
             &.slide-right-enter
                 transform translate(-100%, 0)
 
-            &.slide-right-leave-to
+            &.slide-right-leave-active
                 transform translate(100%, 0)
 
-            &.slide-left-leave-to
+            &.slide-left-leave-active
                 transform translate(-100%, 0)
 
-            &.enable-scroll
+            &.slide-left-enter-active,
+            &.slide-left-leave-active,
+            &.slide-right-enter-active,
+            &.slide-right-leave-active
+                position absolute
+                top 0
+                left 0
+                right 0
                 overflow-y auto
+                bottom 0
+
+            &.enable-scroll
+                position absolute
+                top 0
+                left 0
+                right 0
+                overflow-y auto
+                bottom 0
 </style>

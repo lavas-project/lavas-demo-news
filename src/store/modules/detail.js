@@ -15,8 +15,9 @@ export default {
     actions: {
         // get detail
         async getDetail({commit}, query) {
-            // todo
-            // commit(types.UPDATE_DETAIL, );
+            commit(types.UPDATE_DETAIL, {});
+            let data = await API.getNewsList({nids: query.nid});
+            commit(types.UPDATE_DETAIL, data.news[0]);
         }
     },
 
