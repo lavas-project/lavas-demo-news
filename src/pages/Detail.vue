@@ -1,5 +1,6 @@
 <template>
     <div class="news-detail-wrapper">
+        <b-loading :show="showLoading"></b-loading>
         <h3>{{detail.title}}</h3>
 
         <div class="title-info">
@@ -23,16 +24,19 @@ import {mapGetters, mapActions} from 'vuex';
 // import types from '@/store/mutation-types';
 import Preview from '@/components/Preview';
 import EventBus from '@/event-bus';
+import BLoading from '@/components/BLoading.vue';
 
 export default {
     name: 'detail',
     components: {
-        Preview
+        Preview,
+        BLoading
     },
     data() {
         return {
             imgIndex: 0,
-            scrollTop: 0
+            scrollTop: 0,
+            showLoading: true
         };
     },
     computed: {
@@ -124,7 +128,7 @@ export default {
     },
 
     async activated() {
-
+        this.showLoading = true;
         this.isFavored({nid: this.$route.params.nid});
         this.updateFavoriteAction(this.detailPageFavorStatus);
         this.setAppHeader({
@@ -137,6 +141,7 @@ export default {
             actions: [this.toggleAction]
         });
         await this.$store.dispatch('getNewsDetail', {nid: this.$route.params.nid});
+        this.showLoading = false;
         // document.body.scrollTop = this.scrollTop;
     },
     deactivated() {

@@ -155,16 +155,9 @@ export default {
         },
 
         async getNewsDetail({commit, state}, params) {
-            let list = Object.keys(state.data).reduce((list, cat) => {
-                list = list.concat(state.data[cat].news);
-                return list;
-            }, []);
-
-            if (!list.length) {
-                let {news, banner, topic} = await API.getNewsList({category: defaultCategory});
-                list = [...news, ...banner, ...topic];
-            }
-            commit(types.SET_NEWS_DETAIL, list.find(item => item.nid === params.nid) || list[0]);
+            commit(types.SET_NEWS_DETAIL, {});
+            let data = await API.getNewsList(params);
+            commit(types.SET_NEWS_DETAIL, data.news[0]);
         },
 
         async getSearchResult({commit}, query) {
@@ -308,7 +301,7 @@ export default {
             setLocalMenuTabsData(otherMenuTabsLocalDataKey, state.otherMenuTabs);
         },
         [types.SET_SEARCH_RESULT](state, data) {
-            data = data.filter(item => item.content.length).map(dataProcess);
+            data = data.map(dataProcess);
 
             state.searchResultData = data;
         },
