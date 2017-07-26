@@ -156,7 +156,7 @@ export default {
 
         async getNewsDetail({commit, state}, params) {
             commit(types.SET_NEWS_DETAIL, {});
-            let data = await API.getNewsList(params);
+            let data = await API.getNewsList({nids: params.nid});
             commit(types.SET_NEWS_DETAIL, data.news[0]);
         },
 

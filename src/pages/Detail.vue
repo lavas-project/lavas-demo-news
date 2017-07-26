@@ -15,28 +15,41 @@
             </div>
         </div>
 
+        <div class="related-news">
+            <div class="block-title">相关新闻</div>
+            <news-item v-for="(newsItem, i) in relatedNews"
+                :newsItem="newsItem"
+                :key="newsItem.nid"
+                :data-index="i">
+            </news-item>
+        </div>
+
         <preview :show="previewShow" :imageList="imageList" @click-close="closePreview" :index="imgIndex"></preview>
     </div>
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
+import {mapGetters, mapActions, mapState} from 'vuex';
 // import types from '@/store/mutation-types';
 import Preview from '@/components/Preview';
 import EventBus from '@/event-bus';
 import BLoading from '@/components/BLoading.vue';
+import NewsItem from '@/components/NewsItem.vue';
+import API from '@/api';
 
 export default {
     name: 'detail',
     components: {
         Preview,
-        BLoading
+        BLoading,
+        NewsItem
     },
     data() {
         return {
             imgIndex: 0,
             scrollTop: 0,
-            showLoading: true
+            showLoading: true,
+            relatedNews: []
         };
     },
     computed: {
@@ -128,8 +141,10 @@ export default {
     },
 
     async activated() {
+        let nid = this.$route.params.nid;
         this.showLoading = true;
-        this.isFavored({nid: this.$route.params.nid});
+        this.relatedNews = [];
+        this.isFavored({nid});
         this.updateFavoriteAction(this.detailPageFavorStatus);
         this.setAppHeader({
             title: '百度新闻',
@@ -140,8 +155,14 @@ export default {
             showLogo: false,
             actions: [this.toggleAction]
         });
-        await this.$store.dispatch('getNewsDetail', {nid: this.$route.params.nid});
+        await this.$store.dispatch('getNewsDetail', {nid});
         this.showLoading = false;
+        let relatedNewsData = await API.getNewsList({
+            nid,
+            category: 'getbodyinfo',
+            ver: 5
+        });
+        this.relatedNews = relatedNewsData.related_news.filter(item => item.sourcets);
         // document.body.scrollTop = this.scrollTop;
     },
     deactivated() {
@@ -168,6 +189,7 @@ export default {
         font-size 20px
         line-height 28px
         margin-bottom 8px
+        font-weight bold
 
     .title-info
         font-size 14px
@@ -183,4 +205,15 @@ export default {
         padding 10px 0
         font-size 36px
         font-weight bold
+    .related-news
+        margin-top 80px
+        min-height 80px
+        .block-title
+            font-size 18px
+            line-height 44px
+            color #999
+            border-bottom: solid 1px #f5f5f5
+    .news-item
+        &:last-child
+            border-bottom: none
 </style>

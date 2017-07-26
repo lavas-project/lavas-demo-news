@@ -8,16 +8,24 @@ import axios from 'axios';
 let {width: screenSizeWidth, height: screenSizeHeight} = screen;
 // let screenSizeHeight = screen.height;
 
-function getParamT({category, nid}) {
-    if (nid) {
+function getParamT({category, nids}) {
+    // 新闻详情
+    if (nids) {
         return 'recommendinfo';
     }
+    // 相关新闻
+    if (category === 'getbodyinfo') {
+        return 'getbodyinfo';
+    }
+    // 推荐栏目
     if (category === '推荐') {
         return 'newchosenlist';
     }
+    // 本地栏目
     if (category === '本地') {
         return 'localnewslist';
     }
+    // 普通栏目
     return 'recommendlist';
 }
 
@@ -36,9 +44,12 @@ export default {
                 an: 20,
                 withtopic: 0,
                 wf: 1,
-                ver: 4,
+                ver: params.ver || 4,
                 pd: 'webapp',
-                nids: params.nid,
+                // 新闻详情需要nids
+                nids: params.nids,
+                // 相关新闻需要nid
+                nid: params.nid,
                 /* eslint-disable */
                 remote_device_type: 1,
                 os_type: 1,
@@ -49,11 +60,6 @@ export default {
             },
             withCredentials: true
         });
-
-        if (params.nid) {
-            let news = data.data.data.news || [];
-            data.data.data.news = news.filter(item => item.nid === params.nid) || news[0] || [];
-        }
 
         return data.data.data;
     },
