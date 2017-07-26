@@ -5,7 +5,14 @@
                 <v-icon class="search-icon">arrow_back</v-icon>
             </v-btn>
             <form @submit.prevent="search">
-                <input class="search-input" v-model="query" type="search" autocomplete="off" placeholder="请输入搜索词" autocapitalize="off" />
+                <input
+                    ref="input"
+                    class="search-input"
+                    v-model="query"
+                    type="search"
+                    autocomplete="off"
+                    placeholder="请输入搜索词"
+                    autocapitalize="off" />
             </form>
             <v-btn light icon class="search-btn" @click.native="query = ''">
                 <v-icon class="search-icon">close</v-icon>
@@ -15,8 +22,8 @@
             <v-progress-circular indeterminate :size="40" class="primary--text"></v-progress-circular>
         </div>
 
-        <div v-if="searchResultData && searchResultData.length" class="search-content">
-            <news-item v-for="(newsItem, i) in searchResultData"
+        <div v-if="result && result.length" class="search-content">
+            <news-item v-for="(newsItem, i) in result"
                 :newsItem="newsItem"
                 :key="newsItem.nid"
                 :data-index="i">
@@ -26,7 +33,7 @@
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex';
+import {mapState} from 'vuex';
 import NewsItem from '../components/NewsItem.vue';
 
 export default {
@@ -42,27 +49,23 @@ export default {
         NewsItem
     },
     computed: {
-        ...mapGetters([
-            'searchResultData'
-        ])
+        ...mapState({
+            result(state) {
+                return state.search.result;
+            }
+        })
     },
     methods: {
-        ...mapActions('appShell/appHeader', [
-            'setAppHeader'
-        ]),
-        ...mapActions([
-            'getSearchResult'
-        ]),
         async search() {
 
             // 显示加载动画
             this.loading = true;
 
             // 让当前输入框失去焦点
-            this.$el.querySelector('.search-input').blur();
+            this.$refs.input.blur();
 
             // 获取数据
-            await this.$store.dispatch('getSearchResult', this.query);
+            await this.$store.dispatch('query', this.query);
 
             this.loading = false;
         },
@@ -72,11 +75,7 @@ export default {
         }
     },
     activated() {
-        this.setAppHeader({show: false});
-
-        if (this.query.length === 0) {
-            this.$store.dispatch('clearSearchResult');
-        }
+        this.$store.dispatch('appShell/appHeader/setAppHeader', {show: false});
     }
 };
 </script>

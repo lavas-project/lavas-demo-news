@@ -1,7 +1,9 @@
 /**
  * @file app shell mutation types
- * @author huanghuiquan(huanghuiquanhhh@gmail.com)
+ * @author huanghuiquan (huanghuiquanhhh@gmail.com)
  */
+
+// please begin with `ADD`, `DELETE`, `UPDATE`
 
 export const ENABLE_PAGE_TRANSITION = 'ENABLE_PAGE_TRANSITION';
 export const DISABLE_PAGE_TRANSITION = 'DISABLE_PAGE_TRANSITION';
@@ -13,6 +15,8 @@ export const ACTIVATE_APP_BOTTOM_NAV = 'ACTIVATE_APP_BOTTOM_NAV';
 export const SET_SIDEBAR_VISIBILITY = 'SET_SIDEBAR_VISIBILITY';
 export const SAVE_SCROLLTOP = 'SAVE_SCROLLTOP';
 export const SET_SWIPE_OUT = 'SET_SWIPE_OUT';
+export const UPDATE_OVERFLOW_SCROLLING_TOUCH = 'UPDATE_OVERFLOW_SCROLLING_TOUCH';
+export const UPDATE_SWIPE_BACK = 'UPDATE_SWIPE_BACK';
 
 // home
 export const SET_NEWS_DATA = 'SET_NEWS_DATA';
@@ -30,3 +34,9 @@ export const SET_PREVIEW_DATA = 'SET_PREVIEW_DATA';
 export const DEL_CATEGORY = 'DEL_CATEGORY';
 export const ADD_CATEGORY = 'ADD_CATEGORY';
 export const SET_SEARCH_RESULT = 'SET_SEARCH_RESULT';
+
+// search
+export const UPDATE_RESULT = 'UPDATE_RESULT';
+
+// detail
+export const UPDATE_DETAIL = 'UPDATE_DETAIL';

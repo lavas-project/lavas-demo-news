@@ -58,7 +58,9 @@ Vue.mixin({
             // 滚动内部页面到之前保存的位置
             let scrollTop = vm.$store.state.appShell.historyPageScrollTop[to.path] || 0;
             $el.classList.add('enable-scroll');
-            $el.scrollTop = scrollTop;
+            $el.scrollTop = $el.dataset.scrollTop || 0;
+
+            vm.$store.dispatch('appShell/' + (to.meta.swipeBack ? 'enable' : 'disable') + 'SwipeBack');
         });
     },
 

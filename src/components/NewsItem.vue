@@ -43,12 +43,6 @@ export default {
     props: ['newsItem'],
     data() {
         return {};
-    },
-    methods: {
-        preview(event) {
-            let index = +event.target.dataset.index || 0;
-            this.$store.dispatch('showPreview', Object.assign({index}, this.newsItem));
-        }
     }
 };
 </script>

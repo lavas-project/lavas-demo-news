@@ -23,7 +23,7 @@
                             v-if="!$route.meta.notKeepAlive"
                             class="app-view"
                             :class="{
-                                'overflow-scrolling-touch': !previewShow
+                                'overflow-scrolling-touch': overflowScrollingTouch
                             }"></router-view>
                     </keep-alive>
                 </transition>
@@ -36,7 +36,7 @@
                         v-if="$route.meta.notKeepAlive"
                         class="app-view"
                         :class="{
-                            'overflow-scrolling-touch': !previewShow
+                            'overflow-scrolling-touch': overflowScrollingTouch
                         }"></router-view>
                 </transition>
             </div>
@@ -46,8 +46,7 @@
 
 <script>
 
-import EventBus from '@/event-bus';
-import {mapState, mapActions, mapGetters} from 'vuex';
+import {mapState, mapActions} from 'vuex';
 import AppHeader from '@/components/AppHeader';
 import AppSidebar from '@/components/AppSidebar';
 
@@ -62,10 +61,9 @@ export default {
             'appHeader',
             'appSidebar',
             'pageTransitionName',
+            'overflowScrollingTouch',
+            'enableSwipeBack',
             'historyPageScrollTop'
-        ]),
-        ...mapGetters([
-            'previewShow'
         ])
     },
     methods: {
@@ -119,8 +117,7 @@ export default {
             // 首页不能继续后退
             if (touchMoveX > minOffset
                 && Math.abs(touchMoveY) < minOffset
-                && this.$router.currentRoute.path !== '/'
-                && !this.previewShow
+                && this.enableSwipeBack
             ) {
                 this.$router.go(-1);
             }
@@ -204,7 +201,7 @@ export default {
 
             &.slide-left-leave-active
                 transform translate(-100%, 0)
-                
+
             &.slide-left-enter-active,
             &.slide-left-leave-active,
             &.slide-right-enter-active,
@@ -215,7 +212,7 @@ export default {
                 right 0
                 overflow-y auto
                 bottom 0
-                
+
             &.enable-scroll
                 position absolute
                 top 0

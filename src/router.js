@@ -43,6 +43,7 @@ export function createRouter() {
                 name: 'detail',
                 component: Detail,
                 meta: {
+                    swipeBack: true
                     // notKeepAlive: true,
                 }
             },
