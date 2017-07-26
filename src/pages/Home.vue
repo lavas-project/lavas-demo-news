@@ -146,7 +146,7 @@ export default {
         }
     },
     async asyncData({store, route}) {
-        let category = route.params.category || 'remen';
+        let category = route.params.category || '推荐';
         await store.dispatch('selectTab', category);
         store.dispatch('getNewsFavorList');
     },

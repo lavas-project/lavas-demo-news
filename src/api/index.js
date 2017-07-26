@@ -5,9 +5,45 @@
 
 import axios from 'axios';
 
+let {width: screenSizeWidth, height: screenSizeHeight} = screen;
+// let screenSizeHeight = screen.height;
+
+function getParamT(category) {
+    if (category === '推荐') {
+        return 'newchosenlist';
+    }
+    if (category === '本地') {
+        return 'localnewslist';
+    }
+    return 'recommendlist';
+}
+
 export default {
     async getNewsList(params) {
-        let data = await axios('https://pwa.baidu.com/api/mockup/news/' + params.category, {
+        let data = await axios('http://172.18.180.87:8849/api/mockup/realNews/news', {
+            params: {
+                tn: 'bdapibaiyue',
+                t: getParamT(params.category),
+                mid: '03c7a16f2e8028127e42c5f7ca9e210b',
+                ts: 0,
+                topic: params.category,
+                type: 'info',
+                token: 'info',
+                ln: 20,
+                an: 20,
+                withtopic: 0,
+                wf: 0,
+                ver: 4,
+                pd: 'webapp',
+                // 'nids':
+                /* eslint-disable */
+                remote_device_type: 1,
+                os_type: 1,
+                screen_size_width: screenSizeWidth,
+                screen_size_height: screenSizeHeight,
+                /* eslint-enable */
+                action: 1
+            },
             withCredentials: true
         });
 

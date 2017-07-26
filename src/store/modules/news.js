@@ -10,45 +10,19 @@ const localStorage = window.localStorage;
 const FAVORITE_KEY = 'FAVORITE_NEWS';
 const menuTabsLocalDataKey = 'menuTabsLocalDataKey';
 const otherMenuTabsLocalDataKey = 'otherMenuTabsLocalDataKey';
-const defaultCategory = 'remen';
+const defaultCategory = '推荐';
 
-let menuTabs = [
-    {
-        text: '热点',
-        value: defaultCategory
-    },
-    {
-        text: '娱乐',
-        value: 'yule'
-    },
-    {
-        text: '体育',
-        value: 'tiyu'
-    },
-    {
-        text: '军事',
-        value: 'junshi'
-    },
-    {
-        text: '社会',
-        value: 'shehui'
-    }
-];
+let menuTabs = `${defaultCategory}|本地|娱乐|社会|军事|女人|互联网|科技|生活|国际|国内|体育|汽车`;
+menuTabs = handleMenuTabsOriginData(menuTabs);
 
-let otherMenuTabs = [
-    {
-        text: '汽车',
-        value: 'qiche'
-    },
-    {
-        text: '国内',
-        value: 'guonei'
-    },
-    {
-        text: '国际',
-        value: 'guoji'
-    }
-];
+let otherMenuTabs = '房产|财经|时尚|教育|游戏|旅游|人文|创意';
+otherMenuTabs = handleMenuTabsOriginData(otherMenuTabs);
+
+function handleMenuTabsOriginData(menuData) {
+    return menuData.split('|').map(item => {
+        return {text: item};
+    });
+}
 
 function setLocalMenuTabsData(menuTabsKey = menuTabsLocalDataKey, menuTabsData) {
     localStorage.setItem(menuTabsKey, JSON.stringify(menuTabsData));
@@ -113,7 +87,7 @@ export default {
         },
         category(state) {
             let activeTab = state.menuTabs.find(tab => tab.active);
-            return activeTab.value;
+            return activeTab.text;
         },
         newsDetail(state) {
             return state.newsDetail;
@@ -187,7 +161,7 @@ export default {
             }, []);
 
             if (!list.length) {
-                let {news, banner, topic} = await API.getNewsList({category: 'remen'});
+                let {news, banner, topic} = await API.getNewsList({category: defaultCategory});
                 list = [...news, ...banner, ...topic];
             }
             commit(types.SET_NEWS_DETAIL, list.find(item => item.nid === params.nid) || list[0]);
@@ -257,11 +231,11 @@ export default {
         closePreview({commit, state}) {
             commit(types.SET_PREVIEW_DATA, {show: false});
         },
-        [types.ADD_CATEGORY]({commit}, {value: category}) {
+        [types.ADD_CATEGORY]({commit}, {text: category}) {
             commit(types.ADD_CATEGORY, category);
         },
         [types.DEL_CATEGORY]({commit}, tabItem) {
-            commit(types.DEL_CATEGORY, tabItem.value);
+            commit(types.DEL_CATEGORY, tabItem.text);
         },
         changePreviewShow({commit}, previewShowValue) {
             commit('changePreviewShow', previewShowValue);
@@ -269,8 +243,11 @@ export default {
     },
     mutations: {
         [types.SET_NEWS_DATA](state, {data, category, change}) {
-            data.news = data.news.filter(item => item.content.length).map(dataProcess);
-            data.banner = data.banner.filter(item => item.content.length).map(dataProcess);
+            data.news = data.news.map(dataProcess);
+
+            if (data.banner) {
+                data.banner = data.banner.map(dataProcess);
+            }
 
             if (data.news && data.news.length) {
                 if (change) {
@@ -297,7 +274,7 @@ export default {
         },
         [types.SET_NEWS_ACTIVE_TAB](state, category) {
             state.menuTabs = state.menuTabs.map(item => {
-                item.active = category === item.value;
+                item.active = category === item.text;
                 return item;
             });
         },
@@ -312,7 +289,7 @@ export default {
         },
         [types.DEL_CATEGORY](state, category) {
             state.menuTabs.forEach((item, index) => {
-                if (category === item.value) {
+                if (category === item.text) {
                     let deletedCategoryObj = state.menuTabs.splice(index, 1)[0];
                     state.otherMenuTabs.unshift(deletedCategoryObj);
                     setLocalMenuTabsData(otherMenuTabsLocalDataKey, state.otherMenuTabs);
@@ -322,7 +299,7 @@ export default {
         },
         [types.ADD_CATEGORY](state, category) {
             state.otherMenuTabs.forEach((item, index) => {
-                if (category === item.value) {
+                if (category === item.text) {
                     let deletedCategoryObj = state.otherMenuTabs.splice(index, 1)[0];
                     state.menuTabs.push(deletedCategoryObj);
                     setLocalMenuTabsData(menuTabsLocalDataKey, state.menuTabs);
