@@ -5,6 +5,8 @@
 
 import axios from 'axios';
 
+const API_PATH = 'https://lavas.baidu.com/api/mockup/realNews/news';
+
 let {width: screenSizeWidth, height: screenSizeHeight} = screen;
 // let screenSizeHeight = screen.height;
 
@@ -31,7 +33,7 @@ function getParamT({category, nids}) {
 
 export default {
     async getNewsData(params) {
-        let data = await axios('http://172.18.180.87:8849/api/mockup/realNews/news', {
+        let data = await axios(API_PATH, {
             params: {
                 tn: 'bdapibaiyue',
                 t: getParamT(params),

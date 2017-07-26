@@ -103,7 +103,7 @@ export default {
                 scrollY: false,
                 startX: -ww * this.index,
                 click: true,
-                momentum: true
+                momentum: false
             });
 
             this.curIndex = this.index + 1;

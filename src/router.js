@@ -44,7 +44,6 @@ export function createRouter() {
                 component: Detail,
                 meta: {
                     swipeBack: true
-                    // notKeepAlive: true,
                 }
             },
             {
@@ -55,12 +54,18 @@ export function createRouter() {
             {
                 path: '/search',
                 name: 'search',
-                component: Search
+                component: Search,
+                meta: {
+                    swipeBack: true
+                }
             },
             {
                 path: '/favor',
                 name: 'favor',
-                component: Favor
+                component: Favor,
+                meta: {
+                    swipeBack: true
+                }
             },
             {
                 path: '*',
