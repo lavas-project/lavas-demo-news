@@ -17,7 +17,7 @@
         </div>
 
         <error v-show="detail.error" :message="detail.msg || 加载失败"> </error>
-
+        <b-loading :show="showLoading"></b-loading>
         <preview :show="previewShow" :imageList="imageList" @click-close="closePreview" :index="previewIndex"></preview>
     </div>
 </template>
@@ -27,13 +27,15 @@ import {mapGetters, mapActions, mapState} from 'vuex';
 import Preview from '@/components/Preview';
 import Error from '@/components/Error';
 import EventBus from '@/event-bus';
+import BLoading from '@/components/BLoading.vue';
 
 export default {
     name: 'detail',
 
     components: {
         Preview,
-        Error
+        Error,
+        BLoading
     },
 
     data() {
@@ -41,7 +43,8 @@ export default {
             imgIndex: 0,
             scrollTop: 0,
             previewShow: false,
-            previewIndex: 0
+            previewIndex: 0,
+            showLoading: true
         };
     },
 
@@ -140,7 +143,7 @@ export default {
     },
 
     async activated() {
-
+        this.showLoading = true;
         this.isFavored({nid: this.$route.params.nid});
         this.updateFavoriteAction(this.detailPageFavorStatus);
         this.setAppHeader({
@@ -153,6 +156,9 @@ export default {
             actions: [this.toggleAction]
         });
         await this.$store.dispatch('getDetail', {nid: this.$route.params.nid});
+        // await this.$store.dispatch('getNewsDetail', {nid: this.$route.params.nid});
+        this.showLoading = false;
+        // document.body.scrollTop = this.scrollTop;
     },
     deactivated() {
     },

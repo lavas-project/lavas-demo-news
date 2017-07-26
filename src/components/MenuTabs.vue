@@ -12,22 +12,22 @@
         <div class="edit" @click="toggleEditWrapper"><span>+</span></div>
         <div class="edit-wrapper">
             <div class="edit-wrapper-inner">
-                <p class="title">我的栏目<span>点击删除</span></p>
+                <p class="menu-title">我的栏目<span>点击删除</span></p>
                 <transition-group class="edit-menu-tabs-wrapper" @leave="leave" @enter="enter">
                     <div class="edit-menu-tabs-item selected"
                         v-for="(item, i) in menuTabs"
                         v-if="i !== 0"
                         @click="delSelectedItem(item)"
-                        :key="item.value">
+                        :key="item.text">
                         <span :class="{active: item.active}">- {{item.text}}</span>
                     </div>
                 </transition-group>
-                <p class="title">推荐栏目<span>点击添加</span></p>
+                <p class="menu-title">推荐栏目<span>点击添加</span></p>
                 <transition-group class="edit-menu-tabs-wrapper" @leave="leave" @enter="enter">
                     <div class="edit-menu-tabs-item"
                         v-for="(item, i) in otherMenuTabs"
                         @click="addItemToSelected(item)"
-                        :key="item.value">
+                        :key="item.text">
                         <span>+ {{item.text}}</span>
                     </div>
                 </transition-group>
@@ -70,8 +70,9 @@ export default {
             types.ADD_CATEGORY,
             types.DEL_CATEGORY
         ]),
-        async selectItem(item) {
-            await this.$store.dispatch('selectTab', item.value);
+        selectItem(item) {
+            this.opend = false;
+            this.$store.dispatch('selectTab', item.text);
             this.setMenuTabsPos();
             // this.$router.replace('/home/' + item.value);
             // this.$router.push('/home/' + item.value);
@@ -184,13 +185,13 @@ $height = 40px
         z-index: 4
         span
             display: inline-block
-            transition: transform ease .3s
+            transition: transform ease .25s
     .edit-wrapper
         position: relative
         height: 0
         width: 100%
         z-index: 2
-        transition: height ease-out .3s
+        transition: height cubic-bezier(0.18, 0.89, 0.32, 1.28) 0.4s
         background: $theme.primary
         box-sizing: border-box
         color: #fff
@@ -199,7 +200,7 @@ $height = 40px
         &-inner
             margin-top: 20px
             position: relative
-        .title
+        .menu-title
             font-size: 16px
             padding-left: 10px
             line-height: 24px
@@ -219,6 +220,7 @@ $height = 40px
             text-align: center
             line-height: 30px
             margin-bottom: 10px
+            font-size: 14px
             span
                 display: block
                 margin: 0 5px
@@ -239,7 +241,7 @@ $height = 40px
             span
                 transform: rotate(45deg)
         .edit-wrapper
-            height: 250px
+            height: 380px
         .menu-tab-mask
             display: block
 
@@ -252,7 +254,6 @@ $height = 40px
     font-size 16px
     width 72px
     text-align center
-    padding 0 8px
 
     span
         display inline-block
