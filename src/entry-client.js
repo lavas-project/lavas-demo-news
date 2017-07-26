@@ -42,6 +42,8 @@ Vue.mixin({
             let $el = vm.$el;
             $el.classList.add('enable-scroll');
             $el.scrollTop = $el.dataset.scrollTop || 0;
+
+            vm.$store.dispatch('appShell/' + (to.meta.swipeBack ? 'enable' : 'disable') + 'SwipeBack');
         });
     },
 

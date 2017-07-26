@@ -36,6 +36,13 @@ let state = {
     overflowScrollingTouch: false,
 
     /**
+     * 侧滑返回开关
+     *
+     * @type {boolean}
+     */
+    enableSwipeBack: false,
+
+    /**
      * 上个页面 scroll 的信息
      *
      * @type {Object}
@@ -100,7 +107,26 @@ let actions = {
      */
     enableOverflowScrollingTouch({commit}) {
         commit(types.UPDATE_OVERFLOW_SCROLLING_TOUCH, true);
+    },
+
+    /**
+     * 开启侧滑返回
+     *
+     * @param {Function} options.commit committer
+     */
+    enableSwipeBack({commit}) {
+        commit(types.UPDATE_SWIPE_BACK, true);
+    },
+
+    /**
+     * 关闭侧滑返回
+     *
+     * @param {Function} options.commit committer
+     */
+    disableSwipeBack({commit}) {
+        commit(types.UPDATE_SWIPE_BACK, false);
     }
+
 };
 
 let mutations = {
@@ -113,8 +139,11 @@ let mutations = {
     [types.SAVE_SCROLLTOP](state, {path, scrollTop}) {
         state.historyPageScrollTop[path] = scrollTop;
     },
-    [types.UPDATE_OVERFLOW_SCROLLING_TOUCH](state, enable) {
-        state.overflowScrollingTouch = enable;
+    [types.UPDATE_OVERFLOW_SCROLLING_TOUCH](state, flag) {
+        state.overflowScrollingTouch = flag;
+    },
+    [types.UPDATE_SWIPE_BACK](state, flag) {
+        state.enableSwipeBack = flag;
     }
 };
 

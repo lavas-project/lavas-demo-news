@@ -1,34 +1,41 @@
 <template>
     <div class="news-detail-wrapper">
-        <h3>{{detail.title}}</h3>
+        <div v-show="!detail.error" class="content">
+            <h3>{{detail.title}}</h3>
 
-        <div class="title-info">
-            <span>{{detail.site}}</span>
-            <span>{{detail.show}}</span>
-        </div>
+            <div class="title-info">
+                <span>{{detail.site}}</span>
+                <span>{{detail.show}}</span>
+            </div>
 
-        <div class="content">
-            <div v-for="content in contents" class="news-item">
-                <p v-if="content.type === 'text'">{{ content.data }}</p>
-                <img v-if="content.type === 'image'" :src="content.data.original.url" @click="preview" ref="img"/>
+            <div class="content">
+                <div v-for="content in contents" class="news-item">
+                    <p v-if="content.type === 'text'">{{ content.data }}</p>
+                    <img v-if="content.type === 'image'" :src="content.data.original.url" @click="preview" ref="img"/>
+                </div>
             </div>
         </div>
+
+        <error v-show="detail.error" :message="detail.msg || 加载失败"> </error>
 
         <preview :show="previewShow" :imageList="imageList" @click-close="closePreview" :index="previewIndex"></preview>
     </div>
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
-// import types from '@/store/mutation-types';
+import {mapGetters, mapActions, mapState} from 'vuex';
 import Preview from '@/components/Preview';
+import Error from '@/components/Error';
 import EventBus from '@/event-bus';
 
 export default {
     name: 'detail',
+
     components: {
-        Preview
+        Preview,
+        Error
     },
+
     data() {
         return {
             imgIndex: 0,
@@ -37,25 +44,26 @@ export default {
             previewIndex: 0
         };
     },
+
     computed: {
+        ...mapState({
+            detail(state) {
+                return state.detail.detail;
+            }
+        }),
         ...mapGetters([
-            'newsDetail',
             'detailPageFavorStatus'
         ]),
-        detail() {
-            return this.newsDetail || {};
-        },
         contents() {
-            return this.newsDetail && this.newsDetail.content || [];
+            return this.detail && this.detail.content || [];
         },
         imageList() {
             return this.contents
                 .filter(item => item.type === 'image')
-                .map(item => {
-                    return {src: item.data.original.url};
-                });
+                .map(item => ({src: item.data.original.url}));
         }
     },
+
     methods: {
         ...mapActions('appShell/appHeader', [
             'setAppHeader'
@@ -64,7 +72,6 @@ export default {
             'hideBottomNav'
         ]),
         ...mapActions([
-            'getNewsDetail',
             'addFavorItem',
             'removeFavorItem',
             'getNewsFavorList',
@@ -72,13 +79,13 @@ export default {
         ]),
         // 收藏
         addFavoriteItem() {
-            this.addFavorItem(this.newsDetail);
+            this.addFavorItem(this.detail);
             this.updateFavoriteAction(true);
             this.favored = true;
         },
         // 取消收藏
         removeFavoriteItem() {
-            this.removeFavorItem(this.newsDetail);
+            this.removeFavorItem(this.detail);
             this.updateFavoriteAction(false);
             this.favored = false;
         },
@@ -104,14 +111,21 @@ export default {
 
             this.setAppHeader({actions: [this.toggleAction]});
         },
+
         closePreview() {
             this.previewShow = false;
             this.$store.dispatch('appShell/enableOverflowScrollingTouch');
+            // enable swipe back
+            this.$store.dispatch('appShell/enableSwipeBack');
         },
+
+        // 打开预览
         preview(event) {
             this.previewIndex = this.$refs.img.indexOf(event.target);
             this.previewShow = true;
             this.$store.dispatch('appShell/disableOverflowScrollingTouch');
+            // disable swipe back
+            this.$store.dispatch('appShell/disableSwipeBack');
         }
     },
 
@@ -122,7 +136,7 @@ export default {
     },
 
     async asyncData({store, route}) {
-        await store.dispatch('getNewsDetail', {nid: route.params.nid});
+        await store.dispatch('getDetail', {nid: route.params.nid});
     },
 
     async activated() {
@@ -138,12 +152,11 @@ export default {
             showLogo: false,
             actions: [this.toggleAction]
         });
-        await this.$store.dispatch('getNewsDetail', {nid: this.$route.params.nid});
-        // document.body.scrollTop = this.scrollTop;
+        await this.$store.dispatch('getDetail', {nid: this.$route.params.nid});
     },
     deactivated() {
-        // this.scrollTop = document.body.scrollTop;
     },
+
     beforeRouteLeave(to, from, next) {
         next();
         setTimeout(() => this.closePreview(), 500);

@@ -17,6 +17,10 @@ export default {
         async getDetail({commit}, query) {
             // todo
             // commit(types.UPDATE_DETAIL, );
+            commit(types.UPDATE_DETAIL, {
+                error: 1,
+                msg: 'fetch data error'
+            });
         }
     },
 

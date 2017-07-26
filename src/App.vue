@@ -46,7 +46,7 @@
 
 <script>
 
-import {mapState, mapActions, mapGetters} from 'vuex';
+import {mapState, mapActions} from 'vuex';
 import AppHeader from '@/components/AppHeader';
 import AppSidebar from '@/components/AppSidebar';
 
@@ -61,7 +61,8 @@ export default {
             'appHeader',
             'appSidebar',
             'pageTransitionName',
-            'overflowScrollingTouch'
+            'overflowScrollingTouch',
+            'enableSwipeBack'
         ])
     },
     methods: {
@@ -113,8 +114,7 @@ export default {
             // 首页不能继续后退
             if (touchMoveX > minOffset
                 && Math.abs(touchMoveY) < minOffset
-                && this.$router.currentRoute.path !== '/'
-                && !this.previewShow
+                && this.enableSwipeBack
             ) {
                 this.$router.go(-1);
             }
