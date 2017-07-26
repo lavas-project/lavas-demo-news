@@ -244,21 +244,20 @@ export default {
                 // 侧滑
                 enableSwipeOut: false,
 
-                user: {
-                    name: '度熊',
-                    location: '中国北京',
-                    email: 'example@baidu.com'
-                },
+                user: null,
                 // 分块组
                 blocks: [
                     {
-                        // 子列表1
                         list: [
                             {
                                 text: '收藏',
                                 icon: 'star',
                                 route: '/favor'
-                            },
+                            }
+                        ]
+                    },
+                    {
+                        list: [
                             {
                                 text: '消息通知',
                                 icon: 'message'
@@ -300,6 +299,18 @@ export default {
                 },
                 disableSwipeOut({commit}) {
                     commit(types.SET_SWIPE_OUT, false);
+                },
+                login({commit}, userInfo) {
+                    return new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            commit(types.SET_USER_INFO, {
+                                name: userInfo.name,
+                                location: '中国北京',
+                                email: 'example@baidu.com'
+                            });
+                            resolve();
+                        }, 1000);
+                    })
                 }
             },
             mutations: {
@@ -308,6 +319,9 @@ export default {
                 },
                 [types.SET_SWIPE_OUT](state, enable) {
                     state.enableSwipeOut = enable;
+                },
+                [types.SET_USER_INFO](state, userInfo) {
+                    state.user = userInfo;
                 }
             }
         },

@@ -1,18 +1,7 @@
 <template>
     <div class="favor-list-wrapper">
         <div class="favor-list-container">
-            <div class="favor-list-header">
-                <v-btn class="white--text" ripple icon @click.native="$router.go(-1)">
-                    <v-icon class="app-header-icon">arrow_back</v-icon>
-                </v-btn>
-                <span>收藏夹</span>
-                <v-icon class="delete white--text" @click="toggleDelete" :class="{shaking:showDelete}">delete_forever</v-icon>
-            </div>
-            <div v-if="newsFavorList.length <= 0" class="favor-list-null">
-                <span>这里空空的</span>
-            </div>
-
-            <transition-group name="favor-item-fold" v-else tag="ul" class="favor-list-content">
+            <transition-group name="favor-item-fold" v-if="newsFavorList && newsFavorList.length > 0" tag="ul" class="favor-list-content">
                 <li
                     v-for="item in newsFavorList" :key="item.nid"
                     v-ripple="{class: 'grey--text'}"
@@ -25,24 +14,38 @@
                     </div>
                 </li>
             </transition-group>
+            <div v-else class="favor-list-null">
+                <span>这里空空的</span>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
-import {mapActions, mapGetters} from 'vuex';
+import {mapActions, mapState} from 'vuex';
+import EventBus from '@/event-bus';
 
 export default {
-    name: 'Favor',
+    name: 'favor',
     data() {
         return {
-            showDelete: false
+            showDelete: false,
+            action: {
+                toggleIcon: 'delete_forever',
+                toggle: true,
+                toggleHandler: 'toggleDelete',
+                toggleClassObj: {
+                    shaking: false
+                }
+            }
         };
     },
     computed: {
-        ...mapGetters([
-            'newsFavorList'
-        ])
+        ...mapState({
+            newsFavorList(state) {
+                return state.favor.newsFavorList;
+            }
+        })
     },
     methods: {
         ...mapActions([
@@ -63,31 +66,36 @@ export default {
         removeItem(nid) {
             this.removeFavorItem({nid});
         },
-        toggleDelete() {
-            this.showDelete = !this.showDelete;
-        },
-        handleClickBack() {
+        toggleDelete(showDelete) {
+            this.showDelete = typeof showDelete !== 'undefined' ? showDelete : !this.showDelete;
 
+            Object.assign(this.action.toggleClassObj, {
+                shaking: this.showDelete
+            });
+            this.setAppHeader({
+                actions: [this.action]
+            });
         }
+    },
+    created() {
+        EventBus.$on('app-header:click-toggle', data => {
+            this[data.handler] && this[data.handler]();
+        });
     },
     activated() {
         this.$store.dispatch('getNewsFavorList');
 
         this.setAppHeader({
-            show: false,
+            show: true,
             title: '收藏夹',
             showMenu: false,
-            showBack: false,
+            showBack: true,
             showLogo: false,
-            actions: [
-                {
-                    icon: 'delete_forever'
-                }
-            ]
+            actions: [this.action]
         });
     },
     deactivated() {
-        this.showDelete = false;
+        this.toggleDelete(false);
     }
 };
 </script>
@@ -149,10 +157,17 @@ $padding = 10px
     color: #888
     text-align: center
 
-    img
-        width: 40%
-        vertical-align: middle
+.favor-item-fold-enter-active,
+.favor-item-fold-leave-active
+    transition: all .7s
 
+.favor-item-fold-enter,
+.favor-item-fold-leave-to
+    opacity: 0;
+    transform: translateY(30px);
+
+</style>
+<style lang="stylus">
 .shaking
     animation: shake .3s infinite
 
@@ -164,14 +179,4 @@ $padding = 10px
     75% {transform: rotate(-20deg)}
     100% {transform: rotate(0deg)}
 }
-
-.favor-item-fold-enter-active,
-.favor-item-fold-leave-active
-    transition: all .7s
-
-.favor-item-fold-enter,
-.favor-item-fold-leave-to
-    opacity: 0;
-    transform: translateY(30px);
-
 </style>
