@@ -4,32 +4,16 @@
         <div
             class="app-sidebar-content">
             <!-- 头部 -->
-            <div v-if="title" class="app-sidebar-title" @click.stop="closeAndGo('/')">
-                <span class="app-sidebar-title-left-icon">
-                    <img v-if="title.imageLeft" :src="title.imageLeft" :alt="title.altLeft"></img>
-                    <icon v-else-if="title.svgLeft" :name="title.svgLeft"></icon>
-                    <v-icon light v-else-if="title.iconLeft">{{ title.iconLeft }}</v-icon>
-                </span>
-                <span>{{ title.text }}</span>
-                <slot name="logo" class="app-sidebar-title-right-logo">
-                    <span class="app-sidebar-title-right-logo">
-                        <img v-if="title.imageRight" :src="title.imageRight" :alt="title.altRight"></img>
-                        <icon v-else-if="title.svgRight" :name="title.svgRight"></icon>
-                        <v-icon v-else-if="title.iconRight">{{ title.iconRight }}</v-icon>
-                    </span>
-                </slot>
-            </div>
-
-            <!-- 用户信息 -->
-            <div v-if="user" class="app-sidebar-user">
-                 <div class="user-avatar">
+            <div class="app-sidebar-header">
+                <div class="user-avatar">
                     <v-icon light class="user-avatar-icon">face</v-icon>
                  </div>
-                 <div class="user-info">
+                 <div v-if="user" class="user-info">
                      <div class="user-name"><v-icon>person</v-icon>{{user.name}}</div>
                      <div class="user-location"><v-icon>room</v-icon>{{user.location}}</div>
                      <div class="user-email"><v-icon>email</v-icon>{{user.email}}</div>
                  </div>
+                 <p v-else @click="login" class="user-login">登录</p>
             </div>
 
             <!-- 导航列表分区块 -->
@@ -54,21 +38,25 @@
 
             <transition name="toast"><p v-if="toast" class="app-sidebar-toast">Only a demo</p></transition>
         </div>
+        <login :show="showLogin" @close-login="closeLogin"></login>
     </sidebar>
 </template>
 
 <script>
 import {mapState} from 'vuex';
 import Sidebar from './Sidebar';
+import Login from './Login';
 
 export default {
     data() {
         return {
-            toast: false
+            toast: false,
+            showLogin: false
         };
     },
     components: {
-        Sidebar
+        Sidebar,
+        Login
     },
     computed: {
         ...mapState('appShell/appSidebar', [
@@ -108,6 +96,12 @@ export default {
 
             this.$router.push(route);
             this.close();
+        },
+        login() {
+            this.showLogin = true;
+        },
+        closeLogin() {
+            this.showLogin = false;
         }
     }
 };
@@ -124,6 +118,43 @@ ul,li
 a
     text-decoration none
     color #333
+
+p
+    margin 0
+
+.app-sidebar-header
+    background: $theme.primary
+    padding: 10px
+    text-align: center
+    color: #fff
+    display: flex
+
+    .user-avatar
+        justify-content center
+        align-items center
+        margin-right: 7px
+
+        i
+            font-size: 50px
+            height: 100%
+
+    .user-login
+        line-height: 50px
+        font-size: 18px
+        //margin-left: 60px
+        text-align: left
+
+    .user-info
+        // padding 10px 0
+        text-align: left
+        //margin-left: 60px
+
+        >div
+            margin 5px 0
+
+            i
+                font-size 18px
+                margin-right 5px
 
 
 .app-sidebar-content

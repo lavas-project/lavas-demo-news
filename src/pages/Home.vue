@@ -19,7 +19,6 @@
                 :needTransition="!listFromCache">
             </news-list>
             <b-loading :show="showLoading"></b-loading>
-            <!-- 收藏夹组件 -->
             <infinite-loading v-if="!showLoading"
                 spinner="spiral"
                 :on-infinite="getMoreNews"
@@ -29,10 +28,6 @@
                 </span>
             </infinite-loading>
         </div>
-        <news-favor-list
-            :list='newsFavorList' :show="newsFavorListShow"
-            @hide-favorList="hideFavorList">
-        </news-favor-list>
     </div>
 </template>
 
@@ -42,8 +37,6 @@ import InfiniteLoading from 'vue-infinite-loading';
 import MenuTabs from '@/components/MenuTabs.vue';
 import Carousel from '@/components/Carousel.vue';
 import NewsList from '@/components/NewsList.vue';
-import NewsFavorList from '@/components/NewsFavorList.vue';
-import EventBus from '@/event-bus';
 import BLoading from '@/components/BLoading.vue';
 
 const APP_HEADER_HEIGHT = 52;
@@ -63,7 +56,6 @@ export default {
         InfiniteLoading,
         MenuTabs,
         Carousel,
-        NewsFavorList,
         BLoading
     },
     methods: {
@@ -79,15 +71,11 @@ export default {
             'enableSwipeOut'
         ]),
         ...mapActions([
-            'getNewsList',
-            'getNewsFavorList'
+            'getNewsList'
         ]),
         async getMoreNews() {
             await this.getNewsList(this.category);
             setTimeout(() => this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded), 100);
-        },
-        hideFavorList() {
-            this.newsFavorListShow = false;
         }
     },
     computed: {
@@ -97,8 +85,7 @@ export default {
             'loaded',
             'data',
             'lastListLen',
-            'menuTabs',
-            'newsFavorList'
+            'menuTabs'
         ]),
         ...mapState('appShell', [
             'historyPageScrollTop',
@@ -138,7 +125,6 @@ export default {
     async asyncData({store, route}) {
         let category = route.params.category || '推荐';
         await store.dispatch('selectTab', category);
-        store.dispatch('getNewsFavorList');
     },
     activated() {
         this.setAppHeader({
@@ -161,11 +147,6 @@ export default {
     deactivated() {
         this.disableSwipeOut();
         this.scrollTops[this.category] = this.$refs.contentWrapper.scrollTop;
-    },
-    created() {
-        EventBus.$on('app-header:click-favor', () => {
-            this.newsFavorListShow = true;
-        });
     }
 };
 </script>

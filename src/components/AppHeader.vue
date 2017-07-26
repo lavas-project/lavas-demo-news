@@ -38,6 +38,7 @@
                     :icon="action.icon"
                     :route="action.route">
                     <v-btn icon="icon" v-if="action.toggle"
+                        :class="action.toggleClassObj"
                         @click.native="handleClick('toggle', {actionIdx, handler: action.toggleHandler})">
                         <v-icon class="app-header-icon">{{ action.toggleIcon }}</v-icon>
                     </v-btn>
