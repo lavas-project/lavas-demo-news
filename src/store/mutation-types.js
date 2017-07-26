@@ -40,5 +40,6 @@ export const UPDATE_RESULT = 'UPDATE_RESULT';
 // favor
 export const SET_NEWS_FAVOR_LIST = 'SET_NEWS_FAVOR_LIST';
 export const SET_NEWS_DETAIL_FAVOR_STATUS = 'SET_NEWS_DETAIL_FAVOR_STATUS';
+
 // detail
 export const UPDATE_DETAIL = 'UPDATE_DETAIL';
