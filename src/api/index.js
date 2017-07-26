@@ -30,7 +30,7 @@ function getParamT({category, nids}) {
 }
 
 export default {
-    async getNewsList(params) {
+    async getNewsData(params) {
         let data = await axios('http://172.18.180.87:8849/api/mockup/realNews/news', {
             params: {
                 tn: 'bdapibaiyue',
@@ -66,7 +66,7 @@ export default {
 
     async getSearchResult(params) {
 
-        let data = await this.getNewsList({category: '推荐'});
+        let data = await this.getNewsData({category: '推荐'});
 
         let news = data.news || [];
 
