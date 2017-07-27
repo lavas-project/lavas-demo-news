@@ -84,8 +84,7 @@ export default {
             'listFromCache',
             'loaded',
             'data',
-            'lastListLen',
-            'menuTabs'
+            'lastListLen'
         ]),
         ...mapState('appShell', [
             'historyPageScrollTop',
@@ -123,7 +122,7 @@ export default {
         }
     },
     async asyncData({store, route}) {
-        let category = route.params.category || '推荐';
+        let category = this.category || '推荐';
         await store.dispatch('selectTab', category);
     },
     activated() {

@@ -10,6 +10,7 @@ import news from './modules/news';
 import search from './modules/search';
 import favor from './modules/favor';
 import detail from './modules/detail';
+import category from './modules/category';
 
 
 Vue.use(Vuex);
@@ -20,6 +21,7 @@ export default new Vuex.Store({
         news,
         search,
         favor,
-        detail
+        detail,
+        category
     }
 });
