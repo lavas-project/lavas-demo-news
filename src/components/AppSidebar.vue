@@ -23,7 +23,7 @@
                     <li v-for="(block, index) in blocks" :key="index" class="app-sidebar-block">
                         <div v-if="block.sublistTitle" class="sub-list-title">{{ block.sublistTitle }}</div>
                         <ul v-if="block.list">
-                            <li v-for="item in block.list" :key="item.text" @click.stop="closeAndGo(item.route)" v-ripple="{class: 'grey--text'}">
+                            <li v-for="item in block.list" :key="item.text" @click.stop="closeAndGo(item.route, item.action)" v-ripple="{class: 'grey--text'}">
                                 <span v-if="item.icon || item.image || item.svg " class="app-sidebar-block-left-icon">
                                     <img v-if="item.image" :src="item.image" :alt="item.alt"></img>
                                     <icon v-else-if="item.svg" :name="item.svg"></icon>
@@ -38,7 +38,7 @@
 
             <transition name="toast"><p v-if="toast" class="app-sidebar-toast">Only a demo</p></transition>
         </div>
-        <login :show="showLogin" @close-login="closeLogin"></login>
+        <login :show="showLogin" :logout="aclogout" @close-login="closeLogin"></login>
     </sidebar>
 </template>
 
@@ -51,7 +51,8 @@ export default {
     data() {
         return {
             toast: false,
-            showLogin: false
+            showLogin: false,
+            aclogout: false
         };
     },
     components: {
@@ -84,7 +85,11 @@ export default {
         close() {
             this.sidebarStatus = false;
         },
-        closeAndGo(route) {
+        closeAndGo(route, action) {
+            if (action) {
+                this[action] && this[action]();
+                return;            
+            }
             if (!route) {
                 clearTimeout(this.timer);
                 this.toast = true;
@@ -99,6 +104,9 @@ export default {
         },
         login() {
             this.showLogin = true;
+        },
+        logout() {
+            this.aclogout = true;
         },
         closeLogin() {
             this.showLogin = false;

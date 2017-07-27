@@ -300,6 +300,15 @@ export default {
                                 icon: 'settings'
                             }
                         ]
+                    },
+                    {
+                        list: [
+                            {
+                                text: '退出账户',
+                                icon: 'exit_to_app',
+                                action: 'logout'
+                            }
+                        ]
                     }
                 ]
             },
@@ -329,7 +338,7 @@ export default {
                 disableSwipeOut({commit}) {
                     commit(types.SET_SWIPE_OUT, false);
                 },
-                login({commit}, userInfo) {
+                accountLogin({commit}, userInfo) {
                     return new Promise((resolve, reject) => {
                         setTimeout(() => {
                             commit(types.SET_USER_INFO, {
@@ -339,7 +348,15 @@ export default {
                             });
                             resolve();
                         }, 1000);
-                    })
+                    });
+                },
+                accountLogout({commit}) {
+                    return new Promise((resolve, reject) => {
+                        setTimeout(() => {
+                            commit(types.SET_USER_INFO, null);
+                            resolve();
+                        }, 1000);
+                    });
                 }
             },
             mutations: {

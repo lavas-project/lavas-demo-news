@@ -16,6 +16,9 @@
                 <input type="password" v-model="password" placeholder="密码" />
             </div>
             <div class="sign-in-btn" @click="submit"><v-btn>登录</v-btn></div>
+            <v-progress-circular indeterminate 
+                class="primary--text login-progress" v-if="processing">
+            </v-progress-circular>
         </div>
     </transition>
 </template>
@@ -24,18 +27,19 @@
 import {mapActions} from 'vuex';
 export default {
     name: 'login',
-    props: ['show'],
+    props: ['show', 'logout'],
     data() {
         return {
             username: '',
             password: '',
-            wrapperWidth: document.body.clientWidth
+            wrapperWidth: document.body.clientWidth,
+            processing: false
         };
     },
     computed: {
     },
     methods: {
-        ...mapActions('appShell/appSidebar', ['login']),
+        ...mapActions('appShell/appSidebar', ['accountLogin', 'accountLogout']),
         close() {
             this.$emit('close-login');
         },
@@ -57,13 +61,13 @@ export default {
 
             this.showLoginLoading();
 
-            this.login(
+            this.accountLogin(
                 {
                     name: this.username,
                     pwd: this.password
                 })
                 .then(() => {
-                    this.storeCred();
+                    return this.storeCred();
                 })
                 .then(() => {
                     this.hideLoginLoading();
@@ -76,23 +80,29 @@ export default {
                 // 使用 navigator.credentials.store 进行凭证存储
 
                 let cred = new PasswordCredential({
-                    unmediated: true,
                     id: this.username,
                     password: this.password,
                     name: this.username,
                     iconURL: 'https://gss0.bdstatic.com/9rkZbzqaKgQUohGko9WTAnF6hhy/movie/edison/assets/android-chrome-192x192_1501062228038.png'
                 });
-                return navigator.credentials.store(cred)
-                    .then(() => {
-                        return {};
-                    });
+                return navigator.credentials.store(cred);
             }
 
             return Promise.resolve();      
         },
+        toLogout() {
+            if (navigator.credentials) {
+                navigator.credentials.requireUserMediation()
+                    .then(() => {
+                        return this.accountLogout();
+                    });
+            }
+        },
         showLoginLoading() {
+            this.processing = true;
         },
         hideLoginLoading() {
+            this.processing = false;
         }
     },
     created() {
@@ -101,7 +111,8 @@ export default {
 
             navigator.credentials.get({
                 // 返回类型为 PasswordCredential 的登录信息
-                password: true
+                password: true,
+                unmediated: true
             }).then(cred => {
                 // cred 可能为 undefined
                 if (cred) {
@@ -116,6 +127,13 @@ export default {
                     }
                 }
             });
+        }
+    },
+    watch: {
+        logout(value, old) {
+            if (value) {
+                this.toLogout();
+            }
         }
     }
 };
@@ -165,6 +183,12 @@ header
         font-size: 1.2em
         background: $theme.primary
         color: #fff
+
+.login-progress
+    position: absolute
+    top: 50%
+    left: 50%
+    transform: translateX(-50%)
 
 .login-leave-active, .login-enter-active
   transition: all .2s ease
