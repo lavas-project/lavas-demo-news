@@ -122,7 +122,11 @@ export default {
         }
     },
     async asyncData({store, route}) {
-        let category = this.category || '推荐';
+        let localTabData = localStorage.getItem('activeTab');
+        let category = '推荐';
+        if (localTabData) {
+            category = localTabData.split('|')[1];
+        }
         await store.dispatch('selectTab', category);
     },
     activated() {

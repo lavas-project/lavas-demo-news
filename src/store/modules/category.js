@@ -35,7 +35,12 @@ function getLocalMenuTabsData(menuTabsKey = menuTabsLocalDataKey) {
 
 let menuTabs = `${defaultCategory}|本地|娱乐|社会|军事|女人|互联网|科技|生活|国际|国内|体育|汽车`;
 menuTabs = getLocalMenuTabsData(menuTabsLocalDataKey) || handleMenuTabsOriginData(menuTabs);
-menuTabs[0].active = true;
+let activeIndex = 0;
+let localTabData = localStorage.getItem('activeTab');
+if (localTabData) {
+    activeIndex = parseInt(localTabData.split('|')[0], 10);
+}
+menuTabs[activeIndex].active = true;
 
 let otherMenuTabs = '房产|财经|时尚|教育|游戏|旅游|人文|创意';
 otherMenuTabs = getLocalMenuTabsData(otherMenuTabsLocalDataKey) || handleMenuTabsOriginData(otherMenuTabs);

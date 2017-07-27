@@ -101,6 +101,7 @@ export default {
             this.menuTabs.forEach((item, index) => {
                 if (item.active) {
                     activeIndex = index;
+                    localStorage.setItem('activeTab', `${index}|${item.text}`);
                 }
             });
 
