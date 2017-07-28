@@ -142,6 +142,7 @@ p
     height: 112px
 
     .user-avatar
+        display: flex
         justify-content center
         align-items center
         margin-right: 7px
