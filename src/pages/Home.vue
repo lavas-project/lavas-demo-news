@@ -1,8 +1,5 @@
 <template>
     <div class="home-wrapper">
-        <div class="menu-tabs-wrapper" :style="{top: menuTabsTop + 'px'}">
-            <menu-tabs class="menu-tabs"></menu-tabs>
-        </div>
         <div
             class="content-wrapper"
             ref="contentWrapper">
@@ -34,12 +31,13 @@
 <script>
 import {mapActions, mapGetters, mapState} from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
-import MenuTabs from '@/components/MenuTabs.vue';
+// import MenuTabs from '@/components/MenuTabs.vue';
 import Carousel from '@/components/Carousel.vue';
 import NewsList from '@/components/NewsList.vue';
 import BLoading from '@/components/BLoading.vue';
+import EventBus from '@/event-bus';
 
-const APP_HEADER_HEIGHT = 52;
+// const APP_HEADER_HEIGHT = 52;
 
 export default {
     name: 'home',
@@ -49,12 +47,13 @@ export default {
             newsFavorListShow: false,
             scrollTops: {},
             showLoading: true
+            // menuTabsTop: APP_HEADER_HEIGHT
         };
     },
     components: {
         NewsList,
         InfiniteLoading,
-        MenuTabs,
+        // MenuTabs,
         Carousel,
         BLoading
     },
@@ -101,15 +100,18 @@ export default {
 
             this.showLoading = false;
             return this.data[this.category].news;
-        },
-        menuTabsTop() {
-            /**
-             * https://stackoverflow.com/a/37953806
-             * 切换动画时，由于父元素应用transform，子元素fixed定位实效，会表现地像absolute
-             * 因此需要设置top为之前保存的滚动距离
-             */
-            return this.isPageSwitching ? this.historyPageScrollTop['/'] : APP_HEADER_HEIGHT;
         }
+        // menuTabsTop() {
+        //     *
+        //      * https://stackoverflow.com/a/37953806
+        //      * 切换动画时，由于父元素应用transform，子元素fixed定位实效，会表现地像absolute
+        //      * 因此需要设置top为之前保存的滚动距离
+
+        //     if (this.isPageSwitching) {
+        //         return this.$route.path === '/' ? 0 : this.historyPageScrollTop['/'];
+        //     }
+        //     return APP_HEADER_HEIGHT;
+        // }
     },
     watch: {
         category(val, old) {
@@ -145,22 +147,26 @@ export default {
         });
 
         this.enableSwipeOut();
-        this.$refs.contentWrapper.scrollTop = this.scrollTops[this.category];
+        // this.$refs.contentWrapper.scrollTop = this.scrollTops[this.category];
     },
     deactivated() {
         this.disableSwipeOut();
         this.scrollTops[this.category] = this.$refs.contentWrapper.scrollTop;
     }
+    // created() {
+    //     EventBus.$on('app-page:after-leave', () => {
+    //         if (this.$route.path === '/') {
+    //             this.menuTabsTop = APP_HEADER_HEIGHT;
+    //         }
+    //     });
+    //     EventBus.$on('app-page:before-enter', () => {
+    //         this.menuTabsTop = this.$route.path === '/' ? 0 : this.historyPageScrollTop['/'];
+    //     });
+    // }
 };
 </script>
 
 <style lang="stylus" scoped>
-
-.menu-tabs-wrapper
-    position fixed
-    left 0
-    right 0
-    z-index 3
 
 .carousel
     height 232px

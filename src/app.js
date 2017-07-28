@@ -10,6 +10,7 @@ import store from './store';
 import App from './App.vue';
 import Icon from 'vue-awesome/components/Icon.vue';
 import filters from './util/filters';
+import {sync} from 'vuex-router-sync';
 
 Vue.use(Vuetify);
 Vue.component('icon', Icon);
@@ -30,5 +31,6 @@ export function createApp() {
         filters,
         ...App
     });
+    sync(store, router);
     return {app, router, store};
 }
