@@ -139,8 +139,10 @@ p
     text-align: center
     color: #fff
     display: flex
+    height: 112px
 
     .user-avatar
+        display: flex
         justify-content center
         align-items center
         margin-right: 7px
@@ -150,15 +152,12 @@ p
             height: 100%
 
     .user-login
-        line-height: 50px
+        line-height: 92px
         font-size: 18px
-        //margin-left: 60px
         text-align: left
 
     .user-info
-        // padding 10px 0
         text-align: left
-        //margin-left: 60px
 
         >div
             margin 5px 0

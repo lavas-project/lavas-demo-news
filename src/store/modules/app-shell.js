@@ -300,15 +300,6 @@ export default {
                                 icon: 'settings'
                             }
                         ]
-                    },
-                    {
-                        list: [
-                            {
-                                text: '退出账户',
-                                icon: 'exit_to_app',
-                                action: 'logout'
-                            }
-                        ]
                     }
                 ]
             },
@@ -346,6 +337,16 @@ export default {
                                 location: '中国北京',
                                 email: 'example@baidu.com'
                             });
+                            commit(types.ADD_SIDEBAR_BLOCKS, {
+                                name: 'logout',
+                                list: [
+                                    {
+                                        text: '退出账户',
+                                        icon: 'exit_to_app',
+                                        action: 'logout'
+                                    }
+                                ]
+                            });
                             resolve();
                         }, 1000);
                     });
@@ -354,6 +355,7 @@ export default {
                     return new Promise((resolve, reject) => {
                         setTimeout(() => {
                             commit(types.SET_USER_INFO, null);
+                            commit(types.RM_SIDEBAR_BLOCKS, 'logout');
                             resolve();
                         }, 1000);
                     });
@@ -368,6 +370,16 @@ export default {
                 },
                 [types.SET_USER_INFO](state, userInfo) {
                     state.user = userInfo;
+                },
+                [types.ADD_SIDEBAR_BLOCKS](state, block) {
+                    state.blocks.push(block);
+                },
+                [types.RM_SIDEBAR_BLOCKS](state, name) {
+                    for (let i = 0; i < state.blocks.length; i++) {
+                        if (state.blocks[i].name === name) {
+                            state.blocks.splice(i, 1);
+                        }
+                    }
                 }
             }
         },
