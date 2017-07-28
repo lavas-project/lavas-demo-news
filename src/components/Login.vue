@@ -71,7 +71,7 @@ export default {
                 })
                 .then(() => {
                     this.hideLoginLoading();
-                    this.$emit('close-login');
+                    this.close();
                 });
         },
         // 存储用户凭证
