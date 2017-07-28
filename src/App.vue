@@ -64,7 +64,8 @@ export default {
             'overflowScrollingTouch',
             'enableSwipeBack',
             'historyPageScrollTop'
-        ])
+        ]),
+        ...mapState(['route'])
     },
     methods: {
         ...mapActions('appShell', [
@@ -80,8 +81,9 @@ export default {
         handleAfterEnter(el) {
             // 动画结束，恢复 body 上的滚动距离
             el.classList.remove('enable-scroll');
-            let scrollTop = this.historyPageScrollTop[this.$route.path];
+            let scrollTop = this.historyPageScrollTop[this.route.path];
             window.scrollTo(0, scrollTop);
+            this.setPageSwitching(false);
         },
         handleAfterLeave(el) {
             el.classList.remove('enable-scroll');
@@ -147,6 +149,7 @@ export default {
 </style>
 
 <style lang="stylus" scoped>
+
 .app-shell
     position absolute
     top 0
@@ -177,7 +180,10 @@ export default {
             bottom $app-footer-height
 
         .app-view
-            // transform translate(0, 0)
+            position absolute
+            top 0
+            left 0
+            right 0
             transition transform 0.4s cubic-bezier(.55, 0, .1, 1)
             background: $material-theme.bg-color
             color: $material-theme.text-color
@@ -206,18 +212,10 @@ export default {
             &.slide-left-leave-active,
             &.slide-right-enter-active,
             &.slide-right-leave-active
-                position absolute
-                top 0
-                left 0
-                right 0
                 overflow-y auto
                 bottom 0
 
             &.enable-scroll
-                position absolute
-                top 0
-                left 0
-                right 0
                 overflow-y auto
                 bottom 0
 </style>

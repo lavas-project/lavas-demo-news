@@ -157,6 +157,7 @@ export default {
 <style lang="stylus" scoped>
 
 .menu-tabs-wrapper
+    transform translate3d(0, 0, 0)
     position fixed
     left 0
     right 0

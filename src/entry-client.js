@@ -16,6 +16,8 @@ document.body.appendChild(loading.$el);
 
 // 是否是首屏，区别后续路由切换
 let firstPaint = true;
+// 顶部导航条高度
+const APP_HEADER_HEIGHT = 52;
 
 /**
  * https://developers.google.com/web/updates/2015/09/history-api-scroll-restoration
@@ -50,15 +52,17 @@ Vue.mixin({
 
     beforeRouteEnter(to, from, next) {
         next(vm => {
+            // 首屏就不用滚动了
             if (firstPaint) {
                 firstPaint = false;
                 return;
             }
+
             let $el = vm.$el;
             // 滚动内部页面到之前保存的位置
             let scrollTop = vm.$store.state.appShell.historyPageScrollTop[to.path] || 0;
             $el.classList.add('enable-scroll');
-            $el.scrollTop = $el.dataset.scrollTop || 0;
+            $el.scrollTop = scrollTop;
 
             vm.$store.dispatch('appShell/' + (to.meta.swipeBack ? 'enable' : 'disable') + 'SwipeBack');
         });
@@ -66,11 +70,17 @@ Vue.mixin({
 
     beforeRouteLeave(to, from, next) {
         let $el = this.$el;
-        // 取得当前 body 上的滚动距离
-        let scrollTop = window.scrollY || 0;
+        let $wrapper = $el.parentNode;
+        let currentWindowHeight = window.innerHeight;
+        let scrollTop = window.pageYOffset || 0;
+
+        // wrapper 高度有可能发生变化，例如手机浏览器地址栏隐藏时，需要重新设置
+        $wrapper.style.height = `${currentWindowHeight - APP_HEADER_HEIGHT}px`;
+
         // 滚动内部页面
         $el.classList.add('enable-scroll');
         $el.scrollTop = scrollTop;
+
         // 记录当前页面滚动位置
         this.$store.dispatch('appShell/saveScrollTop', {path: from.path, scrollTop});
         next();
