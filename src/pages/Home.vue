@@ -38,6 +38,7 @@ import MenuTabs from '@/components/MenuTabs.vue';
 import Carousel from '@/components/Carousel.vue';
 import NewsList from '@/components/NewsList.vue';
 import BLoading from '@/components/BLoading.vue';
+import EventBus from '@/event-bus';
 
 const APP_HEADER_HEIGHT = 52;
 
@@ -48,7 +49,8 @@ export default {
         return {
             newsFavorListShow: false,
             scrollTops: {},
-            showLoading: true
+            showLoading: true,
+            menuTabsTop: APP_HEADER_HEIGHT
         };
     },
     components: {
@@ -102,14 +104,17 @@ export default {
             this.showLoading = false;
             return this.data[this.category].news;
         },
-        menuTabsTop() {
-            /**
-             * https://stackoverflow.com/a/37953806
-             * 切换动画时，由于父元素应用transform，子元素fixed定位实效，会表现地像absolute
-             * 因此需要设置top为之前保存的滚动距离
-             */
-            return this.isPageSwitching ? this.historyPageScrollTop['/'] : APP_HEADER_HEIGHT;
-        }
+        // menuTabsTop() {
+        //     *
+        //      * https://stackoverflow.com/a/37953806
+        //      * 切换动画时，由于父元素应用transform，子元素fixed定位实效，会表现地像absolute
+        //      * 因此需要设置top为之前保存的滚动距离
+
+        //     if (this.isPageSwitching) {
+        //         return this.$route.path === '/' ? 0 : this.historyPageScrollTop['/'];
+        //     }
+        //     return APP_HEADER_HEIGHT;
+        // }
     },
     watch: {
         category(val, old) {
@@ -145,11 +150,19 @@ export default {
         });
 
         this.enableSwipeOut();
-        this.$refs.contentWrapper.scrollTop = this.scrollTops[this.category];
+        // this.$refs.contentWrapper.scrollTop = this.scrollTops[this.category];
     },
     deactivated() {
         this.disableSwipeOut();
         this.scrollTops[this.category] = this.$refs.contentWrapper.scrollTop;
+    },
+    created() {
+        EventBus.$on('app-page:after-leave', () => {
+            this.menuTabsTop = APP_HEADER_HEIGHT;console.log(this.menuTabsTop)
+        });
+        EventBus.$on('app-page:before-enter', () => {
+            this.menuTabsTop = this.$route.path === '/' ? 0 : this.historyPageScrollTop['/'];console.log(this.menuTabsTop)
+        });
     }
 };
 </script>

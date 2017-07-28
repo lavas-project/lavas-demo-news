@@ -75,7 +75,7 @@ export default {
     },
     mutations: {
         [types.SET_NEWS_DATA](state, {data, category, change}) {
-            data.news = data.news.map(dataProcess);
+            data.news = data.news.filter(item => item.sourcets).map(dataProcess);
 
             if (data.banner) {
                 data.banner = data.banner.map(dataProcess);

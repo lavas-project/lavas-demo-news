@@ -49,6 +49,7 @@
 import {mapState, mapActions} from 'vuex';
 import AppHeader from '@/components/AppHeader';
 import AppSidebar from '@/components/AppSidebar';
+import EventBus from '@/event-bus';
 
 export default {
     name: 'app',
@@ -76,6 +77,7 @@ export default {
         ]),
         handleBeforeEnter(el) {
             this.setPageSwitching(true);
+            EventBus.$emit('app-page:before-enter');
         },
         handleAfterEnter(el) {
             // 动画结束，恢复 body 上的滚动距离
@@ -86,6 +88,7 @@ export default {
         handleAfterLeave(el) {
             el.classList.remove('enable-scroll');
             this.setPageSwitching(false);
+            EventBus.$emit('app-page:after-leave');
         },
         handleClickHeaderBack() {
             this.$router.go(-1);
