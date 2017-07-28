@@ -7,7 +7,7 @@
                 @click-back="handleClickHeaderBack">
                 <template slot="logo"></template>
             </app-header>
-
+            <menu-tabs class="menu-tabs"></menu-tabs>
             <app-sidebar @hide-sidebar="hideSidebar" @show-sidebar="showSidebar"></app-sidebar>
             <div class="app-view-wrapper" ref="appViewWrapper"
                 :class="{
@@ -50,12 +50,14 @@ import {mapState, mapActions} from 'vuex';
 import AppHeader from '@/components/AppHeader';
 import AppSidebar from '@/components/AppSidebar';
 import EventBus from '@/event-bus';
+import MenuTabs from '@/components/MenuTabs.vue';
 
 export default {
     name: 'app',
     components: {
         AppHeader,
-        AppSidebar
+        AppSidebar,
+        MenuTabs
     },
     computed: {
         ...mapState('appShell', [

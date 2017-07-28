@@ -1,44 +1,46 @@
 <template>
-    <div :class="{'menu-tabs': true, opend: opend}">
-        <div class="menu-tabs-wrap" ref="menuTabsWrap">
-            <div class="menu-tabs-wrap-inner" :style="{width: len * tabWidth + extraWidth + 'px'}">
-                <div class="menu-tabs-item"
-                    v-for="(item, i) in menuTabs"
-                    @click="selectItem(item)">
-                    <span :class="{active: item.active}">{{item.text}}</span>
+    <transition name="slide-left">
+        <div :class="{'menu-tabs': true, opend: opend}" v-show="$route.path === '/'" :style="{width: clientWidth + 'px'}">
+            <div class="menu-tabs-wrap" ref="menuTabsWrap">
+                <div class="menu-tabs-wrap-inner" :style="{width: len * tabWidth + extraWidth + 'px'}">
+                    <div class="menu-tabs-item"
+                        v-for="(item, i) in menuTabs"
+                        @click="selectItem(item)">
+                        <span :class="{active: item.active}">{{item.text}}</span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="edit" @click="toggleEditWrapper"><span>+</span></div>
-        <div class="edit-wrapper">
-            <div class="edit-wrapper-inner">
-                <p class="menu-title">我的栏目<span>点击删除</span></p>
-                <transition-group class="edit-menu-tabs-wrapper" @leave="leave" @enter="enter">
-                    <div class="edit-menu-tabs-item"
-                        v-for="(item, i) in menuTabs"
-                        v-if="i !== 0"
-                        @click="delSelectedItem(item)"
-                        :key="item.text">
-                        <span :class="{active: item.active}">- {{item.text}}</span>
-                    </div>
-                </transition-group>
-                <p class="menu-title">推荐栏目<span>点击添加</span></p>
-                <transition-group class="edit-menu-tabs-wrapper" @leave="leave" @enter="enter">
-                    <div class="edit-menu-tabs-item"
-                        v-for="(item, i) in otherMenuTabs"
-                        @click="addItemToSelected(item)"
-                        :key="item.text">
-                        <span>+ {{item.text}}</span>
-                    </div>
-                </transition-group>
+            <div class="edit" @click="toggleEditWrapper"><span>+</span></div>
+            <div class="edit-wrapper">
+                <div class="edit-wrapper-inner">
+                    <p class="menu-title">我的栏目<span>点击删除</span></p>
+                    <transition-group class="edit-menu-tabs-wrapper" @leave="leave" @enter="enter">
+                        <div class="edit-menu-tabs-item"
+                            v-for="(item, i) in menuTabs"
+                            v-if="i !== 0"
+                            @click="delSelectedItem(item)"
+                            :key="item.text">
+                            <span :class="{active: item.active}">- {{item.text}}</span>
+                        </div>
+                    </transition-group>
+                    <p class="menu-title">推荐栏目<span>点击添加</span></p>
+                    <transition-group class="edit-menu-tabs-wrapper" @leave="leave" @enter="enter">
+                        <div class="edit-menu-tabs-item"
+                            v-for="(item, i) in otherMenuTabs"
+                            @click="addItemToSelected(item)"
+                            :key="item.text">
+                            <span>+ {{item.text}}</span>
+                        </div>
+                    </transition-group>
+                </div>
             </div>
+            <div class="menu-tab-mask" @click="toggleEditWrapper"></div>
         </div>
-        <div class="menu-tab-mask" @click="toggleEditWrapper"></div>
-    </div>
+    </transition>
 </template>
 
 <script>
-import {mapGetters, mapActions} from 'vuex';
+import {mapGetters, mapActions, mapState} from 'vuex';
 import Iscroll from 'iscroll';
 export default {
     name: 'menu-tabs',
@@ -47,7 +49,8 @@ export default {
         return {
             opend: false,
             tabWidth: 72,
-            extraWidth: 40
+            extraWidth: 40,
+            clientWidth: document.documentElement.clientWidth
         };
     },
 
@@ -156,8 +159,14 @@ $height = 40px
 .menu-tabs
     // border-top 1px solid #5dabf0
     // height $height
-    position: relative
+    position: fixed
+    top: $app-header-height
     z-index: 3
+    transition transform .4s cubic-bezier(.55, 0, .1, 1)
+    overflow: hidden
+    &.slide-left-enter,
+    &.slide-left-leave-to
+        transform translate(-100%)
 
     &-wrap
         position relative

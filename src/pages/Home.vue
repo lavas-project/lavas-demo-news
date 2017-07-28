@@ -1,8 +1,5 @@
 <template>
     <div class="home-wrapper">
-        <div class="menu-tabs-wrapper" :style="{top: menuTabsTop + 'px'}">
-            <menu-tabs class="menu-tabs"></menu-tabs>
-        </div>
         <div
             class="content-wrapper"
             ref="contentWrapper">
@@ -34,13 +31,13 @@
 <script>
 import {mapActions, mapGetters, mapState} from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
-import MenuTabs from '@/components/MenuTabs.vue';
+// import MenuTabs from '@/components/MenuTabs.vue';
 import Carousel from '@/components/Carousel.vue';
 import NewsList from '@/components/NewsList.vue';
 import BLoading from '@/components/BLoading.vue';
 import EventBus from '@/event-bus';
 
-const APP_HEADER_HEIGHT = 52;
+// const APP_HEADER_HEIGHT = 52;
 
 export default {
     name: 'home',
@@ -49,14 +46,14 @@ export default {
         return {
             newsFavorListShow: false,
             scrollTops: {},
-            showLoading: true,
-            menuTabsTop: APP_HEADER_HEIGHT
+            showLoading: true
+            // menuTabsTop: APP_HEADER_HEIGHT
         };
     },
     components: {
         NewsList,
         InfiniteLoading,
-        MenuTabs,
+        // MenuTabs,
         Carousel,
         BLoading
     },
@@ -103,7 +100,7 @@ export default {
 
             this.showLoading = false;
             return this.data[this.category].news;
-        },
+        }
         // menuTabsTop() {
         //     *
         //      * https://stackoverflow.com/a/37953806
@@ -155,25 +152,21 @@ export default {
     deactivated() {
         this.disableSwipeOut();
         this.scrollTops[this.category] = this.$refs.contentWrapper.scrollTop;
-    },
-    created() {
-        EventBus.$on('app-page:after-leave', () => {
-            this.menuTabsTop = APP_HEADER_HEIGHT;console.log(this.menuTabsTop)
-        });
-        EventBus.$on('app-page:before-enter', () => {
-            this.menuTabsTop = this.$route.path === '/' ? 0 : this.historyPageScrollTop['/'];console.log(this.menuTabsTop)
-        });
     }
+    // created() {
+    //     EventBus.$on('app-page:after-leave', () => {
+    //         if (this.$route.path === '/') {
+    //             this.menuTabsTop = APP_HEADER_HEIGHT;
+    //         }
+    //     });
+    //     EventBus.$on('app-page:before-enter', () => {
+    //         this.menuTabsTop = this.$route.path === '/' ? 0 : this.historyPageScrollTop['/'];
+    //     });
+    // }
 };
 </script>
 
 <style lang="stylus" scoped>
-
-.menu-tabs-wrapper
-    position fixed
-    left 0
-    right 0
-    z-index 3
 
 .carousel
     height 232px
