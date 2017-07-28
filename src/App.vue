@@ -7,7 +7,7 @@
                 @click-back="handleClickHeaderBack">
                 <template slot="logo"></template>
             </app-header>
-
+            <menu-tabs class="menu-tabs"></menu-tabs>
             <app-sidebar @hide-sidebar="hideSidebar" @show-sidebar="showSidebar"></app-sidebar>
             <div class="app-view-wrapper" ref="appViewWrapper"
                 :class="{
@@ -49,12 +49,15 @@
 import {mapState, mapActions} from 'vuex';
 import AppHeader from '@/components/AppHeader';
 import AppSidebar from '@/components/AppSidebar';
+import EventBus from '@/event-bus';
+import MenuTabs from '@/components/MenuTabs.vue';
 
 export default {
     name: 'app',
     components: {
         AppHeader,
-        AppSidebar
+        AppSidebar,
+        MenuTabs
     },
     computed: {
         ...mapState('appShell', [
@@ -77,6 +80,7 @@ export default {
         ]),
         handleBeforeEnter(el) {
             this.setPageSwitching(true);
+            EventBus.$emit('app-page:before-enter');
         },
         handleAfterEnter(el) {
             // 动画结束，恢复 body 上的滚动距离
@@ -88,6 +92,7 @@ export default {
         handleAfterLeave(el) {
             el.classList.remove('enable-scroll');
             this.setPageSwitching(false);
+            EventBus.$emit('app-page:after-leave');
         },
         handleClickHeaderBack() {
             this.$router.go(-1);

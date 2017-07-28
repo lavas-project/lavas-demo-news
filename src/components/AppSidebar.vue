@@ -107,6 +107,9 @@ export default {
         },
         logout() {
             this.aclogout = true;
+            setTimeout(() => {
+                this.aclogout = false;
+            }, 100);
         },
         closeLogin() {
             this.showLogin = false;
