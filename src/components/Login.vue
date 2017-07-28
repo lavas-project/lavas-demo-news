@@ -7,14 +7,24 @@
                 </v-btn>
                 <span>登录</span>
             </header>
-            <div class="field-item">
-                <v-btn icon><v-icon>email</v-icon></v-btn>
-                <input type="text" v-model="username" placeholder="用户名" />
-            </div>
-            <div class="field-item">
-                <v-btn icon><v-icon>lock</v-icon></v-btn>
-                <input type="password" v-model="password" placeholder="密码" />
-            </div>
+            <v-text-field
+              name="username"
+              single-line
+              prepend-icon="email"
+              placeholder="用户名"
+              v-model="username"
+              type="text"
+              class="field-item"
+            ></v-text-field>
+            <v-text-field
+              name="password"
+              single-line
+              prepend-icon="lock"
+              placeholder="密码"
+              v-model="password"
+              type="password"
+              class="field-item"
+            ></v-text-field>
             <div class="sign-in-btn" @click="submit"><v-btn>登录</v-btn></div>
             <v-progress-circular indeterminate 
                 class="primary--text login-progress" v-if="processing">
@@ -165,17 +175,10 @@ header
         margin-left: 10px
 
 .field-item
-    padding: 0 23px 0 8px
-
-    input
-        border-bottom: 1px solid #959595
-        margin-left: 10px
-        padding: 0 16px 0 0
-        box-sizing: border-box
-        width: calc(100% - 74px)
+    padding: 0 20px
 
 .sign-in-btn
-    padding: 20px 23px
+    padding: 0 20px
 
     button
         width: 100%
