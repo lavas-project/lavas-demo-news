@@ -19,7 +19,7 @@
         <error v-show="detail.error" :message="detail.msg || '加载失败'"> </error>
         <b-loading :show="showLoading"></b-loading>
         <preview :show="previewShow" :imageList="imageList" @click-close="closePreview" :index="previewIndex"></preview>
-        <div class="related-news">
+        <div class="related-news" v-show="showRelatedNews">
             <div class="block-title">相关新闻</div>
             <news-item v-for="(newsItem, i) in relatedNews"
                 :newsItem="newsItem"
@@ -56,7 +56,8 @@ export default {
             showLoading: true,
             relatedNews: [],
             previewShow: false,
-            previewIndex: 0
+            previewIndex: 0,
+            showRelatedNews: false
         };
     },
 

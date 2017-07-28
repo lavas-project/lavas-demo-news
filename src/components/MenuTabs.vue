@@ -14,7 +14,7 @@
             <div class="edit-wrapper-inner">
                 <p class="menu-title">我的栏目<span>点击删除</span></p>
                 <transition-group class="edit-menu-tabs-wrapper" @leave="leave" @enter="enter">
-                    <div class="edit-menu-tabs-item selected"
+                    <div class="edit-menu-tabs-item"
                         v-for="(item, i) in menuTabs"
                         v-if="i !== 0"
                         @click="delSelectedItem(item)"
@@ -39,7 +39,6 @@
 
 <script>
 import {mapGetters, mapActions} from 'vuex';
-import * as types from '../store/mutation-types';
 import Iscroll from 'iscroll';
 export default {
     name: 'menu-tabs',
@@ -67,11 +66,15 @@ export default {
 
     methods: {
         ...mapActions([
-            types.ADD_CATEGORY,
-            types.DEL_CATEGORY
+            'addCategory',
+            'setActiveTab',
+            'delCategory'
         ]),
-        selectItem(item) {
-            this.opend = false;
+        selectItem(item, noFold) {
+            if (!noFold) {
+                this.opend = false;
+            }
+            this.setActiveTab(item.text);
             this.$store.dispatch('selectTab', item.text);
             this.setMenuTabsPos();
             // this.$router.replace('/home/' + item.value);
@@ -81,16 +84,16 @@ export default {
             this.opend = !this.opend;
         },
         addItemToSelected(tabItem) {
-            this[types.ADD_CATEGORY](tabItem);
+            this.addCategory(tabItem);
             this.refreshScroll();
         },
         delSelectedItem(tabItem) {
 
             if (tabItem.active) {
-                this.selectItem(this.menuTabs[0]);
+                this.selectItem(this.menuTabs[0], true);
             }
 
-            this[types.DEL_CATEGORY](tabItem);
+            this.delCategory(tabItem);
             this.refreshScroll();
         },
         setMenuTabsPos() {
@@ -98,6 +101,7 @@ export default {
             this.menuTabs.forEach((item, index) => {
                 if (item.active) {
                     activeIndex = index;
+                    localStorage.setItem('activeTab', `${index}|${item.text}`);
                 }
             });
 
@@ -226,6 +230,8 @@ $height = 40px
                 margin: 0 5px
                 border: solid 1px rgba(255, 255, 255, .6)
                 border-radius: 20px
+                &.active
+                    box-shadow: 0 0 3px 1px rgba(255, 255, 255, .6)
     .menu-tab-mask
         position: fixed
         top: $height

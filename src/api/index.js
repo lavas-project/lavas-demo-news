@@ -5,7 +5,7 @@
 
 import axios from 'axios';
 
-const API_PATH = 'https://lavas.baidu.com/api/mockup/realNews/news';
+const API_PATH = 'http://120.76.240.153:8090/api/mockup/realNews/news';
 
 let {width: screenSizeWidth, height: screenSizeHeight} = screen;
 // let screenSizeHeight = screen.height;
