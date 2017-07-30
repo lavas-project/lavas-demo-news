@@ -65,11 +65,11 @@ export default {
         ...mapState({
             detail(state) {
                 return state.detail.detail;
+            },
+            detailPageFavorStatus(state) {
+                return state.favor.detailPageFavorStatus;
             }
         }),
-        ...mapGetters([
-            'detailPageFavorStatus'
-        ]),
         contents() {
             return this.detail && this.detail.content || [];
         },
@@ -90,7 +90,6 @@ export default {
         ...mapActions([
             'addFavorItem',
             'removeFavorItem',
-            'getNewsFavorList',
             'isFavored'
         ]),
         // 收藏

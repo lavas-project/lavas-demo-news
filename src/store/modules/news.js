@@ -5,49 +5,21 @@
 
 import API from '@/api';
 import * as types from '../mutation-types';
-
-function df(t) {
-    let date = new Date(parseInt(t, 10) || Date.now());
-    return date.toISOString()
-        .replace('T', ' ')
-        .substr(0, 16);
-}
+import filters from '@/util/filters';
 
 function dataProcess(item) {
-    item.show = df(item.ts);
+    item.show = filters.dateFormat(+item.ts, 'yyyy-MM-dd hh:mm:ss');
     return item;
 }
 
 export default {
     state: {
-        loaded: false,
-        listFromCache: false,
-        data: {},
-        detailPageFavorStatus: false,
-        lastListLen: 0
-    },
-    getters: {
-        loaded(state) {
-            return state.loaded;
-        },
-        listFromCache(state) {
-            return state.listFromCache;
-        },
-        data(state) {
-            return state.data;
-        },
-        lastListLen(state) {
-            return state.lastListLen;
-        },
-        detailPageFavorStatus(state) {
-            return state.detailPageFavorStatus;
-        }
+        data: {}
     },
     actions: {
         async getNewsList({commit, state}, category) {
             try {
                 let data = await API.getNewsData({category});
-                commit(types.SET_LIST_FROM_CACHE, false);
                 commit(types.SET_NEWS_DATA, {category, data});
             }
             catch (e) {
@@ -59,7 +31,6 @@ export default {
         async selectTab({commit, state}, category) {
 
             if (state.data[category]) {
-                commit(types.SET_LIST_FROM_CACHE, true);
                 return;
             }
 
@@ -70,7 +41,6 @@ export default {
             catch (e) {
                 // console.log(e);
             }
-            commit(types.SET_LIST_FROM_CACHE, false);
         }
     },
     mutations: {
@@ -97,14 +67,6 @@ export default {
             else {
                 state.loaded = 'complete';
             }
-        },
-        [types.SET_LIST_FROM_CACHE](state, fromCache) {
-            state.listFromCache = fromCache;
-        },
-        [types.SET_SEARCH_RESULT](state, data) {
-            data = data.map(dataProcess);
-
-            state.searchResultData = data;
         }
     }
 };

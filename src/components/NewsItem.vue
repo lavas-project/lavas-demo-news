@@ -1,8 +1,7 @@
 <template>
-    <router-link :to="'/detail/' + newsItem.nid" class="news-item">
+    <router-link :to="'/detail/' + newsItem.nid" class="news-item" v-ripple="{class: 'grey--text'}">
         <!-- 仅一张图时的样式 -->
         <div v-if="newsItem.imageurls && newsItem.imageurls.length === 1"
-            v-ripple="{class: 'grey--text'}"
             class="img-first news-content" >
             <div class="posts" v-if="newsItem.imageurls.length">
                 <span v-for="imgUrl in newsItem.imageurls">
@@ -20,7 +19,6 @@
 
         <!-- 非一张图时的样式 -->
         <div v-if="newsItem.imageurls && newsItem.imageurls.length !== 1"
-            v-ripple="{class: 'grey--text'}"
             class="title-first news-content">
             <div class="list-item-title">{{newsItem.title}}</div>
             <div class="posts" v-if="newsItem.imageurls.length">

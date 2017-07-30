@@ -3,16 +3,23 @@
  * @author  qiusiqi (qiusiqi@baidu.com)
  */
 
-import API from '@/api';
 import * as types from '../mutation-types';
 
 const localStorage = window.localStorage;
 const FAVORITE_KEY = 'FAVORITE_NEWS';
 
+let localList;
+try {
+    localList = JSON.parse(localStorage.getItem(FAVORITE_KEY));
+}
+catch (e) {
+    localList = [];
+}
+
 export default {
 
     state: {
-        newsFavorList: []
+        newsFavorList: localList
     },
 
     actions: {
@@ -40,18 +47,6 @@ export default {
             });
 
             localStorage.setItem(FAVORITE_KEY, JSON.stringify(favorList));
-            commit(types.SET_NEWS_FAVOR_LIST, favorList);
-        },
-        // 获取收藏列表
-        getNewsFavorList({commit}) {
-            let favorList = [];
-            try {
-                let tmpList = localStorage.getItem(FAVORITE_KEY);
-                if (tmpList) {
-                    favorList = JSON.parse(tmpList);
-                }
-            }
-            catch (e) {}
             commit(types.SET_NEWS_FAVOR_LIST, favorList);
         },
         // 检测是否已收藏

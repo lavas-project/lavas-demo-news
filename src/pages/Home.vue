@@ -1,138 +1,83 @@
 <template>
     <div class="home-wrapper">
-        <div
-            class="content-wrapper"
-            ref="contentWrapper">
-            <!-- 轮播banner组件 -->
-<!--             <carousel
-                v-if="bannerList.length > 0"
-                :interval=3500
-                :list="bannerList">
-            </carousel> -->
-            <!-- 列表部分list组件 -->
+        <div class="content-wrapper" ref="contentWrapper">
             <news-list
                 :newsList='newsList'
-                :lastListLen="lastListLen"
-                :needTransition="!listFromCache">
+                :lastListLen="lastListLen">
             </news-list>
-            <b-loading :show="showLoading"></b-loading>
-            <infinite-loading v-if="!showLoading"
+            <b-loading :show="!newsList.length"></b-loading>
+            <infinite-loading
                 spinner="spiral"
-                :on-infinite="getMoreNews"
+                :on-infinite="oninfinite"
                 ref="infiniteLoading">
-                <span slot="no-more">
-                  亲，已经拉到底啦
-                </span>
+                <span slot="no-more"> 亲，已经拉到底啦 </span>
             </infinite-loading>
         </div>
     </div>
 </template>
 
 <script>
-import {mapActions, mapGetters, mapState} from 'vuex';
+import {mapState, mapGetters} from 'vuex';
 import InfiniteLoading from 'vue-infinite-loading';
-// import MenuTabs from '@/components/MenuTabs.vue';
-import Carousel from '@/components/Carousel.vue';
 import NewsList from '@/components/NewsList.vue';
 import BLoading from '@/components/BLoading.vue';
-import EventBus from '@/event-bus';
 
-// const APP_HEADER_HEIGHT = 52;
+let initCategory = '推荐';
+let localTabData = localStorage.getItem('activeTab');
+if (localTabData) {
+    initCategory = localTabData.split('|')[1];
+}
 
 export default {
     name: 'home',
     props: {},
     data() {
         return {
-            newsFavorListShow: false,
             scrollTops: {},
-            showLoading: true
-            // menuTabsTop: APP_HEADER_HEIGHT
+            lastListLen: 0
         };
     },
     components: {
         NewsList,
         InfiniteLoading,
-        // MenuTabs,
-        Carousel,
         BLoading
     },
     methods: {
-        ...mapActions('appShell/appHeader', [
-            'setAppHeader'
-        ]),
-        ...mapActions('appShell/appBottomNavigator', [
-            'showBottomNav',
-            'activateBottomNav'
-        ]),
-        ...mapActions('appShell/appSidebar', [
-            'disableSwipeOut',
-            'enableSwipeOut'
-        ]),
-        ...mapActions([
-            'getNewsList'
-        ]),
-        async getMoreNews() {
-            await this.getNewsList(this.category);
-            setTimeout(() => this.$refs.infiniteLoading.$emit('$InfiniteLoading:' + this.loaded), 100);
+        async oninfinite() {
+            this.lastListLen = this.data[this.category].news.length;
+            await this.$store.dispatch('getNewsList', this.category);
+            setTimeout(() => this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded'), 1000);
         }
     },
     computed: {
-        ...mapGetters([
-            'category',
-            'listFromCache',
-            'loaded',
-            'data',
-            'lastListLen'
-        ]),
-        ...mapState('appShell', [
-            'historyPageScrollTop',
-            'isPageSwitching'
-        ]),
-        ...mapState('route', [
-            'from'
-        ]),
-        newsList() {
-            if (!this.data[this.category]) {
-                this.showLoading = true;
-                return [];
+        ...mapState({
+            data(state) {
+                return state.news.data;
             }
-
-            this.showLoading = false;
-            return this.data[this.category].news;
+        }),
+        ...mapGetters(['category']),
+        newsList() {
+            if (this.data[this.category] && this.data[this.category].news) {
+                return this.data[this.category].news;
+            }
+            return [];
         }
-        // menuTabsTop() {
-        //     *
-        //      * https://stackoverflow.com/a/37953806
-        //      * 切换动画时，由于父元素应用transform，子元素fixed定位实效，会表现地像absolute
-        //      * 因此需要设置top为之前保存的滚动距离
-
-        //     if (this.isPageSwitching) {
-        //         return this.$route.path === '/' ? 0 : this.historyPageScrollTop['/'];
-        //     }
-        //     return APP_HEADER_HEIGHT;
-        // }
     },
     watch: {
         category(val, old) {
             this.scrollTops[old] = this.$refs.contentWrapper.scrollTop;
         }
     },
-    updated(data) {
-        if (this.listFromCache) {
-            this.$refs.contentWrapper.scrollTop = this.scrollTops[this.category];
-        }
+    updated() {
+        // if (this.listFromCache) {
+        //     this.$refs.contentWrapper.scrollTop = this.scrollTops[this.category];
+        // }
     },
     async asyncData({store, route}) {
-        let localTabData = localStorage.getItem('activeTab');
-        let category = '推荐';
-        if (localTabData) {
-            category = localTabData.split('|')[1];
-        }
-        await store.dispatch('selectTab', category);
+        await store.dispatch('selectTab', initCategory);
     },
     activated() {
-        this.setAppHeader({
+        this.$store.dispatch('appShell/appHeader/setAppHeader', {
             show: true,
             title: '百度新闻',
             showMenu: true,
@@ -145,24 +90,12 @@ export default {
                 }
             ]
         });
-
-        this.enableSwipeOut();
-        // this.$refs.contentWrapper.scrollTop = this.scrollTops[this.category];
+        this.$store.dispatch('appShell/appSidebar/enableSwipeOut');
     },
     deactivated() {
-        this.disableSwipeOut();
+        this.$store.dispatch('appShell/appSidebar/disableSwipeOut');
         this.scrollTops[this.category] = this.$refs.contentWrapper.scrollTop;
     }
-    // created() {
-    //     EventBus.$on('app-page:after-leave', () => {
-    //         if (this.$route.path === '/') {
-    //             this.menuTabsTop = APP_HEADER_HEIGHT;
-    //         }
-    //     });
-    //     EventBus.$on('app-page:before-enter', () => {
-    //         this.menuTabsTop = this.$route.path === '/' ? 0 : this.historyPageScrollTop['/'];
-    //     });
-    // }
 };
 </script>
 
@@ -174,8 +107,5 @@ export default {
 
 .content-wrapper
     padding-top: 40px
-
-// .loading-spiral
-//     border-color: $theme.primary !important
 
 </style>

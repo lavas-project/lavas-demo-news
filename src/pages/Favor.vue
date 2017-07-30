@@ -83,8 +83,6 @@ export default {
         });
     },
     activated() {
-        this.$store.dispatch('getNewsFavorList');
-
         this.setAppHeader({
             show: true,
             title: '收藏夹',
