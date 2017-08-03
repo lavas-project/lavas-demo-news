@@ -222,12 +222,11 @@ header
    text-align: center
    margin-top: 10px
 
-/*
 .hidden-filed
     visibility: hidden
     height: 0
     float: right
-*/
+
 .login-progress
     position: absolute
     top: 60%
