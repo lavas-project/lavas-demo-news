@@ -7,25 +7,36 @@
                 </v-btn>
                 <span>登录</span>
             </header>
-            <v-text-field
-              name="username"
-              single-line
-              prepend-icon="email"
-              placeholder="用户名"
-              v-model="username"
-              type="text"
-              class="field-item"
-            ></v-text-field>
-            <v-text-field
-              name="password"
-              single-line
-              prepend-icon="lock"
-              placeholder="密码"
-              v-model="password"
-              type="password"
-              class="field-item"
-            ></v-text-field>
-            <div class="sign-in-btn" @click="submit"><v-btn>登录</v-btn></div>
+            <div v-if="!useDefaultAccount" class="login-content">
+                <v-text-field
+                  name="username"
+                  single-line
+                  prepend-icon="email"
+                  placeholder="用户名"
+                  v-model="username"
+                  type="text"
+                  autocomplete="name"
+                ></v-text-field>
+                <v-text-field
+                  name="password"
+                  single-line
+                  prepend-icon="lock"
+                  placeholder="密码"
+                  v-model="password"
+                  type="password"
+                  autocomplete="new-password"
+                ></v-text-field>
+                <div class="sign-in-btn" @click="submit"><v-btn>登录</v-btn></div>
+            </div>
+            <div v-else class="login-content">
+                <p class="sign-in-already-tip">您已经登录过您的账户，可以直接访问</p>
+                <input type="text" v-model="username" class="hidden-filed" />
+                <input type="password" v-model="password" class="hidden-filed" />
+                <v-radio :label="username" v-model="username" :value="username" 
+                    class="sign-in-checkbox" color="primary" hide-details></v-radio>
+                <div class="sign-in-btn" @click="submit"><v-btn>现在访问</v-btn></div>
+                <p class="sign-in-change" @click="changeAccount">换个账户登录</p>
+            </div>
             <v-progress-circular indeterminate 
                 class="primary--text login-progress" v-if="processing">
             </v-progress-circular>
@@ -43,7 +54,8 @@ export default {
             username: '',
             password: '',
             wrapperWidth: document.body.clientWidth,
-            processing: false
+            processing: false,
+            useDefaultAccount: false
         };
     },
     computed: {
@@ -77,18 +89,23 @@ export default {
                     pwd: this.password
                 })
                 .then(() => {
-                    return this.storeCred();
+                    this.storeCred();
                 })
                 .then(() => {
                     this.hideLoginLoading();
                     this.close();
+                    this.useDefaultAccount = true;
                 });
+        },
+        // 换账户登录
+        changeAccount() {
+            this.username = '';
+            this.password = '';
+            this.useDefaultAccount = false;
         },
         // 存储用户凭证
         storeCred() {
             if (navigator.credentials) {
-                // 使用 navigator.credentials.store 进行凭证存储
-
                 let cred = new PasswordCredential({
                     id: this.username,
                     password: this.password,
@@ -98,15 +115,18 @@ export default {
                 return navigator.credentials.store(cred);
             }
 
-            return Promise.resolve();      
+            return Promise.resolve();
         },
         toLogout() {
             if (navigator.credentials) {
                 navigator.credentials.requireUserMediation()
                     .then(() => {
-                        return this.accountLogout();
+                        this.accountLogout();
                     });
+                return;
             }
+
+            this.accountLogout();
         },
         showLoginLoading() {
             this.processing = true;
@@ -118,19 +138,21 @@ export default {
     created() {
         // 提取用户凭证
         if (navigator.credentials) {
-
             navigator.credentials.get({
+                // unmediated: true,
                 // 返回类型为 PasswordCredential 的登录信息
-                password: true,
-                unmediated: true
+                password: true
             }).then(cred => {
                 // cred 可能为 undefined
                 if (cred) {
-                    
                     switch (cred.type) {
                         case 'password':
+                            if (cred.password === undefined) {
+                                break;
+                            }
                             this.username = cred.id;
                             this.password = cred.password;
+                            this.useDefaultAccount = true;
                             break;
                         default:
                             break;
@@ -174,11 +196,10 @@ header
         font-weight: 600
         margin-left: 10px
 
-.field-item
-    padding: 0 20px
+.login-content
+    padding: 0 16px
 
 .sign-in-btn
-    padding: 0 20px
 
     button
         width: 100%
@@ -187,9 +208,29 @@ header
         background: $theme.primary
         color: #fff
 
+.sign-in-already-tip
+    color: #898B92
+    font-size: 1.2em
+    line-height: 20px
+    padding-bottom: 12px
+    border-bottom: 1px solid #EBEBEC
+
+.sign-in-change
+   color: #3A3E4A
+   font-size: 16px
+   line-height: 24px
+   text-align: center
+   margin-top: 10px
+
+/*
+.hidden-filed
+    visibility: hidden
+    height: 0
+    float: right
+*/
 .login-progress
     position: absolute
-    top: 50%
+    top: 60%
     left: 50%
     transform: translateX(-50%)
 
