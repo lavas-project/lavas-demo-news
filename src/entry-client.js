@@ -70,12 +70,11 @@ Vue.mixin({
 
     beforeRouteLeave(to, from, next) {
         let $el = this.$el;
-        let $wrapper = $el.parentNode;
         let currentWindowHeight = window.innerHeight;
         let scrollTop = window.pageYOffset || 0;
 
         // wrapper 高度有可能发生变化，例如手机浏览器地址栏隐藏时，需要重新设置
-        $wrapper.style.height = `${currentWindowHeight - APP_HEADER_HEIGHT}px`;
+        this.$root.$refs.appView.$el.style.height = `${currentWindowHeight - APP_HEADER_HEIGHT}px`;
 
         // 滚动内部页面
         $el.classList.add('enable-scroll');

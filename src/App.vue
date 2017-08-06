@@ -22,6 +22,7 @@
                         <router-view
                             v-if="!$route.meta.notKeepAlive"
                             class="app-view"
+                            ref="appView"
                             :key="$route.fullPath"
                             :class="{
                                 'overflow-scrolling-touch': overflowScrollingTouch
@@ -36,6 +37,7 @@
                     <router-view
                         v-if="$route.meta.notKeepAlive"
                         class="app-view"
+                        ref="appView"
                         :key="$route.fullPath"
                         :class="{
                             'overflow-scrolling-touch': overflowScrollingTouch
