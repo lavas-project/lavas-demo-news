@@ -131,7 +131,20 @@ let webpackConfig = merge(baseWebpackConfig, {
             {
                 from: path.resolve(__dirname, '../static'),
                 to: config.build.assetsSubDirectory,
-                ignore: ['.*']
+                ignore: ['.*'],
+                transform(context, p) {
+                    if (/manifest\.json$/.test(p)) {
+                        try {
+                            /* eslint-disable fecs-camelcase */
+                            let data = JSON.parse(context);
+                            data.start_url = config.build.assetsPublicPath;
+                            /* eslint-enable fecs-camelcase */
+                            context = JSON.stringify(data);
+                        }
+                        catch (e) {}
+                    }
+                    return context;
+                }
             }
         ]),
 
