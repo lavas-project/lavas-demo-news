@@ -22,7 +22,7 @@
             icon ripple @click.native="query = ''">
             <v-icon class="clear-icon">close</v-icon>
         </v-btn>
-        
+
         <div class="search-history-wrapper">
             <v-list subheader class="history-list">
                 <v-subheader inset>历史记录</v-subheader>
@@ -38,7 +38,7 @@
                             <v-list-tile-title>{{ historyItem }}</v-list-tile-title>
                         </v-list-tile-content>
                         <v-list-tile-action>
-                            <v-btn 
+                            <v-btn
                                 class="grey--text"
                                 icon ripple @click.native.stop="deleteHistory(historyItem)">
                                 <v-icon>close</v-icon>

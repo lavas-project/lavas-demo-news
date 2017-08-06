@@ -4,7 +4,7 @@
         <div v-if="newsItem.imageurls && newsItem.imageurls.length === 1"
             class="img-first news-content" >
             <div class="posts" v-if="newsItem.imageurls.length">
-                <span v-for="imgUrl in newsItem.imageurls">
+                <span v-for="(imgUrl, index) in newsItem.imageurls" :key="index">
                     <img :src="imgUrl.url" alt="">
                 </span>
             </div>
@@ -22,7 +22,7 @@
             class="title-first news-content">
             <div class="list-item-title">{{newsItem.title}}</div>
             <div class="posts" v-if="newsItem.imageurls.length">
-                <span v-for="imgUrl, i in newsItem.imageurls">
+                <span v-for="(imgUrl, i) in newsItem.imageurls" :key="i">
                     <img :src="imgUrl.url" alt="" :data-index="i">
                 </span>
             </div>

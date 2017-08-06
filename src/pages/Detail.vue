@@ -9,7 +9,7 @@
             </div>
 
             <div class="content">
-                <div v-for="content in contents" class="news-item">
+                <div v-for="(content, index) in contents" class="news-item" :key="index">
                     <p v-if="content.type === 'text'">{{ content.data }}</p>
                     <img v-if="content.type === 'image'" :src="content.data.original.url" @click="preview" ref="img"/>
                 </div>
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import {mapGetters, mapActions, mapState} from 'vuex';
+import {mapActions, mapState} from 'vuex';
 import Preview from '@/components/Preview';
 import Error from '@/components/Error';
 import EventBus from '@/event-bus';

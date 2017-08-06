@@ -88,7 +88,7 @@ export default {
         closeAndGo(route, action) {
             if (action) {
                 this[action] && this[action]();
-                return;            
+                return;
             }
             if (!route) {
                 clearTimeout(this.timer);

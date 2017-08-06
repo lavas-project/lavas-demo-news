@@ -5,6 +5,8 @@
 
 'use strict';
 
+/* eslint-disable fecs-no-require */
+
 const path = require('path');
 const config = require('../config');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -48,7 +50,7 @@ exports.cssLoaders = function (options = {}) {
             });
         }
 
-        return ['vue-style-loader'].concat(loaders);
+        return ['vue-style-loader', ...loaders];
     }
 
     // https://vue-loader.vuejs.org/en/configurations/extract-css.html

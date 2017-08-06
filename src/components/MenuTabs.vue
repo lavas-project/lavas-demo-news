@@ -5,6 +5,7 @@
                 <div class="menu-tabs-wrap-inner" :style="{width: len * tabWidth + extraWidth + 'px'}">
                     <div class="menu-tabs-item"
                         v-for="(item, i) in menuTabs"
+                        :key="i"
                         @click="selectItem(item)">
                         <span :class="{active: item.active}">{{item.text}}</span>
                     </div>
@@ -40,7 +41,7 @@
 </template>
 
 <script>
-import {mapGetters, mapActions, mapState} from 'vuex';
+import {mapGetters, mapActions} from 'vuex';
 import Iscroll from 'iscroll';
 export default {
     name: 'menu-tabs',

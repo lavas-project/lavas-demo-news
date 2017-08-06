@@ -3,7 +3,7 @@
         <div class="preview" v-show="show" @click.stop="toggleInfo" :style="touchTransiStyle">
             <div class="preview-wrapper" ref="wrapper" :style="wrapperStyle">
                 <ul :style="ulStyle">
-                    <li v-for="item in imageList" :style="itemStyle">
+                    <li v-for="(item, index) in imageList" :style="itemStyle" :key="index">
                         <div class="preview-image">
                             <img :src="item.src" alt="">
                         </div>

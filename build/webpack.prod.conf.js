@@ -5,6 +5,8 @@
 
 'use strict';
 
+/* eslint-disable fecs-no-require */
+
 const path = require('path');
 const utils = require('./utils');
 const webpack = require('webpack');
@@ -93,7 +95,7 @@ let webpackConfig = merge(baseWebpackConfig, {
         // split vendor js into its own file
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vendor',
-            minChunks: function (module, count) {
+            minChunks(module, count) {
                 // any required modules inside node_modules are extracted to vendor
                 return (
                     module.resource
@@ -108,7 +110,7 @@ let webpackConfig = merge(baseWebpackConfig, {
         // split vue, vue-router and vuex into vue chunk
         new webpack.optimize.CommonsChunkPlugin({
             name: 'vue',
-            minChunks: function (module, count) {
+            minChunks(module, count) {
                 let context = module.context;
                 let targets = ['vue', 'vue-router', 'vuex'];
                 return context
