@@ -66,10 +66,13 @@ export default {
             detail(state) {
                 return state.detail.detail;
             },
-            detailPageFavorStatus(state) {
-                return state.favor.detailPageFavorStatus;
+            newsFavorList(state) {
+                return state.favor.newsFavorList;
             }
         }),
+        isFavor() {
+            return this.newsFavorList.some(item => item.nid === this.detail.nid);
+        },
         contents() {
             return this.detail && this.detail.content || [];
         },
@@ -77,6 +80,15 @@ export default {
             return this.contents
                 .filter(item => item.type === 'image')
                 .map(item => ({src: item.data.original.url}));
+        },
+        toggleAction() {
+            let isFavor = this.isFavor;
+            return {
+                toggle: true,
+                toggleStatus: isFavor,
+                toggleHandler: isFavor ? 'removeFavoriteItem' : 'addFavoriteItem',
+                toggleIcon: isFavor ? 'favorite' : 'favorite_border'
+            };
         }
     },
 
@@ -89,41 +101,16 @@ export default {
         ]),
         ...mapActions([
             'addFavorItem',
-            'removeFavorItem',
-            'isFavored'
+            'removeFavorItem'
         ]),
         // 收藏
         addFavoriteItem() {
             this.addFavorItem(this.detail);
-            this.updateFavoriteAction(true);
-            this.favored = true;
+            this.setAppHeader({actions: [this.toggleAction]});
         },
         // 取消收藏
         removeFavoriteItem() {
             this.removeFavorItem(this.detail);
-            this.updateFavoriteAction(false);
-            this.favored = false;
-        },
-        // 更新收藏状态
-        updateFavoriteAction(toggleStatus) {
-            this.toggleAction = {
-                toggle: true,
-                toggleStatus: toggleStatus
-            };
-
-            if (toggleStatus) {
-                Object.assign(this.toggleAction, {
-                    toggleHandler: 'removeFavoriteItem',
-                    toggleIcon: 'favorite'
-                });
-            }
-            else {
-                Object.assign(this.toggleAction, {
-                    toggleHandler: 'addFavoriteItem',
-                    toggleIcon: 'favorite_border'
-                });
-            }
-
             this.setAppHeader({actions: [this.toggleAction]});
         },
 
@@ -158,8 +145,6 @@ export default {
         let nid = this.$route.params.nid;
         this.showLoading = true;
         this.relatedNews = [];
-        this.isFavored({nid});
-        this.updateFavoriteAction(this.detailPageFavorStatus);
         this.setAppHeader({
             title: '百度新闻',
             show: true,
@@ -170,7 +155,6 @@ export default {
             actions: [this.toggleAction]
         });
         await this.$store.dispatch('getDetail', {nid});
-        // await this.$store.dispatch('getNewsDetail', {nid: this.$route.params.nid});
         this.showLoading = false;
         let relatedNewsData = await API.getNewsData({
             nid,
@@ -178,9 +162,7 @@ export default {
             ver: 5
         });
         this.relatedNews = relatedNewsData.related_news.filter(item => item.sourcets);
-        // document.body.scrollTop = this.scrollTop;
-    },
-    deactivated() {
+        this.setAppHeader({actions: [this.toggleAction]});
     },
 
     beforeRouteLeave(to, from, next) {

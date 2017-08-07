@@ -25,50 +25,31 @@ export default {
     actions: {
         // 收藏
         addFavorItem({commit, state}, detail) {
-            let favorList = state.newsFavorList;
+            if (state.newsFavorList.filter(item => item.nid === detail.nid).length) {
+                return;
+            }
 
-            favorList.push({
+            commit(types.ADD_FAVOR_ITEM, {
                 title: detail.title,
                 nid: detail.nid,
                 time: Date.now()
             });
-
-            localStorage.setItem(FAVORITE_KEY, JSON.stringify(favorList));
-            commit(types.SET_NEWS_FAVOR_LIST, favorList);
         },
         // 取消收藏
         removeFavorItem({commit, state}, detail) {
-            let favorList = state.newsFavorList;
-
-            favorList = favorList.filter((news, i) => {
-                if (news.nid !== detail.nid) {
-                    return true;
-                }
-            });
-
-            localStorage.setItem(FAVORITE_KEY, JSON.stringify(favorList));
-            commit(types.SET_NEWS_FAVOR_LIST, favorList);
-        },
-        // 检测是否已收藏
-        isFavored({commit, state}, detail) {
-            let favorList = state.newsFavorList;
-
-            favorList = favorList.filter((news, i) => {
-                if (news.nid === detail.nid) {
-                    return true;
-                }
-            });
-
-            commit(types.SET_NEWS_DETAIL_FAVOR_STATUS, favorList.length > 0);
+            commit(types.DELETE_FAVOR_ITEM, detail);
         }
     },
 
     mutations: {
-        [types.SET_NEWS_FAVOR_LIST](state, favorList) {
-            state.newsFavorList = favorList;
+        [types.ADD_FAVOR_ITEM](state, item) {
+            state.newsFavorList.push(item);
+            localStorage.setItem(FAVORITE_KEY, JSON.stringify(state.newsFavorList));
         },
-        [types.SET_NEWS_DETAIL_FAVOR_STATUS](state, status) {
-            state.detailPageFavorStatus = status;
+
+        [types.DELETE_FAVOR_ITEM](state, item) {
+            state.newsFavorList = state.newsFavorList.filter(favor => favor.nid !== item.nid);
+            localStorage.setItem(FAVORITE_KEY, JSON.stringify(state.newsFavorList));
         }
     }
 };
