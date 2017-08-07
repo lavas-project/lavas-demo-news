@@ -10,7 +10,7 @@ const FAVORITE_KEY = 'FAVORITE_NEWS';
 
 let localList;
 try {
-    localList = JSON.parse(localStorage.getItem(FAVORITE_KEY));
+    localList = JSON.parse(localStorage.getItem(FAVORITE_KEY)) || [];
 }
 catch (e) {
     localList = [];
@@ -58,6 +58,7 @@ export default {
                     return true;
                 }
             });
+
             commit(types.SET_NEWS_DETAIL_FAVOR_STATUS, favorList.length > 0);
         }
     },
