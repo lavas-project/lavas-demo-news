@@ -45,7 +45,7 @@ export default {
     },
     mutations: {
         [types.SET_NEWS_DATA](state, {data, category, change}) {
-            data.news = data.news.filter(item => item.sourcets).map(dataProcess);
+            data.news = data && data.news && data.news.filter(item => item.sourcets).map(dataProcess);
 
             if (data.banner) {
                 data.banner = data.banner.map(dataProcess);
@@ -58,8 +58,10 @@ export default {
                 }
                 else {
                     // 加载更多
-                    state.lastListLen = state.data[category].news.length;
-                    state.data[category].news = [...state.data[category].news, ...data.news];
+                    if (state.data[category] && state.data[category].news) {
+                        state.lastListLen = state.data[category].news.length;
+                        state.data[category].news = [...state.data[category].news, ...data.news];
+                    }
                     state.loaded = 'loaded';
                 }
                 state.data = Object.assign({}, state.data);

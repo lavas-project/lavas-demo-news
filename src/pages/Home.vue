@@ -44,7 +44,9 @@ export default {
     },
     methods: {
         async oninfinite() {
-            this.lastListLen = this.data[this.category].news.length;
+            this.lastListLen = this.data[this.category]
+                && this.data[this.category].news
+                && this.data[this.category].news.length;
             await this.$store.dispatch('getNewsList', this.category);
             setTimeout(() => this.$refs.infiniteLoading.$emit('$InfiniteLoading:loaded'), 1000);
         }

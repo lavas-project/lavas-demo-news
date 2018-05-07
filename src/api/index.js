@@ -5,7 +5,7 @@
 
 import axios from 'axios';
 
-const API_PATH = 'https://lavas.baidu.com/api/mockup/realNews/news';
+const API_PATH = 'https://newspwa.baidu.com/api/mockup/realNews/news';
 
 let {width: screenSizeWidth, height: screenSizeHeight} = screen;
 // let screenSizeHeight = screen.height;
@@ -70,7 +70,7 @@ export default {
 
         let data = await this.getNewsData({category: '推荐'});
 
-        let news = data.news || [];
+        let news = data && data.news || [];
 
         return news;
     },
