@@ -53,7 +53,9 @@ module.exports = merge(baseWebpackConfig, {
         new webpack.NoEmitOnErrorsPlugin(),
 
         new SkeletonWebpackPlugin({
-            webpackConfig: require('./webpack.skeleton.conf')
+            webpackConfig: {
+                entry: './src/entry-skeleton.js'
+            }
         }),
 
         // https://github.com/ampedandwired/html-webpack-plugin
