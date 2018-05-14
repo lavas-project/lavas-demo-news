@@ -1,15 +1,16 @@
 <template>
     <div class="skeleton-wrapper">
         <section class="skeleton-block">
-            <img src="/static/img/skeleton-logo.jpg" class="skeleton-logo">
+            <img src="../assets/images/skeleton-logo.jpg" class="skeleton-logo">
             <div class="title" v-show="showTitle" ref="title">
-                <img src="/static/img/skeleton-bg.jpg" class="skeleton-bg">
+                <img src="../assets/images/skeleton-bg.jpg" class="skeleton-bg">
             </div>
         </section>
     </div>
 </template>
 
 <script>
+
 export default {
     name: 'skeleton',
     data() {
@@ -20,7 +21,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 
 @import '~normalize.css';
 

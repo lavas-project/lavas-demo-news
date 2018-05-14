@@ -20,7 +20,6 @@ const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
 const SWPrecacheWebpackPlugin = require('sw-precache-webpack-plugin');
 const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin');
 const SwRegisterWebpackPlugin = require('sw-register-webpack-plugin');
-const MultiPathWebpackPlugin = require('multi-path-webpack-plugin');
 
 let env = process.env.NODE_ENV === 'testing'
     ? require('../config/test.env')
@@ -55,7 +54,8 @@ let webpackConfig = merge(baseWebpackConfig, {
 
         // extract css into its own file
         new ExtractTextPlugin({
-            filename: utils.assetsPath('css/[name].[contenthash].css')
+            filename: utils.assetsPath('css/[name].[contenthash].css'),
+            allChunks: true
         }),
 
         // Compress extracted CSS. We are using this plugin so that possible
@@ -67,7 +67,9 @@ let webpackConfig = merge(baseWebpackConfig, {
         }),
 
         new SkeletonWebpackPlugin({
-            webpackConfig: require('./webpack.skeleton.conf')
+            webpackConfig: {
+                entry: './src/entry-skeleton.js'
+            }
         }),
 
         // generate dist index.html with correct asset hash for caching.
@@ -161,8 +163,7 @@ let webpackConfig = merge(baseWebpackConfig, {
         new SWPrecacheWebpackPlugin(config.swPrecache.build),
         new SwRegisterWebpackPlugin({
             filePath: path.resolve(__dirname, '../src/sw-register.js')
-        }),
-        new MultiPathWebpackPlugin({})
+        })
     ]
 });
 

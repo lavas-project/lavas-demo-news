@@ -17,5 +17,11 @@ module.exports = {
 
         // extract: isProduction
         extract: true
-    })
+    }),
+    transformToRequire: {
+        video: ['src', 'poster'],
+        source: 'src',
+        img: 'src',
+        image: 'xlink:href'
+    }
 };
