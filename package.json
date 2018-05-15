@@ -59,7 +59,7 @@
     "url-loader": "^0.5.8",
     "vue-loader": "^12.2.2",
     "vue-server-renderer": "^2.4.1",
-    "vue-skeleton-webpack-plugin": "1.1.14",
+    "vue-skeleton-webpack-plugin": "^1.1.16",
     "vue-style-loader": "^3.0.1",
     "vue-template-compiler": "^2.4.1",
     "webpack": "^3.5.4",

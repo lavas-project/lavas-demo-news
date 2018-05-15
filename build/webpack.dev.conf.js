@@ -15,6 +15,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const SkeletonWebpackPlugin = require('vue-skeleton-webpack-plugin');
+const nodeExternals = require('webpack-node-externals');
 
 function resolve(dir) {
     return path.join(__dirname, '..', dir);
@@ -54,7 +55,10 @@ module.exports = merge(baseWebpackConfig, {
 
         new SkeletonWebpackPlugin({
             webpackConfig: {
-                entry: './src/entry-skeleton.js'
+                entry: './src/entry-skeleton.js',
+                externals: nodeExternals({
+                    whitelist: [/\.(css|vue)$/]
+                })
             }
         }),
 
